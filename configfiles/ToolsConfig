@@ -1,2 +1,7 @@
-test1 DummyTool configfiles/DummyToolConfig
-test2 DummyTool configfiles/DummyToolConfig
+
+InputVariables InputVariables configfiles/InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+Trigger Trigger configfiles/TriggerConfig
+BoardReader BoardReader configfiles/BoardReaderConfig
+Monitoring Monitoring configfiles/MoniteringConfig
+DataRecorder DataRecorder configfiles/DataRecorderConfig

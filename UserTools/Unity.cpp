@@ -1,1 +1,7 @@
 #include "DummyTool.cpp"
+#include "InputVariables.cpp"
+#include "Postgress.cpp"
+#include "BoardReader.cpp"
+#include "Monitoring.cpp"
+#include "DataRecorder.cpp"
+#include "Trigger.cpp"

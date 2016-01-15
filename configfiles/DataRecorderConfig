@@ -1,0 +1,4 @@
+# Dummy config file
+
+OutputPath ./output/
+TTreeEventCap 50000

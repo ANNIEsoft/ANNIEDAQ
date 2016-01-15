@@ -1,0 +1,5 @@
+# Dummy config file
+
+cards 15
+channels 4
+buffersize 2400

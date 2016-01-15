@@ -1,0 +1,7 @@
+# Postgres config file
+
+Verbose 0
+
+dbname mydb
+hostaddr 127.0.0.1
+port 5432
