@@ -14,9 +14,10 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
 
   std::stringstream tmp;
   
-  //connect to sql
-  try{
-
+  
+    //connect to sql
+    try{
+      
     tmp<<"dbname="<<*(m_variables["dbname"])<<" hostaddr="<<*(m_variables["hostaddr"])<<" port="<<*(m_variables["port"]) ;
     C=new pqxx::connection(tmp.str().c_str());
     if (C->is_open()) {
@@ -40,7 +41,7 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
       
       pqxx::result::const_iterator c = R.begin();
       
-      if(c[0].is_null()) m_data->RunNumber=0;
+      if(c[0].is_null()) m_data->RunNumber=1;
       else if(m_data->RunNumber!=c[0].as<int>()) m_data->RunNumber=c[0].as<int>()+1;
       
       tmp.str("");
@@ -68,7 +69,7 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     cout << "Salary = " << c[4].as<float>() << endl;
     */
     tmp.str("");
-    tmp<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents ) values("<<m_data->RunNumber<<","<<m_data->SubRunNumber<<",Now(),NULL,"<<m_data->RunType<<",NULL,"<<m_data->NumEvents<<");";
+    tmp<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents ) values("<<m_data->RunNumber<<","<<m_data->SubRunNumber<<",Now(),NULL,"<<m_data->RunType<<",NULL,0);";
     
     //   pqxx::work W(*C);
     N.exec(tmp.str().c_str());
@@ -111,7 +112,7 @@ bool Postgress::Finalise(){
      
     tmp.str("");
 
-     tmp<<"update runinformation set stoptime=NOW(), numevents= 99 , runstatus=0 where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
+    tmp<<"update runinformation set stoptime=NOW(), numevents="<<m_data->NumEvents<<" , runstatus=0 where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
 
      // Create a non-transactional object. 
     pqxx::nontransaction N(*C);

@@ -151,8 +151,9 @@ bool DataRecorder::Finalise(){
   snprintf ((char *) message.data(), 256 , "%s" ,send.c_str()) ;
   Isend->send(message);
 
-  sleep(5);
   
+  (void) pthread_join(thread[0], NULL);
+
   TFile file(OutFile.c_str(),"UPDATE");
   
   TTree *tree=m_data->GetTTree("PMTData");
