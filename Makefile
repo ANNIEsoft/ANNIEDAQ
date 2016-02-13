@@ -69,3 +69,8 @@ lib/libLogging.so: lib/libStore.so
 	cp $(ToolDAQFrameworkPath)/src/Logging/Logging.h include/
 	g++ -shared -fPIC -I include $(ToolDAQFrameworkPath)/src/Logging/Logging.cpp -o lib/libLogging.so -L lib/ -lStore $(ZMQInclude) $(ZMQLib) $(BoostLib) $(BoostInclude)
 
+update:
+	cd $(ToolDAQFrameworkPath)
+	git pull
+	cd ../..
+	git pull
