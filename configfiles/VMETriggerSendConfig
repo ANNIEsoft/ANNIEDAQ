@@ -1,0 +1,4 @@
+# VME Trigger Sender Configfile
+
+verbose 1
+Trigger_port 24020

@@ -54,39 +54,43 @@ bool BoardReader::Initialise(std::string configfile, DataModel &data){
 
 bool BoardReader::Execute(){
 
-  for(int card=0;card<cards;card++){
-    
-    time_t timer;
-    struct tm y2k = {0};
-    double seconds;
-    
-    y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
-    y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
-    
-    time(&timer);  /* get current time; same as: timer = time(NULL)  */
-    
-        
-    m_data->LastSync.at(card)=difftime(timer,mktime(&y2k));
-    m_data->SequenceID.at(card)=rand() %1000;
-    m_data->StartTime.at(card)=  m_data->LastSync.at(card);
-    m_data->CardID.at(card)=card;
-    
-    
-    for(int channel=0;channel<channels;channel++){
-      
-      m_data->PMTID.at(card)[channel]=(card*4)+channel;
+  if(m_data->triggered){
 
-      for(int buffpos=0;buffpos<buffersize;buffpos++){
+    for(int card=0;card<cards;card++){
+      
+      time_t timer;
+      struct tm y2k = {0};
+      double seconds;
+      
+      y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
+      y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
+      
+      time(&timer);  /* get current time; same as: timer = time(NULL)  */
+      
+        
+      m_data->LastSync.at(card)=difftime(timer,mktime(&y2k));
+      m_data->SequenceID.at(card)=rand() %1000;
+      m_data->StartTime.at(card)=  m_data->LastSync.at(card);
+      m_data->CardID.at(card)=card;
+      
+      
+      for(int channel=0;channel<channels;channel++){
 	
-	m_data->Data.at(card)[(channel*buffersize)+buffpos]= (rand() %10000)/10000.0 ;
+	m_data->PMTID.at(card)[channel]=(card*4)+channel;
+	
+	for(int buffpos=0;buffpos<buffersize;buffpos++){
+	  
+	  m_data->Data.at(card)[(channel*buffersize)+buffpos]= (rand() %10000)/10000.0 ;
+	  
+	}
 	
       }
       
+      
     }
     
-    
   }
-  
+
   return true;
 }
 

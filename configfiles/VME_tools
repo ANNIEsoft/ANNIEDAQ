@@ -1,0 +1,3 @@
+VMETriggerSend VMETriggerSend configfiles/VMETriggerSendConfig
+BoardReader BoardReader configfiles/BoardReaderConfig
+NetworkSendData NetworkSendData configfiles/NetworkSendDataConfig

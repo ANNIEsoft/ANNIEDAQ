@@ -15,7 +15,7 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
   std::stringstream tmp;
   
   
-    //connect to sql
+    /////////////////// Connect to sql ///////////////////////
     try{
       
     tmp<<"dbname="<<*(m_variables["dbname"])<<" hostaddr="<<*(m_variables["hostaddr"])<<" port="<<*(m_variables["port"]) ;
@@ -30,6 +30,7 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
 
     tmp.str("");
     
+    //////////////// Find run number ///////////////
     /* Create a non-transactional object. */
     pqxx::nontransaction N(*C);
 
@@ -43,10 +44,11 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
       
       if(c[0].is_null()) m_data->RunNumber=1;
       else if(m_data->RunNumber!=c[0].as<int>()) m_data->RunNumber=c[0].as<int>()+1;
-      
       tmp.str("");
       
     
+      //////////////// Find Sub Run number ////////////////////
+
     
     tmp<<"select max(subrunnumber) from runinformation where runnumber="<<m_data->RunNumber<<";";
         
@@ -68,6 +70,9 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     cout << "Address = " << c[3].as<string>() << endl;
     cout << "Salary = " << c[4].as<float>() << endl;
     */
+
+    ////////////////// Insert run information ///////////////////////
+
     tmp.str("");
     tmp<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents ) values("<<m_data->RunNumber<<","<<m_data->SubRunNumber<<",Now(),NULL,"<<m_data->RunType<<",NULL,0);";
     
@@ -100,17 +105,30 @@ bool Postgress::Finalise(){
   std::stringstream tmp;
 
   try{
+    ///////////////// Reconnect to database //////////////////
+
     tmp<<"dbname="<<*(m_variables["dbname"])<<" hostaddr="<<*(m_variables["hostaddr"])<<" port="<<*(m_variables["port"]);
+    
     C=new pqxx::connection(tmp.str().c_str());
+
     if (C->is_open()) {
+
       if (m_verbose)std::cout << "Opened database successfully: " << C->dbname() << std::endl;
     } 
+    
     else {
+    
       std::cout << "Can't open database" << std::endl;
-      return 1;
+      
+      return false;
+    
     }
      
     tmp.str("");
+
+
+
+    //////////////// Update entry with end of run information ////////////
 
     tmp<<"update runinformation set stoptime=NOW(), numevents="<<m_data->NumEvents<<" , runstatus=0 where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
 
@@ -122,9 +140,13 @@ bool Postgress::Finalise(){
     N.commit();
     
     C->disconnect ();
+ 
   }catch (const std::exception &e){
+  
     std::cerr << e.what() << std::endl;
+    
     return false;
+  
   }
   
   delete C;

@@ -1,3 +1,6 @@
-# Dummy config file
+#  Trigger config file
 
-VarName Value
+verbose 1
+VME_service_name VME_service
+numVME 1
+VME_port 24020

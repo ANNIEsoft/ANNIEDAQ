@@ -8,6 +8,7 @@
 #include "TTree.h"
 
 #include "Store.h"
+#include "Logging.h"
 
 #include <zmq.hpp>
 
@@ -24,13 +25,14 @@ class DataModel{
   void DeleteTTree(std::string name);
   
   Store vars;
+  Logging *Log;
 
   //Run info
   long RunNumber;
   long SubRunNumber;
   int RunType;
   long NumEvents;
-
+  bool triggered;
 
   //Board Data
   std::vector<int> LastSync;

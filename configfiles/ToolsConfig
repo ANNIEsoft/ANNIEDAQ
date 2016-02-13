@@ -1,7 +1,0 @@
-
-InputVariables InputVariables configfiles/InputVariablesConfig
-Postgress Postgress configfiles/PostgressConfig
-Trigger Trigger configfiles/TriggerConfig
-BoardReader BoardReader configfiles/BoardReaderConfig
-Monitoring Monitoring configfiles/MoniteringConfig
-DataRecorder DataRecorder configfiles/DataRecorderConfig

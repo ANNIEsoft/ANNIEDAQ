@@ -1,19 +1,18 @@
-#ifndef Trigger_H
-#define Trigger_H
+#ifndef VMETriggerSend_H
+#define VMETriggerSend_H
 
 #include <string>
 #include <iostream>
 #include <unistd.h>
-#include <vector>
 
 #include "Tool.h"
 
-class Trigger: public Tool {
+class VMETriggerSend: public Tool {
 
 
  public:
 
-  Trigger();
+  VMETriggerSend();
   bool Initialise(std::string configfile,DataModel &data);
   bool Execute();
   bool Finalise();
@@ -21,12 +20,13 @@ class Trigger: public Tool {
 
  private:
 
-  int m_verbose;
-  std::string VME_service_name;
-  int numVME;
-  int VME_port;
 
-  std::vector<zmq::socket_t*> VMESockets;
+  zmq::socket_t *TriggerCom;
+
+  int m_verbose;
+  int Trigger_port;
+
+
 
 
 };

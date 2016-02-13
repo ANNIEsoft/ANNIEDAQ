@@ -10,7 +10,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
-
+#include "TThread.h"
 
 struct root_thread_args{
   
@@ -19,14 +19,19 @@ struct root_thread_args{
   // tree=intree;
   //}
 
-  root_thread_args(std::string outfile, zmq::context_t* incontext){
+  root_thread_args(std::string outfile, zmq::context_t* incontext, int inTFileTTreeCap, long &infilepart){
+    
     OutFile=outfile;
     context=incontext;
+    TFileTTreeCap=inTFileTTreeCap;
+    filepart=&infilepart;
   }
   
   zmq::context_t* context;
   std::string OutFile;
-  //TTree* tree;
+  int TFileTTreeCap;
+  long *filepart;
+
 };
 
 
@@ -49,13 +54,17 @@ class DataRecorder: public Tool {
 
   zmq::socket_t *Isend;
 
-  pthread_t thread[2];
+  //  pthread_t thread[2];
+  TThread *h1;
+  root_thread_args *args;
 
   std::string OutputPath;
   std::string OutFile; //can be map
  
   int m_TTreeEventCap;
   long m_treenum; // can make map in future if more trees needed
+  int m_TFileTTreeCap;
+  long m_filepart;
  
   int LastSync;
   int SequenceID;
