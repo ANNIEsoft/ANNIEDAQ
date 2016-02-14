@@ -6,8 +6,8 @@ ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/
 BoostLib= -L /usr/local/lib -lboost_date_time -lboost_serialization
 BoostInclude= -I /usr/local/include/
 
-RootInclude=  -I /home/annie/Documents/ANNIEDAQ/ToolDAQ/root/include
-RootLib=   -L /home/annie/Documents/ANNIEDAQ/ToolDAQ/root/lib  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
+RootInclude=  -I /usr/include/root/
+RootLib=   -L /usr/lib64/root/  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
 
 DataModelInclude = $(RootInclude)
 DataModelLib = $(RootLib)
