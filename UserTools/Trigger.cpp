@@ -91,6 +91,7 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
  
     std::stringstream tmp;
     tmp<<"tcp://"<<ip<<":"<<VME_port;
+    
     // printf("%s \n",tmp.str().c_str());
     RemoteSend->connect(tmp.str().c_str());
     
@@ -126,15 +127,14 @@ bool Trigger::Execute(){
       zmq::message_t receive;
       if(VMESockets.at(i)->recv(&receive)){
 	std::istringstream iss(static_cast<char*>(receive.data()));
-	
+	std::cout<<" got trigger message "<<iss.str()<<std::endl;	
 	bool tmptrigger;
 	iss>>tmptrigger;
 	trigger*=tmptrigger;
 	
       }
       else{
-	
-	Log("Error sending trigger query to VME",0,m_verbose);
+	Log("Error receiving trigger query from VME",0,m_verbose);	
 	return false;
 	
       }
@@ -142,7 +142,8 @@ bool Trigger::Execute(){
     
     else{
       
-      Log("Error receiving trigger query to VME",0,m_verbose);
+      Log("Error sending trigger query to VME",0,m_verbose);
+      
       return false;
    
     }   

@@ -6,8 +6,8 @@ ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/
 BoostLib= -L /usr/local/lib -lboost_date_time -lboost_serialization
 BoostInclude= -I /usr/local/include/
 
-RootInclude=  -I/usr/include/root
-RootLib=   -L/usr/lib64/root -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
+RootInclude=  -I /home/annie/Documents/ANNIEDAQ/ToolDAQ/root/include
+RootLib=   -L /home/annie/Documents/ANNIEDAQ/ToolDAQ/root/lib  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
 
 DataModelInclude = $(RootInclude)
 DataModelLib = $(RootLib)
@@ -17,7 +17,7 @@ MyToolsLib = $(RootLib)  -L /usr/local/lib/ -lpqxx -lboost_serialization
 
 all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/libServiceDiscovery.so lib/libDataModel.so lib/libLogging.so RemoteControl  NodeDaemon
  
-	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
+	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude) $(RootInclude) $(RootLib)
 
 
 lib/libStore.so:
@@ -47,6 +47,7 @@ clean:
 lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
+	cp DataModel/CardData.h include/
 	g++ -g -fPIC -shared DataModel/DataModel.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so

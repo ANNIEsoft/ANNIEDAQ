@@ -9,6 +9,7 @@
 
 #include "Store.h"
 #include "Logging.h"
+#include "CardData.h"
 
 #include <zmq.hpp>
 
@@ -45,7 +46,7 @@ class DataModel{
   std::vector<int> fullbuffsize;
   std::vector<double*> Data;
 
-
+  std::vector<CardData*> carddata; 
 
  private:
   

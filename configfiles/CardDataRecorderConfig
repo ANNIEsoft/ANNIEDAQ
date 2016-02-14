@@ -1,0 +1,5 @@
+# Dummy config file
+
+OutputPath ./output/
+TTreeEventCap 10000
+TFileTTreeCap 20

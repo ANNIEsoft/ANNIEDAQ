@@ -15,8 +15,14 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
 
 
   Receive=new zmq::socket_t(*(m_data->context), ZMQ_PULL);
+  int a=12000;
+  Receive->setsockopt(ZMQ_SNDTIMEO, a);
+  Receive->setsockopt(ZMQ_RCVTIMEO, a);
+
+
   std::stringstream tmp;
-  tmp<<"tcp://localhost:"<<"24011";
+  tmp<<"tcp://"<<m_address<<":"<<m_port;
+
   Receive->connect(tmp.str().c_str());
 
   m_variables.Get("cards",cards);
@@ -49,23 +55,43 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
 
 bool NetworkReceiveData::Execute(){
 
-
   if(m_data->triggered){
+
+
+    for (int i=0;i< m_data->carddata.size();i++){
+      delete m_data->carddata.at(i);
+    }
+    m_data->carddata.clear();
     
     zmq::message_t message;
-    Receive->recv(&message);
-    std::istringstream iss(static_cast<char*>(message.data()));
-    
-    //  std::cout<<iss.str()<<std::endl;;
-    //  std::ostringstream archive_stream;
-    
-    boost::archive::text_iarchive ia(iss);
-    
-    //  std::cout<<"run number before is "<<m_data->RunNumber<<std::endl;
-    ia >> *m_data;
-    // std::cout<<"run number after is "<<m_data->RunNumber<<std::endl;
-    //std::cout<<"received data 3 "<<*(m_data->Data.at(3))<<std::endl;
-    
+    //    std::cout<<"about to get message"<<std::endl;
+    if(Receive->recv(&message)){
+      //std::cout<<"i got it"<<std::endl;      
+      std::istringstream iss(static_cast<char*>(message.data()));
+      
+      //std::cout<<iss.str()<<std::endl;;
+      //  std::ostringstream archive_stream;
+      
+      boost::archive::text_iarchive ia(iss);
+      
+      //  std::cout<<"run number before is "<<m_data->RunNumber<<std::endl;
+      // std::cout<<"d1"<<std::endl;      
+      
+      
+      CardData *data = new CardData;
+      ia >> *data;
+      m_data->carddata.push_back(data);
+      
+         
+
+      //      ia >> *m_data;
+
+      //std::cout<<"d2"<<std::endl;
+      // std::cout<<"run number after is "<<m_data->RunNumber<<std::endl;
+      //std::cout<<"received data 3 "<<*(m_data->Data.at(3))<<std::endl;
+      
+    }
+    else return false;
   }
   
   return true;

@@ -1,6 +1,7 @@
 InputVariables InputVariables configfiles/InputVariablesConfig
-Postgress Postgress configfiles/PostgressConfig
+#Postgress Postgress configfiles/PostgressConfig
 Trigger Trigger configfiles/TriggerConfig
-NetworkReceiveData NetworkReceiveData configfiles/BoardReaderConfig
+NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
 #Monitoring Monitoring configfiles/MonitoringConfig
-DataRecorder DataRecorder configfiles/DataRecorderConfig
+#DataRecorder DataRecorder configfiles/DataRecorderConfig
+CardDataRecorder CardDataRecorder configfiles/CardDataRecorderConfig

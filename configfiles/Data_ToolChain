@@ -1,12 +1,12 @@
 #ToolChain dynamic setup file
 
 ##### Runtime Paramiters #####
-verbose 1
+verbose 9
 error_level 0 # 0= do not exit, 1= exit on unhandeled errors only, 2= exit on unhandeled errors and handeled errors
 remote_port 24001
 
 ###### Logging #####
-log_mode Local # Interactive=cout , Remote= remote logging system "serservice_name Remote_Logging" , Local = local file log;
+log_mode Interactive # Interactive=cout , Remote= remote logging system "serservice_name Remote_Logging" , Local = local file log;
 log_local_path ./logs/ANNIE_DAQ_Main_log
 log_service LogStore 
 log_port 24010
@@ -20,6 +20,6 @@ service_name ANNIE_DAQ_Main
 Tools_File configfiles/Main_Data_Taking_Tools
 
 ##### Run Type #####
-Inline 0
-Interactive 0
-Remote 1
+Inline 100
+Interactive 0 
+Remote 0
