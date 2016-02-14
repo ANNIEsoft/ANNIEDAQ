@@ -1,5 +1,5 @@
-#ifndef VMETriggerSend_H
-#define VMETriggerSend_H
+#ifndef DummyVMETriggerSend_H
+#define DummyVMETriggerSend_H
 
 #include <string>
 #include <iostream>
@@ -8,12 +8,12 @@
 #include "Tool.h"
 #include "UC500ADCInterface.h"
 
-class VMETriggerSend: public Tool {
+class DummyVMETriggerSend: public Tool {
 
 
  public:
 
-  VMETriggerSend();
+  DummyVMETriggerSend();
   bool Initialise(std::string configfile,DataModel &data);
   bool Execute();
   bool Finalise();

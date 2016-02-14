@@ -6,14 +6,11 @@ ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/
 BoostLib= -L /usr/local/lib -lboost_date_time -lboost_serialization
 BoostInclude= -I /usr/local/include/
 
-RootInclude=  -I/usr/include/root
-RootLib=   -L/usr/lib64/root -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
+DataModelInclude = 
+DataModelLib = -lvme -lrt 
 
-DataModelInclude = $(RootInclude)
-DataModelLib = $(RootLib)
-
-MyToolsInclude = $(RootInclude)
-MyToolsLib = $(RootLib)  -L /usr/local/lib/ -lpqxx -lboost_serialization
+MyToolsInclude = 
+MyToolsLib =   -lvme -lrt  -L /usr/local/lib/ -lboost_serialization
 
 all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/libServiceDiscovery.so lib/libDataModel.so lib/libLogging.so RemoteControl  NodeDaemon
  
@@ -34,7 +31,7 @@ include/Tool.h:
 lib/libToolChain.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libMyTools.so lib/libServiceDiscovery.so lib/libLogging.so
 
 	cp $(ToolDAQFrameworkPath)/src/ToolChain/*.h include/
-	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)  
+	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)   $(BoostLib) $(BoostInclude)
 
 
 clean: 
@@ -47,13 +44,15 @@ clean:
 lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
+	cp DataModel/CardData.h include/
+	cp UserTools/HardwareInterface.h include/
 	g++ -g -fPIC -shared DataModel/DataModel.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp UserTools/UC500ADCInterface.cpp UserTools/ucadc.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./

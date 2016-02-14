@@ -1,3 +1,6 @@
+#DummyVMETriggerSend DummyVMETriggerSend configfiles/VMETriggerSendConfig
 VMETriggerSend VMETriggerSend configfiles/VMETriggerSendConfig
-BoardReader BoardReader configfiles/BoardReaderConfig
-NetworkSendData NetworkSendData configfiles/NetworkSendDataConfig
+#BoardReader BoardReader configfiles/BoardReaderConfig
+#NetworkSendData NetworkSendData configfiles/NetworkSendDataConfig
+CrateReader CrateReader configfiles/CrateReaderConfig
+VMESendData VMESendData configfiles/VMESendDataConfig

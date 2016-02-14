@@ -1,9 +1,9 @@
-#include "VMETriggerSend.h"
+#include "DummyVMETriggerSend.h"
 
-VMETriggerSend::VMETriggerSend():Tool(){}
+DummyVMETriggerSend::DummyVMETriggerSend():Tool(){}
 
 
-bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
+bool DummyVMETriggerSend::Initialise(std::string configfile, DataModel &data){
 
   if(configfile!="")  m_variables.Initialise(configfile);
   //m_variables.Print();
@@ -25,16 +25,16 @@ bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
   tmp<<"tcp://*:"<<Trigger_port;  
   TriggerCom->bind(tmp.str().c_str());
 
-  m_data->Crate= new UC500ADCInterface(m_crate_num);
-  m_data->Crate->Initialise();
+  //  m_data->Crate= new UC500ADCInterface(m_crate_num);
+  //m_data->Crate->Initialise();
 
-  m_data->Crate->EnableTrigger();
+  //m_data->Crate->EnableTrigger();
 
   return true;
 }
 
 
-bool VMETriggerSend::Execute(){
+bool DummyVMETriggerSend::Execute(){
 
   m_data->triggered=false;
   
@@ -46,15 +46,16 @@ bool VMETriggerSend::Execute(){
     
     if (iss.str()=="Status"){
       
-      
-      if(m_data->Crate->Triggered()){
+      usleep(100000);
+
+      //  if(m_data->Crate->Triggered()){
 	m_data->triggered=true;
 	ret="1";
-      }
-      else {
-	m_data->triggered=false;
-	//usleep(10000);
-      }
+	//      }
+	//else {
+	//m_data->triggered=false;
+	
+	//}
       
       //ret=1;
       //  std::cout << "Waiting for triggers " << std::endl;
@@ -79,7 +80,7 @@ bool VMETriggerSend::Execute(){
 }
 
 
-bool VMETriggerSend::Finalise(){
+bool DummyVMETriggerSend::Finalise(){
 
 
   delete TriggerCom;

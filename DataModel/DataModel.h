@@ -5,10 +5,12 @@
 #include <string>
 #include <vector>
 
-#include "TTree.h"
+//#include "TTree.h"
 
 #include "Store.h"
 #include "Logging.h"
+#include "CardData.h"
+#include "HardwareInterface.h"
 
 #include <zmq.hpp>
 
@@ -20,9 +22,9 @@ class DataModel{
   DataModel();
   zmq::context_t* context;
 
-  TTree* GetTTree(std::string name);
-  void AddTTree(std::string name,TTree *tree);
-  void DeleteTTree(std::string name);
+  //  TTree* GetTTree(std::string name);
+  //void AddTTree(std::string name,TTree *tree);
+  //void DeleteTTree(std::string name);
   
   Store vars;
   Logging *Log;
@@ -35,6 +37,11 @@ class DataModel{
   bool triggered;
 
   //Board Data
+  HardwareInterface* Crate;
+
+  std::vector<CardData*> carddata;
+
+
   std::vector<int> LastSync;
   std::vector<int> SequenceID;
   std::vector<int> StartTime;
@@ -49,7 +56,7 @@ class DataModel{
 
  private:
   
-  std::map<std::string,TTree*> m_trees; 
+  //std::map<std::string,TTree*> m_trees; 
   
   
 };
