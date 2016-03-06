@@ -19,13 +19,13 @@ struct CardData{
   //the form and structure of this data is probably something you want to change this was just my guess baised on what we talked about.
   //so feel free to make this what ever you making the card output to be
   ~CardData(){
-    std::cout<<" c d 1"<<std::endl;
+    //    std::cout<<" c d 1"<<std::endl;
     delete[] PMTID;
     PMTID=0;
-    std::cout<<" c d 2"<<std::endl;
+    // std::cout<<" c d 2"<<std::endl;
     delete[] Data;
     Data=0;
-    std::cout<<" c d 3"<<std::endl;
+    //std::cout<<" c d 3"<<std::endl;
   }
 
   

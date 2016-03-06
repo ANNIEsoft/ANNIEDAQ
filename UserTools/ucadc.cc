@@ -143,9 +143,14 @@ uint64_t CardTime::getValue(int card) {
 	return counter;
 }
 int CardTime::avgTime(struct timespec *avg) {
-	avg->tv_sec = (after.tv_sec - before.tv_sec)/2 + before.tv_sec;
-	avg->tv_nsec = (before.tv_nsec+after.tv_nsec)/2;
-	if ((after.tv_sec - before.tv_sec)%2 == 1) avg->tv_nsec += 500000000;
+	long tempns;
+	avg->tv_sec = before.tv_sec;
+	avg->tv_nsec = before.tv_nsec;
+//	tempns = (after.tv_sec - before.tv_sec) * 1000000000;
+//	tempns += after.tv_nsec; 
+//	tempns -= before.tv_nsec;
+//	avg->tv_nsec = tempns % 1000000000;
+//	avg->tv_sec += tempns / 1000000000;
 	return 1;
 }
 uint32_t* DMABuffer::getPointer(void) {
