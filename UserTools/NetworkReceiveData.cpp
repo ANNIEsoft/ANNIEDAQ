@@ -18,7 +18,7 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
   int a=12000;
   Receive->setsockopt(ZMQ_SNDTIMEO, a);
   Receive->setsockopt(ZMQ_RCVTIMEO, a);
-
+  
 
   std::stringstream tmp;
   tmp<<"tcp://"<<m_address<<":"<<m_port;
@@ -55,52 +55,67 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
 
 bool NetworkReceiveData::Execute(){
 
+ 
+
   if(m_data->triggered){
 
+    //boost::progress_timer t;
 
     for (int i=0;i< m_data->carddata.size();i++){
       delete m_data->carddata.at(i);
     }
     m_data->carddata.clear();
     
+    int more;
+    size_t more_size = sizeof (more);
+    // Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);
+    
     zmq::message_t message;
-    //    std::cout<<"about to get message"<<std::endl;
-    if(Receive->recv(&message)){
-      //std::cout<<"i got it"<<std::endl;      
-      std::istringstream iss(static_cast<char*>(message.data()));
-      
-      //std::cout<<iss.str()<<std::endl;;
-      //  std::ostringstream archive_stream;
-      
-      boost::archive::text_iarchive ia(iss);
-      
-      //  std::cout<<"run number before is "<<m_data->RunNumber<<std::endl;
-      // std::cout<<"d1"<<std::endl;      
-      
-      
-      CardData *data = new CardData;
-      ia >> *data;
-      m_data->carddata.push_back(data);
-      
-         
-
-      //      ia >> *m_data;
-
-      //std::cout<<"d2"<<std::endl;
-      // std::cout<<"run number after is "<<m_data->RunNumber<<std::endl;
-      //std::cout<<"received data 3 "<<*(m_data->Data.at(3))<<std::endl;
-      
+    //        std::cout<<"about to get message"<<std::endl;
+    
+    while (true){
+      if(Receive->recv(&message)){
+	//std::cout<<"i got it"<<std::endl;      
+	std::istringstream iss(static_cast<char*>(message.data()));
+	
+	//std::cout<<iss.str()<<std::endl;;
+	//  std::ostringstream archive_stream;
+	
+	boost::archive::text_iarchive ia(iss);
+	
+	//  std::cout<<"run number before is "<<m_data->RunNumber<<std::endl;
+	//std::cout<<"d1"<<std::endl;      
+	
+	
+	CardData *data = new CardData;
+	ia >> *data;
+	m_data->carddata.push_back(data);
+	
+	
+	
+	
+	//      ia >> *m_data;
+	
+	//	std::cout<<"d2"<<std::endl;
+	//std::cout<<"run number after is "<<m_data->RunNumber<<std::endl;
+	//std::cout<<"received data 3 "<<m_data->carddata.at(0)->Data[3]<<std::endl;
+	
+	
+	Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);
+      }
+      else return false;
+      if(more==0) break;
     }
-    else return false;
+
+    //    std::cout<<"card data size "<<m_data->carddata.size()<<std::endl;
   }
-  
   return true;
 }
 
 
 bool NetworkReceiveData::Finalise(){
 
-
+  
   delete Receive;
   Receive=0;
 

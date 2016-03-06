@@ -18,6 +18,7 @@ if (tool=="NetworkReceiveData") ret=new NetworkReceiveData;
  if (tool=="VMETriggerSend")ret=new VMETriggerSend;
  if (tool=="VMESendData")ret=new VMESendData;
  if (tool=="CardDataRecorder") ret=new CardDataRecorder;
+ if (tool=="Logger") ret=new Logger;
  
 return ret;
 }

@@ -37,15 +37,15 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
   
   m_treenum=0;
   m_data->NumEvents=0;
-  std::cout<<"i d1 "<<std::endl;
+  //std::cout<<"i d1 "<<std::endl;
   // std::cout<<m_data->carddata.at(0)->channels<<std::endl;
 
   m_card.PMTID=new int[4];
-  std::cout<<"i d2"<<std::endl;  
+  //std::cout<<"i d2"<<std::endl;  
 m_card.Data=new uint16_t[160000];
- std::cout<<"i d3"<<std::endl;
+//std::cout<<"i d3"<<std::endl;
   TTree *tree = new TTree("PMTData0","PMTData0");
-  std::cout<<"i d4"<<std::endl;
+  //std::cout<<"i d4"<<std::endl;
   tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
   tree->Branch("SequenceID",&(m_card.SequenceID),"SequenceID/I");
   tree->Branch("StartTime",&(m_card.StartTime),"StartTime/I");
@@ -55,47 +55,50 @@ m_card.Data=new uint16_t[160000];
   tree->Branch("BufferSize",&(m_card.buffersize),"BufferSize/I");
   tree->Branch("FullBufferSize",&(m_card.fullbuffsize),"FullBufferSize/I");
   tree->Branch("Data",m_card.Data,"Data[FullBufferSize]/s");
-  std::cout<<"i d5"<<std::endl;
+  //std::cout<<"i d5"<<std::endl;
   m_data->AddTTree("PMTData",tree);
-  std::cout<<"i d6"<<std::endl;
+  //std::cout<<"i d6"<<std::endl;
   return true;
 }
 
 
 bool CardDataRecorder::Execute(){
-  std::cout<<"Debug 1 i="<<m_data->NumEvents<<std::endl;
+  //std::cout<<"Debug 1 i="<<m_data->NumEvents<<std::endl;
   if(m_data->triggered){
+
+    //    boost::progress_timer t;
+
   m_data->NumEvents++;
   
   TTree *tree=m_data->GetTTree("PMTData");
-  std::cout<<"Debug 2"<<std::endl;
+  //std::cout<<"Debug 2"<<std::endl;
 
   if (tree->GetEntriesFast()>m_TTreeEventCap){
-    std::cout<<"Debug 3"<<std::endl;
+    //std::cout<<"Debug 3"<<std::endl;
     //    root_thread_args *args=new root_thread_args(OutFile,tree);
-    std::cout<<"Debug 4 "<<tree<<std::endl;
+    //std::cout<<"Debug 4 "<<tree<<std::endl;
     
     
     zmq::message_t message(512);
     std::stringstream TTreepointer;
     TTreepointer<<"TTree "<<tree;
     
-    std::cout<<"sending "<<TTreepointer.str()<<std::endl;
+    //std::cout<<"sending "<<TTreepointer.str()<<std::endl;
     
     snprintf ((char *) message.data(), 512 , "%s" ,TTreepointer.str().c_str()) ;
     Isend->send(message);
     
-    std::cout<<"sent "<<std::endl;
+    //std::cout<<"sent "<<std::endl;
     //    pthread_create (&thread[0], NULL, CardDataRecorder::WriteOut, args
-    std::cout<<"Debug 5"<<std::endl;
+    //std::cout<<"Debug 5"<<std::endl;
     m_treenum++;
     std::stringstream tmp;
     tmp<<"PMTData"<<m_treenum;
-    std::cout<<"Debug 6 m_tmp = "<<tmp.str()<<std::endl;
+    //std::cout<<"Debug 6 m_tmp = "<<tmp.str()<<std::endl;
     tree=new TTree(tmp.str().c_str(),tmp.str().c_str());
-    std::cout<<"Debug 7"<<std::endl;
+    //std::cout<<"Debug 7"<<std::endl;
     m_data->AddTTree("PMTData",tree);
-    std::cout<<"Debug 8"<<std::endl;
+    //std::cout<<"Debug 8"<<std::endl;
     tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
     tree->Branch("SequenceID",&(m_card.SequenceID),"SequenceID/I");
     tree->Branch("StartTime",&(m_card.StartTime),"StartTime/I");
@@ -105,13 +108,13 @@ bool CardDataRecorder::Execute(){
     tree->Branch("BufferSize",&(m_card.buffersize),"BufferSize/I");
     tree->Branch("FullBufferSize",&(m_card.fullbuffsize),"FullBufferSize/I");
     tree->Branch("Data",(m_card.Data),"Data[FullBufferSize]/s");
-    std::cout<<"Debug 9"<<std::endl;
+    //std::cout<<"Debug 9"<<std::endl;
   }
 
 
-  std::cout<<"Debug 10 "<<m_data->carddata.size()<<std::endl;
+  //std::cout<<"Debug 10 "<<m_data->carddata.size()<<std::endl;
   for(int i=0;i<m_data->carddata.size();i++){
-    std::cout<<"Debug 11"<<std::endl;
+    //std::cout<<"Debug 11"<<std::endl;
     m_card.LastSync=m_data->carddata.at(i)->LastSync;
     m_card.SequenceID=m_data->carddata.at(i)->SequenceID;
     m_card.StartTime=m_data->carddata.at(i)->StartTime;
@@ -119,15 +122,15 @@ bool CardDataRecorder::Execute(){
     m_card.channels=m_data->carddata.at(i)->channels;
     m_card.buffersize=m_data->carddata.at(i)->buffersize;
     m_card.fullbuffsize=m_data->carddata.at(i)->fullbuffsize;
-     std::cout<<"Debug 12"<<std::endl;
+    //std::cout<<"Debug 12"<<std::endl;
     for(int j=0;j<m_card.channels;j++){
-     std::cout<<"Debug 13"<<std::endl;
+      //std::cout<<"Debug 13"<<std::endl;
 
      (m_card.PMTID)[j]=(m_data->carddata.at(i)->PMTID)[j]; // these pointers have changed hence the crash
-     std::cout<<"Debug 14"<<std::endl;
+     //std::cout<<"Debug 14"<<std::endl;
       
     }	
-    std::cout<<"Debug 15"<<std::endl;
+    //std::cout<<"Debug 15"<<std::endl;
     
     for(int j=0;j<m_card.fullbuffsize;j++){
       //std::cout<<"Debug 16"<<std::endl;
@@ -137,12 +140,12 @@ bool CardDataRecorder::Execute(){
 
     }
     
-    std::cout<<"Debug 18 i= "<<m_data->NumEvents<<std::endl;
+    //std::cout<<"Debug 18 i= "<<m_data->NumEvents<<std::endl;
      tree->Fill();
-    std::cout<<"Debug 19"<<std::endl;
+     //std::cout<<"Debug 19"<<std::endl;
   }    
   
-  std::cout<<"Debug 20"<<std::endl;
+  //std::cout<<"Debug 20"<<std::endl;
   
   
   

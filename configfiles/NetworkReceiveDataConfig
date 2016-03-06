@@ -1,7 +1,7 @@
 #Network receive data config file
 
 port 24011
-address 10.25.190.95 #10.25.190.15
+address 192.168.1.21 #10.25.190.95 #10.25.190.15
 
 cards 1
 channels 4

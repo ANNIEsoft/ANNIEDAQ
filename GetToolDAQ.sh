@@ -18,17 +18,21 @@ export LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
 
 cd ../boost_1_60_0
 
-./bootstrap.sh --prefix=/usr/local/ # change this to pwd
-sudo ./b2 install  # then no need for sudo
+mkdir install
 
-export LD_LIBRARY_PATH=`pwd`/libs:$LD_LIBRARY_PATH
+./bootstrap.sh --prefix=`pwd`/install/ # change this to pwd
+./b2 install  # then no need for sudo
+
+export LD_LIBRARY_PATH=`pwd`/install/lib:$LD_LIBRARY_PATH
 
 cd ../ToolDAQFramework
 
 make clean
 make
 
-cd ../../
+export LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
+
+cd ../
 
 wget https://root.cern.ch/download/root_v5.34.34.source.tar.gz
 tar zxvf root_v5.34.34.source.tar.gz
@@ -44,9 +48,12 @@ make install
 sudo yum install postgresql-devel.x86_64
 
 
-http://pqxx.org/download/software/libpqxx/libpqxx-4.0.1.tar.gz
+wget http://pqxx.org/download/software/libpqxx/libpqxx-4.0.1.tar.gz
 tar zxvf libpqxx-4.0.1.tar.gz
 cd libpqxx-4.0.1
-./configure --enable-shared
+mkdir install
+./configure --enable-shared --prefix=`pwd`/install
 make
-sudo amke install
+make install
+
+route add -net 224.0.0.0 netmask 240.0.0.0 dev eth1

@@ -17,12 +17,12 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   
   m_data->triggered=false;
   
-  
+    
   std::vector<Store*> RemoteServices;
   
   zmq::socket_t Ireceive (*(m_data->context), ZMQ_DEALER);
   Ireceive.connect("inproc://ServiceDiscovery");
-
+  
   for(int i=0;i<11;i++){
   
   zmq::message_t send(256);
@@ -107,12 +107,30 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   }
 
   RemoteServices.clear();
-    
+  
+
+  /* backup
+  zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);                                                                             
+  int a=12000;                                                                
+  RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);                                    
+  RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);                                    
+                                                                                
+  std::stringstream tmp;                                                      
+  tmp<<"tcp://"<<"192.168.1.21"<<":"<<VME_port;                                           
+                                                                                
+  // printf("%s \n",tmp.str().c_str());                                       
+  RemoteSend->connect(tmp.str().c_str());                                     
+                                                                                
+  VMESockets.push_back(RemoteSend);
+  */
+
   return true;
 }
 
 
 bool Trigger::Execute(){
+
+  //boost::progress_timer t;
 
   bool trigger=true;  
   
@@ -127,7 +145,7 @@ bool Trigger::Execute(){
       zmq::message_t receive;
       if(VMESockets.at(i)->recv(&receive)){
 	std::istringstream iss(static_cast<char*>(receive.data()));
-	std::cout<<" got trigger message "<<iss.str()<<std::endl;	
+	//std::cout<<" got trigger message "<<iss.str()<<std::endl;	
 	bool tmptrigger;
 	iss>>tmptrigger;
 	trigger*=tmptrigger;

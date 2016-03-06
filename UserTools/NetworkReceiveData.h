@@ -5,10 +5,12 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <boost/progress.hpp>
 
 #include "Tool.h"
 
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 
 class NetworkReceiveData: public Tool {
 

@@ -3,21 +3,21 @@ ToolDAQFrameworkPath=ToolDAQ/ToolDAQFramework
 ZMQLib= -L ToolDAQ/zeromq-4.0.7/lib -lzmq 
 ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/ 
 
-BoostLib= -L /usr/local/lib -lboost_date_time -lboost_serialization
-BoostInclude= -I /usr/local/include/
+BoostLib= -L ToolDAQ/boost_1_60_0/install/lib -lboost_date_time -lboost_serialization
+BoostInclude= -I ToolDAQ/boost_1_60_0/install/include
 
-RootInclude=  -I /usr/include/root/
-RootLib=   -L /usr/lib64/root/  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
+RootInclude=  -I ToolDAQ/root/include
+RootLib=   -L ToolDAQ/root/lib  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lMathCore -lThread -pthread -lm -ldl -rdynamic -pthread -m64
 
 DataModelInclude = $(RootInclude)
 DataModelLib = $(RootLib)
 
-MyToolsInclude = $(RootInclude)
-MyToolsLib = $(RootLib)  -L /usr/local/lib/ -lpqxx -lboost_serialization
+MyToolsInclude = $(RootInclude) -I ToolDAQ/libpqxx-4.0.1/install/include
+MyToolsLib = $(RootLib)  -L ToolDAQ/libpqxx-4.0.1/install/lib/ -lpqxx 
 
 all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/libServiceDiscovery.so lib/libDataModel.so lib/libLogging.so RemoteControl  NodeDaemon
  
-	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude) $(RootInclude) $(RootLib)
+	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(MyToolsLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 
 lib/libStore.so:
@@ -34,7 +34,7 @@ include/Tool.h:
 lib/libToolChain.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libMyTools.so lib/libServiceDiscovery.so lib/libLogging.so
 
 	cp $(ToolDAQFrameworkPath)/src/ToolChain/*.h include/
-	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)  
+	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)  $(BoostLib) $(BoostInclude)
 
 
 clean: 

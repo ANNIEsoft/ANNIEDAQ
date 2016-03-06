@@ -79,17 +79,17 @@ template<class Archive>
       ar & d.Data[i];
     }
 
-    std::cout<<d.LastSync<<std::endl;
-    std::cout<<d.SequenceID<<std::endl;
-    std::cout<<d.StartTime<<std::endl;
-    std::cout<<d.CardID<<std::endl;
-    std::cout<<d.channels<<std::endl;
-    std::cout<<d.buffersize<<std::endl;
-    std::cout<<d.fullbuffsize<<std::endl;
+    //std::cout<<d.LastSync<<std::endl;
+    //std::cout<<d.SequenceID<<std::endl;
+    //std::cout<<d.StartTime<<std::endl;
+    //std::cout<<d.CardID<<std::endl;
+    //std::cout<<d.channels<<std::endl;
+    //std::cout<<d.buffersize<<std::endl;
+    //std::cout<<d.fullbuffsize<<std::endl;
     //std::cout<<a<<std::endl;
     //std::cout<<b<<std::endl;
-    std::cout<<d.PMTID[0]<<std::endl;
-    std::cout<<d.Data[0]<<std::endl;
+    //std::cout<<d.PMTID[0]<<std::endl;
+    //std::cout<<d.Data[0]<<std::endl;
 
   }
 
@@ -140,17 +140,17 @@ template<class Archive>
 
      }
 
-     std::cout<<d.LastSync<<std::endl;
-     std::cout<<d.SequenceID<<std::endl;
-     std::cout<<d.StartTime<<std::endl;
-     std::cout<<d.CardID<<std::endl;
-     std::cout<<d.channels<<std::endl;
-     std::cout<<d.buffersize<<std::endl;
-     std::cout<<d.fullbuffsize<<std::endl;
+     //std::cout<<d.LastSync<<std::endl;
+     //std::cout<<d.SequenceID<<std::endl;
+     //std::cout<<d.StartTime<<std::endl;
+     //std::cout<<d.CardID<<std::endl;
+     //std::cout<<d.channels<<std::endl;
+     //std::cout<<d.buffersize<<std::endl;
+     //std::cout<<d.fullbuffsize<<std::endl;
      //std::cout<<len<<std::endl;
      //std::cout<<lenb<<std::endl;
-     std::cout<<d.PMTID[0]<<std::endl;
-     std::cout<<d.Data[0]<<std::endl;
+     //std::cout<<d.PMTID[0]<<std::endl;
+     //std::cout<<d.Data[0]<<std::endl;
 
    }
 

@@ -10,3 +10,4 @@
 #include "NetworkReceiveData.cpp"
 #include "VMETriggerSend.cpp"
 #include "VMESendData.cpp"
+#include "Logger.cpp"

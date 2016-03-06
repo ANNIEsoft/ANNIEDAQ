@@ -12,6 +12,8 @@
 #include "TTree.h"
 #include "TThread.h"
 
+#include <boost/progress.hpp>
+
 struct card_root_thread_args{
   
   //root_thread_args(std::string outfile, TTree* intree){
