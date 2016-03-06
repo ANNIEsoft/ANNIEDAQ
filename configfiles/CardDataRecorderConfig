@@ -1,5 +1,5 @@
 # Dummy config file
 
-OutputPath data/output/
+OutputPath /data/output/
 TTreeEventCap 10
 TFileTTreeCap 2
