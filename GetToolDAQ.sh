@@ -65,4 +65,14 @@ cd ../../
 make clean
 make
 
+#as root
 #route add -net 224.0.0.0 netmask 240.0.0.0 dev eth1
+
+#webpage
+#cp /home/annie/ANNIEDAQ/Webpage/*.cgi /var/www/cgi-bin/
+#cp /home/annie/ANNIEDAQ/Webpage/*.cpp /var/www/cgi-bin
+#cp /home/annie/ANNIEDAQ/Webpage/Makefile /var/www/cgi-bin
+#cp /home/annie/ANNIEDAQ/Webpage/*.html /var/www/html/
+#cp /home/annie/ANNIEDAQ/Webpage/*.png /var/www/html/
+#cp /home/annie/ANNIEDAQ/Webpage/*.JPG /var/www/html/
+
