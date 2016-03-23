@@ -48,7 +48,7 @@ lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
-	g++ -g -fPIC -shared DataModel/DataModel.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
+	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 

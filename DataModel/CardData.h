@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <stdlib.h>
+
+#include "zmq.hpp"
+
 
 struct CardData{
 
@@ -15,20 +19,17 @@ struct CardData{
   int buffersize;
   int fullbuffsize; // buffersize * num channels
   uint16_t *Data; //1D array of card readout size fullbuffsize
+  
+  //the form and structure of this data is probably something you want to change this was just my guess baised on what we talked about.
+  //so feel free to make this what ever you making the card output to be
+  
+  ~CardData();  
 
-  //the form and structure of this data is probably something you want to ch\ange this was just my guess baised on what we talked about.
-//so feel free to make this what ever you making the card output to be
-  ~CardData(){
-    //    std::cout<<" c d 1"<<std::endl;
-    delete[] PMTID;
-    PMTID=0;
-    //std::cout<<" c d 2"<<std::endl;
-    delete[] Data;
-    Data=0;
-    //std::cout<<" c d 3"<<std::endl;
-    }
-
-
+  void  Send(zmq::socket_t *socket);
+  void Receive(zmq::socket_t *socket);
+  
+ 
+  
 };
 
 

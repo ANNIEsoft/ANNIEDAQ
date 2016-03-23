@@ -66,29 +66,143 @@ bool NetworkReceiveData::Execute(){
     }
     m_data->carddata.clear();
     
+
+
+    //new
+
+                                                                                
+    zmq::message_t message;
+    
+    Receive->recv(&message);
+    std::istringstream iss(static_cast<char*>(message.data()));
+    int cards;
+    iss>>cards;
+   
+    //std::cout<<" d1"<<std::endl;
+
+    for(int i=0;i<cards;i++){
+      //std::cout<<" d2"<<std::endl;
+
+      CardData *tmp=new CardData;
+      //std::cout<<" d3"<<std::endl;
+
+      tmp->Receive(Receive);
+      //std::cout<<" d4"<<std::endl;
+
+      m_data->carddata.push_back(tmp);
+      //std::cout<<" d5"<<std::endl;
+
+    }
+    //std::cout<<" d6"<<std::endl;
+
+
+                                 
+    /*
+    zmq::message_t message;
+    Receive->recv(&message);
+    std::cout<<*reinterpret_cast<int*>(message.data())<<std::endl;
+    m_data->carddata.at(0)->LastSync=*(reinterpret_cast<int*>(message.data()));
+    //std::istringstream iss(static_cast<char*>(message.data()));
+    //std::cout<<"memcopy"<<std::endl;
+    //std::memcpy( (void*) &(m_data->carddata.at(0)->LastSync), message.data(), sizeof  m_data->carddata.at(0)->LastSync);
+    */
+
+
+    //    std::cout<<" int test "<< m_data->carddata.at(0)->LastSync<<std::endl;
+
+    //////////////old boost
+    /*
+  
     int more;
     size_t more_size = sizeof (more);
     // Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);
     
-    zmq::message_t message;
+    //  zmq::message_t message;
     //        std::cout<<"about to get message"<<std::endl;
     
-    while (true){
-      if(Receive->recv(&message)){
-	//std::cout<<"i got it"<<std::endl;      
-	std::istringstream iss(static_cast<char*>(message.data()));
-	
-	//std::cout<<iss.str()<<std::endl;;
+    // while (true){
+    //    if(Receive->recv(&message)){
+
+    for (int i=0;i<17;i++){
+      zmq::message_t message;
+      Receive->recv(&message);
+      int size=*reinterpret_cast<int*>(message.data());
+      std::cout<<size<<std::endl;
+      //std::cout<<size<<std::endl;
+      //std::cout<<message.data()<<" : "<< sizeof (message.data())<<std::endl;
+      //std::string tmp;
+      zmq::message_t message2;     
+      Receive->recv(&message2);
+      char* tmp=(static_cast<char*>(message2.data()));
+      //    memcpy ((void *) &tmp, message.data() , tmp.length()+1);
+      std::cout<<"d1"<<std::endl;
+      //std::string test(tmp, size);
+      
+      //std::cout<<test<<std::endl;
+ //      std::stringstream tmp;
+      // tmp.rdbuf(reinterpret_cast<std::streambuf*>(message.data()));
+      //std::cout<<tmp.str()<<std::endl;
+
+      //	std::cout<<*(reinterpret_cast<std::string*>(message.data()))<<std::endl;
+     
+      std::stringstream iss;
+      std::cout<<"d1.5"<<std::endl; 
+      ofstream myfile;
+      myfile.open ("example.txt");
+    
+      for(int i=0;i<message2.size();i++){
+      	iss<<tmp[i];
+	myfile<<tmp[i];
+	if(i<10)std::cout<<tmp[i];
+	if(i>size-10)std::cout<<tmp[i];
+
+      }
+      
+      myfile.close();
+
+      std::cout<<std::endl;
+      //std::cout<<std::endl<<"d2"<<iss.str()<<std::endl;
+
+      std::cout<<message2.size()<<std::endl;
+      std::cout<<iss.str().length()<<std::endl<<iss.str().max_size()<<std::endl;;
+      
+
+      std::string hope;
+      hope=iss.str();
+      std::istringstream iss2;
+      //      	std::cout<<iss2.str()<<std::endl;
 	//  std::ostringstream archive_stream;
-	
-	boost::archive::text_iarchive ia(iss);
+      // std::cout<<"d3 "<<iss.str().length()<<std::endl;
+      //      std::istringstream ggg;
+      iss.seekg(0,std::ios::end);
+      bool good =iss.good();
+      bool bad=iss.bad();
+      bool eof=iss.eof();
+      bool fail=iss.fail();
+      bool rdstate=iss.rdstate();
+
+   std::cout<<"d3 "<< iss.str().length()<<std::endl;
+   std::cout<<"good "<<good <<std::endl;
+   std::cout<<"bad "<< bad<<std::endl;
+   std::cout<<"eof "<< eof<<std::endl;
+   std::cout<<"fail "<<fail<<std::endl;
+   std::cout<<"rdstate "<<rdstate<<std::endl;
+   
+   boost::iostreams::basic_array_source<char> device(iss.str().data(), iss.str().size());
+   boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
+   std::cout<<"d3"<<std::endl;
+
+   boost::archive::binary_iarchive ia(s);
+   //   ia >> obj;
+
+   // boost::archive::binary_iarchive ia(iss);
 	
 	//  std::cout<<"run number before is "<<m_data->RunNumber<<std::endl;
-	//std::cout<<"d1"<<std::endl;      
+	std::cout<<"d4"<<std::endl;      
 	
 	
 	CardData *data = new CardData;
-	ia >> *data;
+		ia >> *data;
 	m_data->carddata.push_back(data);
 	
 	
@@ -101,14 +215,25 @@ bool NetworkReceiveData::Execute(){
 	//std::cout<<"received data 3 "<<m_data->carddata.at(0)->Data[3]<<std::endl;
 	
 	
-	Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);
-      }
-      else return false;
-      if(more==0) break;
-    }
+	//Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);
+	//}
+    //else return false;
+    // if(more==0) break;
+   
+    */
+    //}
+	
 
-    //    std::cout<<"card data size "<<m_data->carddata.size()<<std::endl;
-  }
+
+
+
+
+    //        std::cout<<"card data size "<<m_data->carddata.size()<<std::endl;
+
+
+
+}
+
   return true;
 }
 

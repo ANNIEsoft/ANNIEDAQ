@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+
+touch /var/lock/subsys/local
+route add -net 224.0.0.0 netmask 240.0.0.0 dev eth1
+cd /home/annie/ANNIEDAQ/
+source /home/annie/ANNIEDAQ/Setup.sh
+/home/annie/ANNIEDAQ/NodeDaemon DAQ01 </dev/null &>/dev/null &
+disown $!

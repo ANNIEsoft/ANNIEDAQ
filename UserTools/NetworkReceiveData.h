@@ -10,7 +10,11 @@
 #include "Tool.h"
 
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
+//#include <boost/archive/binary_iarchive.hpp>
+//#include <boost/archive/binary_iarchive.hpp>
+//#include <boost/iostreams/basic_array_source.hpp>
+//#include <boost/iostreams/stream.hpp> 
+
 
 class NetworkReceiveData: public Tool {
 
