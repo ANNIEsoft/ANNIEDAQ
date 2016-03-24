@@ -20,8 +20,8 @@ class Lecroy3377 : public CamacCrate
 {
 	public:
 
-		Lecroy3377();	//Constructor !
-		~Lecroy3377();
+		Lecroy3377(int NSlot);	//Constructor !
+//		~Lecroy3377();
 		int ReadFIFOall(std::vector<long> &vData);	//F(0)·A(0) 
 		int ReadFIFO();					//F(0)·A(1)COMMON START ONLY	
 		int ExFIFOOut();				//F(0)·A(2)COMMON START ONLY
@@ -48,15 +48,14 @@ class Lecroy3377 : public CamacCrate
 
 		int GetID();					//Return ID
 		int GetSlot();					//Return Slot
-		void Lecroy3377::PrintRegisterControl();	//Print Register var
+		void Lecroy3377::PrintRegister();		//Print Register vars
 		void Lecroy3377::GetRegister()			//Retrieve register 
 		void Lecroy3377::SetRegister()			//Send register parameters
 		void Lecroy3377::EncRegister()			//Register control Encoder
 		void Lecroy3377::DecRegister()			//Register control Decoder
-		int Lecroy3377::BittoInt(bitset<16> &bitref, int a, int b)	//Utility function, returns integer from bitset<16>
 
 
-		///////Register Control var: num_reg, bit-size
+		///////Register Control vars: num_reg, bit-size
 		//////
 		/////Public, so anyone can use them
 		////

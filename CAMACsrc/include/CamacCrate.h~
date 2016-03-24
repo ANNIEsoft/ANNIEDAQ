@@ -1,8 +1,16 @@
+/*
+ * CC-USB CAMAC controller module and Crate initialiser class 
+ *
+ * Author: Tommaso Boschi
+ */
+
+
 #ifndef CamacCrate_H
 #define CamacCrate_H
 
 #include <iostream>
 #include <vector>
+#include <bitset>
 
 #include "libxxusb.h"
 
@@ -24,6 +32,7 @@ class CamacCrate
 
 	protected:
 
+		int BittoInt(bitset<16> &bitref, int a, int b);
 		std::vector<int> Slot;
 
 	private:

@@ -2,8 +2,8 @@
 
 Lecroy3377::Lecroy3377(int NSlot)	//Subclass constructor, n of Slot given
 {
-	CamacCrate::Slot.push_back(NSlot);
-	ID = CamacCrate::Slot.size()-1;
+	Slot.push_back(NSlot);
+	ID = Slot.size()-1;
 }
 
 int Lecroy3377::ReadFIFOall(std::vector<long> &vData) //Read FIFO data until end of event, Q = 1 for valid data, Q = 0 at end.
@@ -12,7 +12,7 @@ int Lecroy3377::ReadFIFOall(std::vector<long> &vData) //Read FIFO data until end
 	int Q = 0, X = 0, ret;
 	do
 	{
-		ret = CamacCrate::READ(GetID(), 0, 0, Data, Q, X);
+		ret = READ(GetID(), 0, 0, Data, Q, X);
 		if (ret >= 0) vData.push_back(Data);
 	}
 	while (Q == 1)
@@ -33,7 +33,7 @@ long Lecroy3377::ReadReg(int R) //Read Control Register R.
 {
 	long Data = 0;
 	int Q = 0, X = 0, ret;
-	if (R < 4) ret = CamacCrate::READ(GetID(), R, 1, Data, Q, X);
+	if (R < 4) ret = READ(GetID(), R, 1, Data, Q, X);
 	if(ret > 0) return Data;
 	else return 0;
 }
@@ -47,7 +47,7 @@ int Lecroy3377::TestLAM(); //Test LAM.
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 8, Data, Q, X);
+	int ret = READ(GetID(), 0, 8, Data, Q, X);
 	return ret;
 }
 
@@ -55,7 +55,7 @@ int Lecroy3377::ClearAll() //Clear all data and LAM. This does NOT affect the co
 {	
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 9, Data, Q, X);
+	int ret = READ(GetID(), 0, 9, Data, Q, X);
 	return ret;
 }
 
@@ -63,7 +63,7 @@ int Lecroy3377::ClearLAM() //Clear LAM.
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 10, Data, Q, X);
+	int ret = READ(GetID(), 0, 10, Data, Q, X);
 	return ret;
 }
 
@@ -81,7 +81,7 @@ int Lecroy3377::WriteReg(int R, long &Data); //Write Control Register R.
 {
 	int Q = 0, X = 0;
 	int ret;
-	if (R < 4) ret = CamacCrate::WRITE(GetID(), R, 17, Data, Q, X);
+	if (R < 4) ret = WRITE(GetID(), R, 17, Data, Q, X);
 	else ret = 0;
 	return ret;
 }
@@ -90,7 +90,7 @@ int Lecroy3377::DisLAM() //Disable LAM.
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 24, Data, Q, X);
+	int ret = READ(GetID(), 0, 24, Data, Q, X);
 	return ret;
 
 }
@@ -99,7 +99,7 @@ int Lecroy3377::DisAcq() //Disable Acquisition Mode.
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 1, 24, Data, Q, X);
+	int ret = READ(GetID(), 1, 24, Data, Q, X);
 	return ret;
 
 }
@@ -109,7 +109,7 @@ int Lecroy3377::InitTest() //F(25)·A(0): Initiate test cycle (Common Start only
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 25, Data, Q, X);
+	int ret = READ(GetID(), 0, 25, Data, Q, X);
 	return ret;
 
 }
@@ -118,7 +118,7 @@ int Lecroy3377::EnLAM() //Enable LAM.
 {
 	long Data = 0;
 	int Q = 0, X = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 26, Data, Q, X);
+	int ret = READ(GetID(), 0, 26, Data, Q, X);
 	return ret;
 
 }
@@ -127,7 +127,7 @@ int Lecroy3377::EnAcq() //Enable Acquisition Mode.
 {
 	long Data = 0;
 	int Q = 0, Z = 0;
-	int ret = CamacCrate::READ(GetID(), 1, 26, Data, Q, X);
+	int ret = READ(GetID(), 1, 26, Data, Q, X);
 	return ret;
 }
 
@@ -135,7 +135,7 @@ int Lecroy3377::TestBuff()	//Test buffering in progress (BIP), Q = 1 while BIP.
 {
 	long Data = 0;
 	int Q = 0, Z = 0;
-	int ret = CamacCrate::READ(GetID(), 0, 27, Data, Q, X);
+	int ret = READ(GetID(), 0, 27, Data, Q, X);
 	return Q;
 }
 
@@ -143,7 +143,7 @@ int Lecroy3377::TestBusy()	//Test busy, Q = 1 while busy.
 {
 	long Data = 0;
 	int Q = 0, Z = 0;
-	int ret = CamacCrate::READ(GetID(), 1, 27, Data, Q, X);
+	int ret = READ(GetID(), 1, 27, Data, Q, X);
 	return Q;
 }
 
@@ -151,7 +151,7 @@ int Lecroy3377::TestEvent()	//Test event ready, Q = 1 if event ready for readout
 {
 	long Data = 0;
 	int Q = 0, Z = 0;
-	int ret = CamacCrate::READ(GetID(), 2, 27, Data, Q, X);
+	int ret = READ(GetID(), 2, 27, Data, Q, X);
 	return Q;
 }
 
@@ -159,7 +159,7 @@ int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to
 {
 	long Data = 0;
 	int Q = 0, Z = 0;
-	int ret = CamacCrate::READ(GetID(), 3, 27, Data, Q, X);
+	int ret = READ(GetID(), 3, 27, Data, Q, X);
 	return Q;
 }
 
@@ -172,7 +172,7 @@ int Lecroy3377::Reprog(long *Data, int *Q, int *X)	//F(30): Begin the reprogramm
 int Lecroy3377::READ(int F, int A, long &Data)	//Generic READ
 {
 	int Q = 0, X = 0, ret;
-	if (R < 4) ret = CamacCrate::READ(GetID(), F, A, Data, Q, X);
+	if (R < 4) ret = READ(GetID(), F, A, Data, Q, X);
 	if(ret > 0) return Data;
 	else return ret;
 }
@@ -180,7 +180,7 @@ int Lecroy3377::READ(int F, int A, long &Data)	//Generic READ
 int Lecroy3377::WRITE(int F, int A, long &Data)	//Gneric WRITE
 {
 	int Q = 0, X = 0, ret;
-	if (R < 4) ret = CamacCrate::WRITE(GetID(), F, A, Data, Q, X);
+	if (R < 4) ret = WRITE(GetID(), F, A, Data, Q, X);
 	else ret = 0;
 	return ret;
 }
@@ -192,7 +192,7 @@ int Lecroy3377::GetID()		//Return ID of module
 
 int Lecroy3377::GetSlot()	//Return n of Slot of module
 {
-	return CamacCrate::Slot.at(GetID());
+	return Slot.at(GetID());
 }
 
 void Lecroy3377::GetRegister()
@@ -207,6 +207,7 @@ void Lecroy3377::SetRegister()
 	for (int i = 0; i < 4; i++)
 		ret = WriteReg(i, Control+i);
 }
+
 void Lecroy3377::DecRegister()
 {
 	std::bitset<16> breg0(Control[0]);
@@ -286,42 +287,27 @@ void Lecroy3377::EncRegister()
 	Control[3] = b3_0.to_ulong();
 }
 
-void Lecroy3377::PrintRegisterControl();
+void Lecroy3377::PrintRegister();
 {	
 	DecRegister();
 	std::cout << "[" << GetID << "] :\t"
 	std::cout << "Lecroy3377 in slot " << GetSlot() << " register control\n";
-	std::cout << "- Module ID code\t" << ModIDcode << endl; 
-	std::cout << "- Record Edges\t" << RecEdges << endl; 
-	std::cout << "- Redout Mode\t" << RedoutMode << endl; 
-	std::cout << "- Buffer Mode\t" << BuffMode << endl; 
-	std::cout << "- Header Mode\t" << HeaderMode << endl; 
-	std::cout << "- Mode in use\t" << Mode << endl; 
-	std::cout << "- Trg Width\t"  << TrgWidth << endl; 
-	std::cout << "- Trg Delay\t" << TrgDelay << endl; 
-	std::cout << "- Trg Clock\t" << TrgClock << endl; 
-	std::cout << "- MPI\t\t" << MPI << endl; 
-	std::cout << "- Fast FERA\t" << FFERAmode << endl; 
-	std::cout << "- Event Serial\t" << EvSerNum << endl; 
-	std::cout << "- Max HITS\t" << MaxHITS << endl; 
-	std::cout << "- Full Scale\t" << FullScale << endl; 
-	std::cout << "- Request Delay\t" << ReqDelay << endl; 
-	std::cout << endl; 
+	std::cout << "- Module ID code\t" << ModIDcode << std::endl; 
+	std::cout << "- Record Edges\t" << RecEdges << std::endl; 
+	std::cout << "- Redout Mode\t" << RedoutMode << std::endl; 
+	std::cout << "- Buffer Mode\t" << BuffMode << std::endl; 
+	std::cout << "- Header Mode\t" << HeaderMode << std::endl; 
+	std::cout << "- Mode in use\t" << Mode << std::endl; 
+	std::cout << "- Trg Width\t"  << TrgWidth << std::endl; 
+	std::cout << "- Trg Delay\t" << TrgDelay << std::endl; 
+	std::cout << "- Trg Clock\t" << TrgClock << std::endl; 
+	std::cout << "- MPI\t\t" << MPI << std::endl; 
+	std::cout << "- Fast FERA\t" << FFERAmode << std::endl; 
+	std::cout << "- Event Serial\t" << EvSerNum << std::endl; 
+	std::cout << "- Max HITS\t" << MaxHITS << std::endl; 
+	std::cout << "- Full Scale\t" << FullScale << std::endl; 
+	std::cout << "- Request Delay\t" << ReqDelay << std::endl; 
+	std::cout << std::endl; 
 }
 
-int Lecroy3377::BittoInt(bitset<16> &bitref, int a, int b)
-{
-	int tmp, sum = 0;
-	if (a > b)
-	{
-		tmp = a;
-		a = b;
-		b = tmp;
-	}
-	for (int i = b; i i>= a: i--)
-	{
-		sum *= 2;
-		sum += bitref(i);
-	}
-	return sum;
-}
+

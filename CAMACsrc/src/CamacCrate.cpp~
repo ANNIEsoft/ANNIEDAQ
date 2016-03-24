@@ -76,3 +76,20 @@ int CamacCrate::I(bool inh)		//Global INHIBIT
 {
 	CAMAC_I(Mudev, inh);
 }
+
+int CamacCrate::BittoInt(std::bitset<16> &bitref, int a, int b)
+{
+	int tmp, sum = 0;
+	if (a > b)
+	{
+		tmp = a;
+		a = b;
+		b = tmp;
+	}
+	for (int i = b; i i>= a: i--)
+	{
+		sum *= 2;
+		sum += bitref(i);
+	}
+	return sum;
+}
