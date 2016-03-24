@@ -1,0 +1,17 @@
+#ifndef Lecroy3377_H
+#define Lecroy3377_H
+
+#include <iostream>
+
+#include "libxxusb.h"
+
+class Lecroy3377
+{
+	public:
+		Lecroy3377();
+
+	private:
+
+};
+
+#endif
