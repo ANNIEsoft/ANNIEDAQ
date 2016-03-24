@@ -56,8 +56,8 @@ echo "
 "    
 
 run=0
-subrun=0;
-
+subrun=0
+num=-1
 
 for file in `ls /data/output/`
 do
@@ -77,15 +77,25 @@ then
 echo "<td><b> Run $run </b></td>"
 subrun=0
 echo "</tr><tr><td><b> Sub Run  $subrun </></td>"
-
+num1=-1
 fi
 
 if [ ${b[2]} -ne $subrun ]
 then
 subrun=${b[2]}
     echo "</tr><tr> <td><b> Sub Run  $subrun </></td>"
+num=-1
 fi
 
+num=`expr $num + 1`
+mod=`expr $num % 7`
+#echo "<td>$num</td>"
+#echo "<td>$mod</td>"
+if [ $mod -eq 0 ] && [ ${b[3]} -ne 0 ]
+then
+#echo "<td>in</td>"
+ echo "</tr><tr><td></td>"
+fi 
 
    echo "<td><a href=\"/output/$file\"> $file </a></td>"                                                                                                                                                                        
                                                                                                                               
