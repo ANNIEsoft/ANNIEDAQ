@@ -107,4 +107,5 @@ cd /var/www/cgi-bin
 make
 
 cp /home/annie/ANNIEDAQ/rc.local/rc.local /etc/
-
+cp /home/annie/ANNIEDAQ/rc.local/ANNIEcgi.conf /etc/ld.so.conf.d/
+ldconfig
