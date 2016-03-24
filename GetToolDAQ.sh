@@ -76,36 +76,53 @@ make
 #cp /home/annie/ANNIEDAQ/Webpage/*.png /var/www/html/
 #cp /home/annie/ANNIEDAQ/Webpage/*.JPG /var/www/html/
 #cp /home/annie/ANNIEDAQ/Webpage/styles.css /var/www/html/
-mkdir /data/logs
-mkdir /data/output
-cd /va/www/html/
-ln -s /data/logs/ ./
-ln -s /data/output/ ./
-chown -R annie:apache /data/
+#mkdir /data/logs
+#mkdir /data/output
+#cd /va/www/html/
+#ln -s /data/logs/ ./
+#ln -s /data/output/ ./
+#chown -R annie:apache /data/
 
-cd /home/annie/ANNIEDAQ/ToolDAQ/
-wget ftp://ftp.gnu.org/gnu/cgicc/cgicc-3.2.9.tar.gz
-tar -zxvf cgicc-3.2.9.tar.gz
-cd cgicc-3.2.9
-./configure --prefix=/usr/local
-make
-make install
+#cd /home/annie/ANNIEDAQ/ToolDAQ/
+#wget ftp://ftp.gnu.org/gnu/cgicc/cgicc-3.2.9.tar.gz
+#tar -zxvf cgicc-3.2.9.tar.gz
+#cd cgicc-3.2.9
+#./configure --prefix=/usr/local
+#make
+#make install
 
-cd ../boost_1_60_0
-cp -r install/include/* /usr/local/include/
-cp -r install/lib/* /usr/local/lib/
+#cd ../boost_1_60_0
+#cp -r install/include/* /usr/local/include/
+#cp -r install/lib/* /usr/local/lib/
 
-cd ../zeromq-4.0.7/
-cp -r include/* /usr/local/include/
-cp -r lib/* /usr/local/lib/
+#cd ../zeromq-4.0.7/
+#cp -r include/* /usr/local/include/
+#cp -r lib/* /usr/local/lib/
 
-cd ../../
-cp -r include/* /usr/local/include/
-cp -r lib/* /usr/local/lib/
+#cd ../../
+#cp -r include/* /usr/local/include/
+#cp -r lib/* /usr/local/lib/
 
-cd /var/www/cgi-bin
-make
+#cd /var/www/cgi-bin
+#make
 
-cp /home/annie/ANNIEDAQ/rc.local/rc.local /etc/
-cp /home/annie/ANNIEDAQ/rc.local/ANNIEcgi.conf /etc/ld.so.conf.d/
-ldconfig
+#cp /home/annie/ANNIEDAQ/rc.local/rc.local /etc/
+#cp /home/annie/ANNIEDAQ/rc.local/ANNIEcgi.conf /etc/ld.so.conf.d/
+#cp /home/annie/rc.local/ANNIE.conf /etc/httpd/conf.d/
+###edit the daq name to correct one
+#ldconfig
+#service httpd restart
+
+#postgresql
+## as root
+chown -R products:annie /local
+chmod -R g+w /local
+
+## as annie
+source /local/ups/etc/setups.sh 
+setup upd
+upd install postgres v9_3_9_x64 -f Linux+2.6 -z /local/ups/db
+ups tailor postgres
+chgrp  postgres /data/postgres/*
+/local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf
+##
