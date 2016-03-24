@@ -75,4 +75,36 @@ make
 #cp /home/annie/ANNIEDAQ/Webpage/*.html /var/www/html/
 #cp /home/annie/ANNIEDAQ/Webpage/*.png /var/www/html/
 #cp /home/annie/ANNIEDAQ/Webpage/*.JPG /var/www/html/
+#cp /home/annie/ANNIEDAQ/Webpage/styles.css /var/www/html/
+mkdir /data/logs
+mkdir /data/output
+cd /va/www/html/
+ln -s /data/logs/ ./
+ln -s /data/output/ ./
+chown -R annie:apache /data/
+
+cd /home/annie/ANNIEDAQ/ToolDAQ/
+wget ftp://ftp.gnu.org/gnu/cgicc/cgicc-3.2.9.tar.gz
+tar -zxvf cgicc-3.2.9.tar.gz
+cd cgicc-3.2.9
+./configure --prefix=/usr/local
+make
+make install
+
+cd ../boost_1_60_0
+cp -r install/include/* /usr/local/include/
+cp -r install/lib/* /usr/local/lib/
+
+cd ../zeromq-4.0.7/
+cp -r include/* /usr/local/include/
+cp -r lib/* /usr/local/lib/
+
+cd ../../
+cp -r include/* /usr/local/include/
+cp -r lib/* /usr/local/lib/
+
+cd /var/www/cgi-bin
+make
+
+cp /home/annie/ANNIEDAQ/rc.local/rc.local /etc/
 
