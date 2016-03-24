@@ -10,3 +10,4 @@ cd /home/annie/ANNIEDAQ/
 source /home/annie/ANNIEDAQ/Setup.sh
 /home/annie/ANNIEDAQ/NodeDaemon DAQ01 </dev/null &>/dev/null &
 disown $!
+echo '/local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf </dev/null &>/dev/null &  disown $!'| su - annie
