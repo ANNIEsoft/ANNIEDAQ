@@ -1,3 +1,4 @@
 # Dummy config file
 
-MoniterPort 24010
+MonitoringLevel 100
+OutputPath /data/images/

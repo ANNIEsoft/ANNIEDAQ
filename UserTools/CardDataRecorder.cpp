@@ -42,8 +42,8 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
 
   m_card.PMTID=new int[4];
   //std::cout<<"i d2"<<std::endl;  
-m_card.Data=new uint16_t[160000];
-//std::cout<<"i d3"<<std::endl;
+  m_card.Data=new uint16_t[160000];
+  //std::cout<<"i d3"<<std::endl;
   TTree *tree = new TTree("PMTData0","PMTData0");
   //std::cout<<"i d4"<<std::endl;
   tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
@@ -197,6 +197,12 @@ bool CardDataRecorder::Finalise(){
   
   delete args;
   args=0;
+
+  delete m_card.PMTID;
+  m_card.PMTID=0;
+  
+  delete m_card.Data;
+  m_card.Data=0;
   
   return true;
 }

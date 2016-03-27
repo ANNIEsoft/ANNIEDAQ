@@ -11,13 +11,12 @@ bool Monitoring::Initialise(std::string configfile, DataModel &data){
   m_data= &data;
 
   std::string MonitorPort;
-  m_variables.Get("MonitorPort",MonitorPort);
   m_variables.Get("MonitorLevel",MonitoringLevel);
 
   Isend= new zmq::socket_t(*(m_data->context),"ZMQ_PUSH");
   Isend->bind("inproc://MonitorThread");
 
-  monitor_thread_args *args=new monitor_thread_args(MonitorPort,m_data->context);
+  monitor_thread_args *args=new monitor_thread_args(m_data->context,*(m_variables["OutputPath"]));
   pthread_create (&thread, NULL, Monitoring::MoniterThread, args);
   
   return true;
@@ -27,42 +26,27 @@ bool Monitoring::Initialise(std::string configfile, DataModel &data){
 
 bool Monitoring::Execute(){
 
-  if ((tree->GetEntriesFast() % m_monitoringlevel)==0){
-  
-    for(int card =0 ; card<m_data->LastSync.size();card++){
-      LastSync.push_back(m_data->LastSync.at(card));
-      SequenceID.push_back(m_data->SequenceID.at(card));
-      StartTime.push_back(m_data->StartTime.at(card));
-      CardID.push_back(m_data->CardID.at(card));
-      channels.push_back(m_data->channels.at(card));
-      buffersize.push_back(m_data->buffersize.at(card));
-      fullbuffsize.push_back(m_data->fullbuffsize.at(card));
+  if( m_data->triggered){
 
-      int*tmppmtid=new int[channels.at(card)];
+    if ((tree->GetEntriesFast() % m_monitoringlevel)==0){
       
-      for (int channel=0;channel<channels.at(card);channel++){
-	tmppmtid[cahnnel](m_data->PMTID.at(card)[channel]);
-      }
-      PMTID.push_back(tmppmtid);
-      
-      int*tmpdata=new int[fullbuffsize.at(card)];
-      
-      for (int buffpos=0;buffpos<fullbuffsize.at(card);buffpos++){
-	tmpdata[buffpos](m_data->Data.at(card)[buffpos]);
-      }
-      Data.push_back(tmpdata);
+      std::stringstream data;
+      data<<"Data ";
 
+      for(int i=0;i<carddata.size();i++){
+	data<<carddata.at(i)<<" ";
+	carddata.at(i)=0;
+      }
+
+      zmq::message_t message(send.str().length+1);
+      
+      snprintf ((char *) message.data(), send.str().length+1 , "%s" ,send.str().c_str()) ;
+      Isend->send(message);
+      
     }
-
-    zmq::message_t message(512);
-    std::stringstream send;
-    send<<"Data "<<&LastSync<<" "<< &SequenceID<<" "<<&StartTime<<" "<<&CardID<<" "<< &channels <<" "<< &buffersize<<" "<< &fullbuffsize<<" "<< &PMTID &Data;
     
-    snprintf ((char *) message.data(), 512 , "%s" ,send.str().c_str()) ;
-    Isend->send(message);
-  
   }
-
+  
   return true;
 }
 
@@ -71,16 +55,16 @@ bool Monitoring::Finalise(){
 
 
   zmq::message_t message(256);
-  std::string send="Quit";
-
-  snprintf ((char *) message.data(), 256 , "%s" ,send.c_str()) ;
+  snprintf ((char *) message.data(), 256 , "%s" ,"Quit") ;
   Isend->send(message);
+  
+  (void) pthread_join(thread, NULL);
+  
+  delete Isend;
+  Isend=0;
 
-
- (void) pthread_join(thread, NULL);
-
- Isend->close();
-
+  delete args;
+  args=0;
 
   return true;
 }
@@ -89,41 +73,111 @@ bool Monitoring::Finalise(){
 void* Monitoring::MoniterThread(void* arg){
   
   monitor_thread_args* args= static_cast<monitor_thread_args*>(arg);
-
+  
+  std::string outpath=args->outputpath;
   zmq::socket_t Ireceive (*(args->context), ZMQ_PULL);
   Ireceive.connect("inproc://MonitorThread");
   
-  zmq::socket_t Ipub (*(args->context), ZMQ_PUB);
-  std::stringstream tmp;
-  tmp<<"tcp://*:"<<args->MonitorPort;
-  Ipub.bind(tmp.str().c_str());
-
-  bool running=true
-
-    while (running){
-
-     
-      zmq::message_t comm;
-      Ireceive.recv(&comm);
+  //  std::vector<CardData*> carddata;
+  std::vector<TH1I> freqplots;
+  TCanvas c1("c1","c1",600,400);
+  
+  
+  bool running=true;
+  bool init=true;    
+  
+  while (running){
+    
+    
+    zmq::message_t comm;
+    Ireceive.recv(&comm);
+	
+    std::istringstream iss(static_cast<char*>(comm.data()));
+    std::string arg1="";
+    iss>>arg1;
+    
+    if(arg1=="Data"){
+      TH2I EventDisplay ("Event Display", "Event Display", 20, 0, 20, 20, 0, 20)
+      std::vector<TH1I> temporalplots;
+      CardData* carddata;
+      int size=0;
+      iss>>size;  
       
-      std::istringstream iss(static_cast<char*>(comm.data()));
-      std::string arg1="";
+      //freqplots.clear();
+      
+      for(int i=0;i<size;i++){
+	
+	long long unsigned int pointer;
+	iss>>std::hex>>pointer;
+	
+	carddata=(reinterpret_cast<CardData *>(pointer));
+	
+	if(init){
+	  for(int j=0;j<carddata.channels;j++){
+	    std::stringstream tmp;
+	    tmp<<"Channel "<<(i*4)+j<<" frequency";
+	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),600,0,600);
+	    freqplots.push_back(tmpfreq);
+	  }
+	}
 
-      arg1=iss.str();
+	for(int j=0;j<carddata.channels;j++){
+	  std::stringstream tmp;
+	  tmp<<"Channel "<<(i*4)+j<<" temporal";
+	  
+	  TH1I temporal(tmp.str().c_str(),tmp.str().c_str(),carddata.buffersize,0,carddata.buffersize);
+	  long sum=0;
+	
+	for(int k=0;k<carddata.buffersize;k++){
+	  sum+=carddata.Data[(j*carddata.buffersize)+k];  
+	  freqplots.at(i).Fill(carddata.Data[(j*carddata.buffersize)+k]);
+	  temporal.SetBinContent(k,carddata.Data[(j*carddata.buffersize)+k]);	      
+	}
+	
+	
+	temporalplots.push_back(temporal);
+	EventDisplay.SetBinContent((i*4)+j,(i*4)+j,sum);
+	}
 
-      if(arg1==""){
-
-      zmq::message_t mpub(256);
-      snprintf ((char *) Esend.data(), 256 , "%s" ,command.c_str()) ;
-      Ipub.send(mpub);
-
+	delete carddata;
+	
       }
-
-      else if(arg1=="Quit")running=false;
-
+      
+      
+      for(int i=0;i<freqplots.size();i++){
+	if(i==0)freqplots.at(i).Draw();
+	else freqplots.at(i).Draw("same");
+	
+      }
+      std::stringstream tmp;
+      tmp<<outputpath<<"freq.jpg";
+      ca.SaveAs(tmp.str().c_str());
+      
+      for(int i=0;i<size;i++){
+	if(i==0)tempoalplots.at(i).Draw();
+	else tempoalplots.at(i).Draw("same");
+	
+      }	  
+      std::stringstream tmp2;
+      tmp2<<outputpath<<"temporal.jpg";
+      ca.SaveAs(tmp2.str().c_str());
+      
+      EventDisplay.Draw();
+      std::stringstream tmp3;
+      tmp3<<outputpath<<"EventDisplay.jpg";
+      ca.SaveAs(tmp3.str().c_str());
+      
     }
-
-
-  pthread_exit(NULL);
-   
+    
+    
+    
+    else if(arg1=="Quit"){
+      freqplots.clear();
+      running=false;
+      
+    }
+    
+  }
+  
+  
 }

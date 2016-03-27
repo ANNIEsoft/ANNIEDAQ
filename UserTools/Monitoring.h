@@ -7,18 +7,20 @@
 
 #include "Tool.h"
 
+#include "TH1I.h"
+#include "TH2I.h"
+#include "TCanvas.h"
 
 struct monitor_thread_args{
 
 
-  monitor_thread_args(int monitorport, zmq::context_t* incontext){
-    MonitorPort=monitorport;
+  monitor_thread_args( zmq::context_t* incontext, std::string inoutputpath){
     context=incontext;
+    ouputpath=inoutptupath
   }
   
   zmq::context_t* context;
-  int MoniterPort;
-  
+  std::string outputpath;
 };
 
 
@@ -37,22 +39,10 @@ class Monitoring: public Tool {
  private:
 
   int MonitoringLevel;
-  int MonitorPort;
 
   zmq::socket_t *Isend;
   static void *MonitorThread(void* arg);
   pthread_t thread;
-
-  std::vector<int> LastSync;
-  std::vector<int> SequenceID;
-  std::vector<int> StartTime;
-  std::vector<int> CardID;
-  std::vector<int> channels;
-  std::vector<int*> PMTID;
-  std::vector<int> buffersize;
-  std::vector<int> fullbuffsize;
-  std::vector<double*> Data;
-
 
 
 };
