@@ -13,11 +13,11 @@ bool Monitoring::Initialise(std::string configfile, DataModel &data){
   std::string MonitorPort;
   m_variables.Get("MonitorLevel",MonitoringLevel);
 
-  Isend= new zmq::socket_t(*(m_data->context),"ZMQ_PUSH");
+  Isend= new zmq::socket_t(*(m_data->context),ZMQ_PUSH);
   Isend->bind("inproc://MonitorThread");
 
-  monitor_thread_args *args=new monitor_thread_args(m_data->context,*(m_variables["OutputPath"]));
-  pthread_create (&thread, NULL, Monitoring::MoniterThread, args);
+  args=new monitor_thread_args(m_data->context,*(m_variables["OutputPath"]));
+  pthread_create (&thread, NULL, Monitoring::MonitorThread, args);
   
   return true;
 
@@ -28,19 +28,19 @@ bool Monitoring::Execute(){
 
   if( m_data->triggered){
 
-    if ((tree->GetEntriesFast() % m_monitoringlevel)==0){
-      
+    if ((m_data->NumEvents % MonitoringLevel)==0){
+   
       std::stringstream data;
-      data<<"Data "<<carddata.at(i)<<" ";
+      data<<"Data "<<m_data->carddata.size()<<" ";
 
-      for(int i=0;i<carddata.size();i++){
-	data<<carddata.at(i)<<" ";
-	carddata.at(i)=0;
+      for(int i=0;i<m_data->carddata.size();i++){
+	data<<m_data->carddata.at(i)<<" ";
+	m_data->carddata.at(i)=0;
       }
 
-      zmq::message_t message(send.str().length+1);
+      zmq::message_t message(data.str().length()+1);
       
-      snprintf ((char *) message.data(), send.str().length+1 , "%s" ,send.str().c_str()) ;
+      snprintf ((char *) message.data(), data.str().length()+1 , "%s" ,data.str().c_str()) ;
       Isend->send(message);
       
     }
@@ -70,7 +70,7 @@ bool Monitoring::Finalise(){
 }
 
 
-void* Monitoring::MoniterThread(void* arg){
+void* Monitoring::MonitorThread(void* arg){
   
   monitor_thread_args* args= static_cast<monitor_thread_args*>(arg);
   
@@ -97,7 +97,7 @@ void* Monitoring::MoniterThread(void* arg){
     iss>>arg1;
     
     if(arg1=="Data"){
-      TH2I EventDisplay ("Event Display", "Event Display", 20, 0, 20, 20, 0, 20)
+      TH2I EventDisplay ("Event Display", "Event Display", 20, 0, 20, 20, 0, 20);
       std::vector<TH1I> temporalplots;
       CardData* carddata;
       int size=0;
@@ -113,7 +113,7 @@ void* Monitoring::MoniterThread(void* arg){
 	carddata=(reinterpret_cast<CardData *>(pointer));
 	
 	if(init){
-	  for(int j=0;j<carddata.channels;j++){
+	  for(int j=0;j<carddata->channels;j++){
 	    std::stringstream tmp;
 	    tmp<<"Channel "<<(i*4)+j<<" frequency";
 	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),600,0,600);
@@ -122,17 +122,17 @@ void* Monitoring::MoniterThread(void* arg){
 	  if(i==size<-1)init=false;
 	}
 
-	for(int j=0;j<carddata.channels;j++){
+	for(int j=0;j<carddata->channels;j++){
 	  std::stringstream tmp;
 	  tmp<<"Channel "<<(i*4)+j<<" temporal";
 	  
-	  TH1I temporal(tmp.str().c_str(),tmp.str().c_str(),carddata.buffersize,0,carddata.buffersize);
+	  TH1I temporal(tmp.str().c_str(),tmp.str().c_str(),carddata->buffersize,0,carddata->buffersize);
 	  long sum=0;
 	
-	for(int k=0;k<carddata.buffersize;k++){
-	  sum+=carddata.Data[(j*carddata.buffersize)+k];  
-	  freqplots.at(i).Fill(carddata.Data[(j*carddata.buffersize)+k]);
-	  temporal.SetBinContent(k,carddata.Data[(j*carddata.buffersize)+k]);	      
+	for(int k=0;k<carddata->buffersize;k++){
+	  sum+=carddata->Data[(j*carddata->buffersize)+k];  
+	  freqplots.at(i).Fill(carddata->Data[(j*carddata->buffersize)+k]);
+	  temporal.SetBinContent(k,carddata->Data[(j*carddata->buffersize)+k]);	      
 	}
 	
 	
@@ -151,22 +151,22 @@ void* Monitoring::MoniterThread(void* arg){
 	
       }
       std::stringstream tmp;
-      tmp<<outputpath<<"freq.jpg";
-      ca.SaveAs(tmp.str().c_str());
+      tmp<<outpath<<"freq.jpg";
+      c1.SaveAs(tmp.str().c_str());
       
       for(int i=0;i<size;i++){
-	if(i==0)tempoalplots.at(i).Draw();
-	else tempoalplots.at(i).Draw("same");
+	if(i==0)temporalplots.at(i).Draw();
+	else temporalplots.at(i).Draw("same");
 	
       }	  
       std::stringstream tmp2;
-      tmp2<<outputpath<<"temporal.jpg";
-      ca.SaveAs(tmp2.str().c_str());
+      tmp2<<outpath<<"temporal.jpg";
+      c1.SaveAs(tmp2.str().c_str());
       
       EventDisplay.Draw();
       std::stringstream tmp3;
-      tmp3<<outputpath<<"EventDisplay.jpg";
-      ca.SaveAs(tmp3.str().c_str());
+      tmp3<<outpath<<"EventDisplay.jpg";
+      c1.SaveAs(tmp3.str().c_str());
       
     }
     
