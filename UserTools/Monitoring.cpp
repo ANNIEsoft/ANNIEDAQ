@@ -31,7 +31,7 @@ bool Monitoring::Execute(){
     if ((tree->GetEntriesFast() % m_monitoringlevel)==0){
       
       std::stringstream data;
-      data<<"Data ";
+      data<<"Data "<<carddata.at(i)<<" ";
 
       for(int i=0;i<carddata.size();i++){
 	data<<carddata.at(i)<<" ";
@@ -119,6 +119,7 @@ void* Monitoring::MoniterThread(void* arg){
 	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),600,0,600);
 	    freqplots.push_back(tmpfreq);
 	  }
+	  if(i==size<-1)init=false;
 	}
 
 	for(int j=0;j<carddata.channels;j++){

@@ -81,9 +81,11 @@ ln -s configfiles/LoggerToolChain ./Logger
 #cp /home/annie/ANNIEDAQ/Webpage/styles.css /var/www/html/
 #mkdir /data/logs
 #mkdir /data/output
+#mkdir /data/monitoring
 #cd /va/www/html/
 #ln -s /data/logs/ ./
 #ln -s /data/output/ ./
+#ln -s /data/monitoring/ ./
 #chown -R annie:apache /data/
 
 #cd /home/annie/ANNIEDAQ/ToolDAQ/
@@ -109,9 +111,9 @@ ln -s configfiles/LoggerToolChain ./Logger
 #cd /var/www/cgi-bin
 #make
 
-#cp /home/annie/ANNIEDAQ/rc.local/rc.local /etc/
-#cp /home/annie/ANNIEDAQ/rc.local/ANNIEcgi.conf /etc/ld.so.conf.d/
-#cp /home/annie/rc.local/ANNIE.conf /etc/httpd/conf.d/
+#cp /home/annie/ANNIEDAQ/setup/rc.local /etc/
+#cp /home/annie/ANNIEDAQ/setup/ANNIEcgi.conf /etc/ld.so.conf.d/
+#cp /home/annie/ANNIEDAQ/setup/ANNIE.conf /etc/httpd/conf.d/
 ###edit the daq name to correct one
 #ldconfig
 #service httpd restart
@@ -125,6 +127,7 @@ chmod -R g+w /local
 source /local/ups/etc/setups.sh 
 setup upd
 upd install postgres v9_3_9_x64 -f Linux+2.6 -z /local/ups/db
+ups declare -c postgres v9_3_9_x64
 ups tailor postgres
 chgrp  postgres /data/postgres/*
 /local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf
