@@ -16,7 +16,7 @@ struct monitor_thread_args{
 
   monitor_thread_args( zmq::context_t* incontext, std::string inoutputpath){
     context=incontext;
-    ouputpath=inoutptupath
+    outputpath=inoutputpath;
   }
   
   zmq::context_t* context;
@@ -44,6 +44,7 @@ class Monitoring: public Tool {
   static void *MonitorThread(void* arg);
   pthread_t thread;
 
+  monitor_thread_args *args;
 
 };
 

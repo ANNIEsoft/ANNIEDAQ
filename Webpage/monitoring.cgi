@@ -2,7 +2,7 @@
 echo "
 
 <head>
-<meta http-equiv=\"refresh\" content=\"10\"><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> <title>Logs</title>
+<meta http-equiv=\"refresh\" content=\"10\"><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> <title>Monitoring</title>
 
 </head>
 
@@ -20,7 +20,7 @@ echo "
     <div class=\"mdl-layout__header-row\">
       <!-- Title -->
       <span class=\"mdl-layout-title\">
-Logs</span>
+Monitoring</span>
       <!-- Add spacer, to align navigation to the right -->
       <div class=\"mdl-layout-spacer\"></div>
       <!-- Navigation. We hide it in small screens. -->

@@ -118,7 +118,7 @@ ln -s configfiles/LoggerToolChain ./Logger
 #ldconfig
 #service httpd restart
 
-#postgresql
+##postgresql
 ## as root
 chown -R products:annie /local
 chmod -R g+w /local
@@ -129,6 +129,27 @@ setup upd
 upd install postgres v9_3_9_x64 -f Linux+2.6 -z /local/ups/db
 ups declare -c postgres v9_3_9_x64
 ups tailor postgres
-chgrp  postgres /data/postgres/*
-/local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf
+  > /data/postgres
+  > annie
+  >
+  > 
+  >
+## no longer needed chgrp  postgres /data/postgres/*
+cp /data/postgres/postgresql.conf /home/annie/ANNIEDAQ/setup/
+/local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf &
+
+##setting up dbs
+psql postgres
+  > create database annie;
+  > \c annie
+  > create table runinformation(ID bigserial primary key, runnumber bigint, subrunnumber bigint, starttime timestamp without time zone, stoptime timestamp without time zone, runtype integer, runstatus integer, numevents bigint);
+ > create role root;
+ > grant all privileges on runinformation to root;
+ > grant usage, select on sequence runinformation_id_seq to root;
+ > grant usage, update on sequence runinformation_id_seq to root;
+ > create role apache;
+ > alter role apache with login;
+ > grant all privileges on runinformation to apache;
+ > \q
+
 ##
