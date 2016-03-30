@@ -179,6 +179,9 @@ bool CardDataRecorder::Finalise(){
   tree->Write();
   file.Write();
   file.Close();
+  std::stringstream compcommand;
+  compcommand<<"tar -cf "<<tmp.str()<<".tar && rm "<<tmp.str()<<" &"; 
+  system(compcommand.str().c_str());
   
   // sleep(5);
 
@@ -288,6 +291,9 @@ void* CardDataRecorder::RootWriter(void* arg){
       file.Write();
       //std::cout<<"T Debug 6"<<std::endl;
       file.Close();
+      std::stringstream compcommand;
+      compcommand<<"tar -cf "<<tmp.str()<<".tar && rm "<<tmp.str()<<" &";
+      system(compcommand.str().c_str());
       
       //std::cout<<"T  Debug 7"<<std::endl;
       //sleep(5);
