@@ -8,25 +8,40 @@
 #define Lecroy4300b_H
 
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <bitset>
+
 
 #include "libxxusb.h"
+#include "CamacCrate.h"
 
 class Lecroy4300b : public CamacCrate
 {
 	public:
-		Lecroy4300b(int NSlot);
+		Lecroy4300b(int NSlot, int i = 0);
 		int ReadReg(long &Data);		//F(0)·A(0)
-		void ReadPed(int Ch, long &Data);	//F(1)·A(0-15)
-		void ReadOut();				//F(2)·A(0-15)
+		int ReadPed(int Ch, long &Data);	//F(1)·A(0-15)
+		int ReadOut(long &Data, int Ch = 0);	//F(2)·A(0-15)
 		int TestLAM();				//F(8)·A(0)
 		int ClearAll();				//F(9)·A(0)
 		int TestClearLAM();			//F(10)·A(0)
 		int WriteReg(long &Data);		//F(16)·A(0)
-		void WritePed(int Ch, long &Data);	//F(17)·A(0-15)
+		int WritePed(int Ch, long &Data);	//F(17)·A(0-15)
 		int TestAll();				//F(25)·A(0)
-		int READ(int F, int A, long &Data);	//F(x)·A(y) 
-		int WRITE(int F, int A, long &Data);	//F(x)·A(y)
+		int READ(int F, int A, long &Data, int &Q, int &X);	//F(x)·A(y) 
+		int WRITE(int F, int A, long &Data, int &Q, int &X);	//F(x)·A(y)
 
+		int GetData(std::vector<long> &vData);				//Read Data from ADC compressed or not
+		int DumpCompressed(std::vector<long> &vData, long &VSN);	//Retrieve compressed data
+		int DumpAll(std::vector<long> &vData);				//Retrieve from all channels
+		void DecRegister();						//Register decoder	
+		void EncRegister();						//Register encoder
+		void GetRegister();						//Retrieve register
+		void SetRegister();						//Load register
+		void PrintRegister();						//Show register
+		void ParseCompData(long Word, long &Stat, long &Num, bool &B1);	//Compressed data parser
 		int GetID();		//Return ID
 		int GetSlot();		//Return Slot
 
@@ -51,7 +66,7 @@ class Lecroy4300b : public CamacCrate
 	private:
 
 		int ID;
-		long Control;
+		long Control, Word;
 };
 
 #endif

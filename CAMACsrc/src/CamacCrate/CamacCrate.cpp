@@ -1,20 +1,27 @@
 #include "CamacCrate.h"
 
-CamacCrate::CamacCrate(int i = 0)	//Class constructor
+CamacCrate::CamacCrate(int i)	//Class constructor
 {
-	Init(i);
+	do Init(i);
+	while (!isOpen);
 }
 
-~CamacCrate::CamacCrate()		//Class destructor
+CamacCrate::~CamacCrate()		//Class destructor
 {
 	USBClose();
+	isOpen = false;
 }
 
 void CamacCrate::Init(int i)		//Initialize device
 {
 	/*Find XX_USB devices and open the first one found. */
-	USBFind();
-	USBOpen(i);
+	if (!isOpen)
+	{
+		USBFind();
+		USBOpen(i);
+	}
+	else std::cout << "\n\nWarning: USB device has already been opened\n\n";
+	isOpen = true;
 }
 
 void CamacCrate::USBFind()		//Find usb devices
@@ -25,7 +32,7 @@ void CamacCrate::USBFind()		//Find usb devices
 void CamacCrate::USBOpen(int i)		//Open i device and create handler
 {
 	Mdev = devices[i].usbdev;
-	Mudev = xxusb_device_open(Mdev); 
+	Mudev = xxusb_device_open(Mdev);	//SEGS HERE, CANT GO ON 
 	if(Mudev) std::cout << "\n\nFailed to open CC-USB. \n\n";
 	else std::cout << "\n\nCC-USB opened. \n\n";
 }
@@ -39,16 +46,13 @@ void CamacCrate::USBClose()		//Close USB devices
 
 int CamacCrate::READ(int ID, int F, int A, long &Data, int &Q, int &X)	//Generic READ func, suitable for F 0-15, 24-31
 {
-	int ret;
-	ret = CAMAC_read(Mudev, Slot.at(ID), F, A, &Data, &Q, &X);
-	return ret;
+	return CAMAC_read(Mudev, Slot.at(ID), F, A, &Data, &Q, &X);
 }
 
 int CamacCrate::WRITE(int ID, int F, int A, long &Data, int &Q, int &X)	//Generic WRITE func, suitable for F 16-23
 {
-	int Q = 0, X = 0, ret;
-	ret = CAMAC_write(Mudev, Slot.at(ID), F, A, Data, &Q, &X);
-	return ret;
+
+	return CAMAC_write(Mudev, Slot.at(ID), F, A, Data, &Q, &X);
 }
 
 void CamacCrate::ListSlot()		//List all modules in CAMAC
@@ -64,17 +68,17 @@ int CamacCrate::GetSlot(int ID)		//Return n of Slot, ID given
 
 int CamacCrate::Z()			//Global ZERO
 {
-	CAMAC_Z(Mudev);
+	return CAMAC_Z(Mudev);
 }
 
 int CamacCrate::C()			//Global CLEAR
 {
-	CAMAC_C(Mudev);
+	return CAMAC_C(Mudev);
 }
 
 int CamacCrate::I(bool inh)		//Global INHIBIT
 {
-	CAMAC_I(Mudev, inh);
+	return CAMAC_I(Mudev, inh);
 }
 
 int CamacCrate::BittoInt(std::bitset<16> &bitref, int a, int b)
@@ -86,10 +90,10 @@ int CamacCrate::BittoInt(std::bitset<16> &bitref, int a, int b)
 		a = b;
 		b = tmp;
 	}
-	for (int i = b; i i>= a: i--)
+	for (int i = b; i >= a; i--)
 	{
 		sum *= 2;
-		sum += bitref(i);
+		sum += bitref.test(i);
 	}
 	return sum;
 }

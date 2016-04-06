@@ -20,7 +20,7 @@ class Lecroy3377 : public CamacCrate
 {
 	public:
 
-		Lecroy3377(int NSlot);	//Constructor !
+		Lecroy3377(int NSlot, int i = 0);	//Constructor !
 //		~Lecroy3377();
 		int ReadFIFOall(std::vector<long> &vData);	//F(0)·A(0) 
 		int ReadFIFO();					//F(0)·A(1)COMMON START ONLY	
@@ -32,9 +32,9 @@ class Lecroy3377 : public CamacCrate
 		int ClearLAM();					//F(10)·A(0)
 		int WriteFIFOData();				//F(16)·A(0)COMMON START ONLY
 		int WriteFIFOtag();				//F(16)·A(1)COMMON START ONLY
-		int WriteReg(int R, long &Data);		//F(17)·A(0) !
-		int DisLAM(long *Data, int *Q, int *X);		//F(24)·A(0)
-		int DisAcq(long *Data, int *Q, int *X);		//F(24)·A(1)
+		int WriteReg(int R, long *Data);		//F(17)·A(0) !
+		int DisLAM();					//F(24)·A(0)
+		int DisAcq();					//F(24)·A(1)
 		int InitTest();					//F(25)·A(0)COMMON START ONLY
 		int EnLAM();					//F(26)·A(0)
 		int EnAcq();					//F(26)·A(1) !
@@ -43,16 +43,16 @@ class Lecroy3377 : public CamacCrate
 		int TestEvent();				//F(27)·A(2) !
 		int TestFIFO();					//F(27)·A(3) !
 		int Reprog();					//F(30)
-		int READ(int F, int A, long &Data);		//F(x)·A(y) 
-		int WRITE(int F, int A, long &Data);		//F(x)·A(y)
+		int READ(int F, int A, long &Data, int &Q, int &X);		//F(x)·A(y) 
+		int WRITE(int F, int A, long &Data, int &Q, int &X);		//F(x)·A(y)
 
 		int GetID();					//Return ID
 		int GetSlot();					//Return Slot
-		void Lecroy3377::PrintRegister();		//Print Register vars
-		void Lecroy3377::GetRegister()			//Retrieve register 
-		void Lecroy3377::SetRegister()			//Send register parameters
-		void Lecroy3377::EncRegister()			//Register control Encoder
-		void Lecroy3377::DecRegister()			//Register control Decoder
+		void PrintRegister();		//Print Register vars
+		void GetRegister();			//Retrieve register 
+		void SetRegister();			//Send register parameters
+		void EncRegister();			//Register control Encoder
+		void DecRegister();			//Register control Decoder
 
 
 		///////Register Control vars: num_reg, bit-size

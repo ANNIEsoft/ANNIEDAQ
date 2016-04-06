@@ -20,15 +20,15 @@ class CamacCrate
 
 		CamacCrate(int i = 0);
 		~CamacCrate();
-		long READ(int ID, int F, int A, long &Data, int &Q, int &X);
-		long WRITE(int ID, int F, int A, long &Data, int &Q, int &X);
+		int READ(int ID, int F, int A, long &Data, int &Q, int &X);
+		int WRITE(int ID, int F, int A, long &Data, int &Q, int &X);
 		void ListSlot();
-		int GetSlot();
+		int GetSlot(int ID);
 //		void SetCrate();
 //		int GetCrate();
 		int Z();		//Z
 		int C();		//C
-		int I();		//I
+		int I(bool inh);		//I
 
 	protected:
 
@@ -42,6 +42,7 @@ class CamacCrate
 		void USBClose();
 		void Init(int i);
 
+		bool isOpen;
 		xxusb_device_type devices[100];
 		struct usb_device *Mdev;
 		usb_dev_handle *Mudev;
