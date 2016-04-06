@@ -1,9 +1,9 @@
-LUSB = -lm -lusb 
+LUSB = -lm 
 LXUSB = $(LSUB) -lXXusb
 LCC = $(LXUSB) -lCamacCrate
 LLEC = $(LCC) -lLecroy3377 -lLecroy4300b
 
-all: clean lib/libXXusb lib/libCamacCrate lib/libLecroy3377 lib/libLecroy4300b
+all: lib/libXXusb lib/libCamacCrate lib/libLecroy3377 lib/libLecroy4300b
 	g++ -g src/main.cpp -o main -I include -L lib $(LLEC) 
 
 lib/libXXusb:

@@ -1,3 +1,3 @@
 #! /bin/bash
 
-export LD_LIBRARY_PATH=/home/boschi/CAMACsrc/lib:/usr/local/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/boschi/Templates/ANNIEDAQ/CAMACsrc:$LD_LIBRARY_PATH

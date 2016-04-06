@@ -20,7 +20,7 @@ class Lecroy3377 : public CamacCrate
 {
 	public:
 
-		Lecroy3377(int NSlot, int i = 0);	//Constructor !
+		Lecroy3377(int NSlot, int i);	//Constructor !
 //		~Lecroy3377();
 		int ReadFIFOall(std::vector<long> &vData);	//F(0)·A(0) 
 		int ReadFIFO();					//F(0)·A(1)COMMON START ONLY	

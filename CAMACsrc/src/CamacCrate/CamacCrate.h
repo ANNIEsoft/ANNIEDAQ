@@ -18,7 +18,7 @@ class CamacCrate
 {
 	public:
 
-		CamacCrate(int i = 0);
+		CamacCrate(int i);
 		~CamacCrate();
 		int READ(int ID, int F, int A, long &Data, int &Q, int &X);
 		int WRITE(int ID, int F, int A, long &Data, int &Q, int &X);
@@ -42,7 +42,7 @@ class CamacCrate
 		void USBClose();
 		void Init(int i);
 
-		bool isOpen;
+		bool IsOpen;
 		xxusb_device_type devices[100];
 		struct usb_device *Mdev;
 		usb_dev_handle *Mudev;

@@ -1,6 +1,6 @@
 #include "Lecroy4300b.h"
 
-Lecroy4300b::Lecroy4300b(int NSlot, int i) : CamacCrate(i)
+Lecroy4300b::Lecroy4300b(int NSlot, int i = 0) : CamacCrate(i)
 {
 	Slot.push_back(NSlot);
 	ID = Slot.size()-1;
@@ -22,7 +22,7 @@ int Lecroy4300b::ReadPed(int Ch, long &Data)	//Read pedestal memory (8 bits) for
 	else return ret;
 }
 
-int Lecroy4300b::ReadOut(long &Data, int Ch)	//Random access or sequential readout of the 16 ADC values. Q = 1 if BUSY = 1.
+int Lecroy4300b::ReadOut(long &Data, int Ch = 0)	//Random access or sequential readout of the 16 ADC values. Q = 1 if BUSY = 1.
 {
 	int Q = 0, X = 0;
 	int ret = READ(Ch, 2, Data, Q, X);
@@ -96,21 +96,23 @@ int Lecroy4300b::GetData(std::vector<long> &vData)
 	return ret;
 }
 
-int Lecroy4300b::DumpCompressed(std::vector<long> &vData, long &VSN) 
+int Lecroy4300b::DumpCompressed(std::vector<long> &vData, std::vector<long> &vSAD) 
 {
 	vData.clear();
 	long Data = 0, Chan = 0;
-	int ret = ReadOut(Word);
 	bool Head;
-	ParseCompData(VSN, Data, Chan, Head);
+	int ret = ReadOut(Word);
+	ParseCompData(Word, Data, Chan, Head);
 	if (Head)
 	{
 		for (int i = 0; i < Chan; i++)
 		{
 			ret = ReadOut(Data);
+			ParseCompData(Word, Data, Chan, Head);
 			vData.push_back(Data);
+			vSAD.push_back(chan);
 		}
-		return ret * vData.size();
+		return vData.size();
 	}
 	else return -1;
 }

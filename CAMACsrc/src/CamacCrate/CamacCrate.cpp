@@ -1,27 +1,23 @@
 #include "CamacCrate.h"
 
-CamacCrate::CamacCrate(int i)	//Class constructor
+CamacCrate::CamacCrate(int i = 0)	//Class constructor
 {
-	do Init(i);
-	while (!isOpen);
+	if (!IsOpen) Init(i);
+	else std::cout << "\nWarning: USB device has already been opened\n\n";
+	IsOpen = true;
 }
 
 CamacCrate::~CamacCrate()		//Class destructor
 {
 	USBClose();
-	isOpen = false;
+	IsOpen = false;
 }
 
 void CamacCrate::Init(int i)		//Initialize device
 {
 	/*Find XX_USB devices and open the first one found. */
-	if (!isOpen)
-	{
-		USBFind();
-		USBOpen(i);
-	}
-	else std::cout << "\n\nWarning: USB device has already been opened\n\n";
-	isOpen = true;
+	USBFind();
+	USBOpen(i);
 }
 
 void CamacCrate::USBFind()		//Find usb devices
@@ -32,7 +28,7 @@ void CamacCrate::USBFind()		//Find usb devices
 void CamacCrate::USBOpen(int i)		//Open i device and create handler
 {
 	Mdev = devices[i].usbdev;
-	Mudev = xxusb_device_open(Mdev);	//SEGS HERE, CANT GO ON 
+	Mudev = xxusb_device_open(Mdev); 
 	if(Mudev) std::cout << "\n\nFailed to open CC-USB. \n\n";
 	else std::cout << "\n\nCC-USB opened. \n\n";
 }
