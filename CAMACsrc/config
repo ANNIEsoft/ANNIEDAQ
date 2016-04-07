@@ -1,7 +1,3 @@
 #Order of things, tab spacing:
-#
-#Lecroy3377 slot number
-#Lecroy3377 register file
-#Lecroy4300b slot number
-#Lecroy4300b register file
-2	Reg3377	3	Reg4300b
+Lecroy3377	4	Reg3377
+Lecroy4300b	3	Reg3377

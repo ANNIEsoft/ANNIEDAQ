@@ -45,6 +45,7 @@
 // libxxusb.cpp : Defines the entry point for the DLL application.
 //
 
+#include <iostream>
 #include <string.h>
 #include <malloc.h>
 #include "usb.h"
@@ -523,21 +524,45 @@ void  xxusb_init()
 */
 short  xxusb_devices_find(xxusb_device_type *xxdev)
 {
+std::cout << "xxusb_serial_find\n";
   short DevFound = 0;
   usb_dev_handle *udev;
   struct usb_bus *bus;
   struct usb_device *dev;  
-struct usb_bus *usb_busses;
+//struct usb_bus *usb_busses;
   char string[256];
   short ret;
    usb_init();
    usb_find_busses();
    usb_busses=usb_get_busses();
   usb_find_devices();
+std::cout << "xxusb_serial_find\n";
    for (bus=usb_busses; bus; bus = bus->next)
-   {
+   {	
+	std::cout << "dirname " << bus->dirname << std::endl;
+	std::cout << "location " << bus->location << std::endl;
+
        for (dev = bus->devices; dev; dev= dev->next)
        {
+	std::cout << "filename " << dev->filename << std::endl;
+	std::cout << "devnum " << dev->devnum << std::endl;
+	std::cout << "numchildren " << dev->num_children << std::endl;
+	std::cout << "bLength  " << dev->descriptor.bLength << std::endl;
+	std::cout << "bDescrip " << dev->descriptor.bDescriptorType << std::endl;
+	std::cout << "bcdUSB   " << dev->descriptor.bcdUSB << std::endl;
+	std::cout << "bDeviceC " << dev->descriptor.bDeviceClass << std::endl;
+	std::cout << "bDeviceS " << dev->descriptor.bDeviceSubClass << std::endl;
+	std::cout << "bDeviceP " << dev->descriptor.bDeviceProtocol << std::endl;
+	std::cout << "bMaxPack " << dev->descriptor.bMaxPacketSize0 << std::endl;
+	std::cout << "idVendor " << dev->descriptor.idVendor << std::endl;
+	std::cout << "idProduc " << dev->descriptor.idProduct << std::endl;
+	std::cout << "bcdDevic " << dev->descriptor.bcdDevice << std::endl;
+	std::cout << "iManufac " << dev->descriptor.iManufacturer << std::endl;
+	std::cout << "iProduct " << dev->descriptor.iProduct << std::endl;
+	std::cout << "iSerialN " << dev->descriptor.iSerialNumber << std::endl;
+	std::cout << "bNumConf " << dev->descriptor.bNumConfigurations << std::endl;
+	std::cout << std::endl;
+
   	   if (dev->descriptor.idVendor==XXUSB_WIENER_VENDOR_ID)
   	   {
   	       udev = usb_open(dev);
@@ -675,11 +700,12 @@ short  xxusb_flashblock_program(usb_dev_handle *hDev, UCHAR *config)
 */
 usb_dev_handle*  xxusb_serial_open(char *SerialString)
 {
+	std::cout << "xxusb_serial_open\n";
   short DevFound = 0;
   usb_dev_handle *udev = NULL;
   struct usb_bus *bus;
   struct usb_device *dev;  
-struct usb_bus *usb_busses;
+//struct usb_bus *usb_busses;
 char string[7];
   short ret;
 // usb_set_debug(4);
@@ -687,8 +713,13 @@ char string[7];
    usb_find_busses();
   usb_busses=usb_get_busses();
    usb_find_devices();
+	std::cout << "xxusb_serial_open\n";
    for (bus=usb_busses; bus; bus = bus->next)
    {
+	std::cout << "dirname " << bus->dirname << std::endl;
+	std::cout << "location " << bus->location << std::endl;
+//	std::cout << "" << bus->dirname << std::endl
+//	std::cout << "" << bus->dirname << std::endl
        for (dev = bus->devices; dev; dev= dev->next)
        {
   	   if (dev->descriptor.idVendor==XXUSB_WIENER_VENDOR_ID)

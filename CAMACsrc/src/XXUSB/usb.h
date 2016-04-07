@@ -284,7 +284,7 @@ struct usb_dev_handle;
 typedef struct usb_dev_handle usb_dev_handle;
 
 /* Variables */
-struct usb_bus *usb_busses;
+usb_bus *usb_busses;
 
 //#include <poppack.h>
 
@@ -370,4 +370,3 @@ extern "C" {
 #endif
 
 #endif /* __USB_H__ */
-

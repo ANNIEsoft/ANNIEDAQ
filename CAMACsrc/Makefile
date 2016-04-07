@@ -1,29 +1,26 @@
-LUSB = -lm 
-LXUSB = $(LSUB) -lXXusb
-LCC = $(LXUSB) -lCamacCrate
-LLEC = $(LCC) -lLecroy3377 -lLecroy4300b
+LUSB = -lm -lusb 
+MAIN = src/main.cpp
+DCC = src/CamacCrate/CamacCrate.cpp
+DL3 = src/Lecroy3377/Lecroy3377.cpp
+DL4 = src/Lecroy4300b/Lecroy4300b.cpp
+DXX = src/XXUSB/libxxusb.cpp
 
-all: lib/libXXusb lib/libCamacCrate lib/libLecroy3377 lib/libLecroy4300b
-	g++ -g src/main.cpp -o main -I include -L lib $(LLEC) 
+all: cpinclude
+	g++ -o main $(MAIN) -I include -L lib $(DCC) $(DL3) $(DL4) $(DXX) $(LUSB)
 
-lib/libXXusb:
-	cp src/XXUSB/usb.h include/
-	cp src/XXUSB/libxxusb.h include/
-	g++ -g -shared -fPIC src/XXUSB/libxxusb.cpp -I include -L lib $(LUSB) -o lib/libXXusb.so
+demo: cpinclude
+	g++ -v -o demo CC-USB_demo.cpp -I include/ -L lib/ -lusb src/XXUSB/libxxusb.cpp
 
-lib/libCamacCrate: lib/libXXusb
-	cp src/CamacCrate/CamacCrate.h include/
-	g++ -g -shared -fPIC src/CamacCrate/CamacCrate.cpp -I include -L lib $(LXUSB) -o lib/libCamacCrate.so
-
-lib/libLecroy3377: lib/libXXusb lib/libCamacCrate
-	cp src/Lecroy3377/Lecroy3377.h include/
-	g++ -g -shared -fPIC src/Lecroy3377/Lecroy3377.cpp -I include -L lib $(LCC) -o lib/libLecroy3377.so
-
-lib/libLecroy4300b: lib/libXXusb lib/libCamacCrate
-	cp src/Lecroy4300b/Lecroy4300b.h include/
-	g++ -g -shared -fPIC src/Lecroy4300b/Lecroy4300b.cpp -I include -L lib $(LCC) -o lib/libLecroy4300b.so
+cpinclude:
+	cp src/CamacCrate/*.h include/
+	cp src/Lecroy3377/*.h include/
+	cp src/Lecroy4300b/*.h include/
+	cp src/XXUSB/*.h include/
+	cp src/libusb.so lib/
 
 clean:
 	rm -f main
 	rm -f lib/*.so
 	rm -f include/*.h
+	rm -f demo
+

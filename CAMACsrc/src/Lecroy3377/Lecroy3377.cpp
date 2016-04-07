@@ -1,3 +1,4 @@
+#include "CamacCrate.h"
 #include "Lecroy3377.h"
 
 Lecroy3377::Lecroy3377(int NSlot, int i = 0) : CamacCrate(i)	//Subclass constructor, n of Slot given

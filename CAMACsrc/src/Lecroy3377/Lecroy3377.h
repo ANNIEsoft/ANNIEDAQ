@@ -19,8 +19,13 @@
 class Lecroy3377 : public CamacCrate
 {
 	public:
-
-		Lecroy3377(int NSlot, int i);	//Constructor !
+/*		Lecroy3377(int NSlot, int i = 0) : CamacCrate(i)	//Subclass constructor, n of Slot given
+		{
+			Slot.push_back(NSlot);
+			ID = Slot.size()-1;
+		}
+*/
+		Lecroy3377(int NSlot, int i);// : CamacCrate(i);	//Constructor !
 //		~Lecroy3377();
 		int ReadFIFOall(std::vector<long> &vData);	//F(0)·A(0) 
 		int ReadFIFO();					//F(0)·A(1)COMMON START ONLY	
@@ -42,7 +47,7 @@ class Lecroy3377 : public CamacCrate
 		int TestBusy();					//F(27)·A(1) !
 		int TestEvent();				//F(27)·A(2) !
 		int TestFIFO();					//F(27)·A(3) !
-		int Reprog();					//F(30)
+//		int Reprog();					//F(30)
 		int READ(int F, int A, long &Data, int &Q, int &X);		//F(x)·A(y) 
 		int WRITE(int F, int A, long &Data, int &Q, int &X);		//F(x)·A(y)
 

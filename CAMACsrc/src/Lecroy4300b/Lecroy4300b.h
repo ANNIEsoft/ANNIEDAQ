@@ -26,14 +26,14 @@ class Lecroy4300b : public CamacCrate
 		int ReadOut(long &Data, int);	//F(2)·A(0-15)
 		int TestLAM();				//F(8)·A(0)
 		int ClearAll();				//F(9)·A(0)
-		int TestClearLAM();			//F(10)·A(0)
+		int ClearLAM();			//F(10)·A(0)
 		int WriteReg(long &Data);		//F(16)·A(0)
 		int WritePed(int Ch, long &Data);	//F(17)·A(0-15)
 		int TestAll();				//F(25)·A(0)
 		int READ(int F, int A, long &Data, int &Q, int &X);	//F(x)·A(y) 
 		int WRITE(int F, int A, long &Data, int &Q, int &X);	//F(x)·A(y)
 
-		int GetData(std::vector<long> &vData);				//Read Data from ADC compressed or not
+		int GetData(std::vector<long> &vData, std::vector<long> &vSAD);				//Read Data from ADC compressed or not
 		int DumpCompressed(std::vector<long> &vData, std::vector<long> &vSAD);	//Retrieve compressed data
 		int DumpAll(std::vector<long> &vData);				//Retrieve from all channels
 		void DecRegister();						//Register decoder	

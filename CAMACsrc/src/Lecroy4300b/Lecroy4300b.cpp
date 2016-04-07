@@ -46,7 +46,7 @@ int Lecroy4300b::ClearAll()	//Clear Module (not pedestal?)
 	return ret;
 }
 
-int Lecroy4300b::TestClearLAM()		//Test and clear LAM, if present.
+int Lecroy4300b::ClearLAM()		//Test and clear LAM, if present.
 {	
 	long Data = 0;
 	int Q = 0, X = 0;
@@ -87,11 +87,10 @@ int Lecroy4300b::WRITE(int F, int A, long &Data, int &Q, int &X)	//Gneric WRITE
 	return CamacCrate::WRITE(GetID(), F, A, Data, Q, X);
 }
 
-int Lecroy4300b::GetData(std::vector<long> &vData) 
+int Lecroy4300b::GetData(std::vector<long> &vData, std::vector<long> &vSAD) 
 {
 	int ret;
-	long VSN = 0;
-	if (ECE || CCE) ret = DumpCompressed(vData, VSN);
+	if (ECE || CCE) ret = DumpCompressed(vData, vSAD);
 	else ret = DumpAll(vData);
 	return ret;
 }
@@ -110,7 +109,7 @@ int Lecroy4300b::DumpCompressed(std::vector<long> &vData, std::vector<long> &vSA
 			ret = ReadOut(Data);
 			ParseCompData(Word, Data, Chan, Head);
 			vData.push_back(Data);
-			vSAD.push_back(chan);
+			vSAD.push_back(Chan);
 		}
 		return vData.size();
 	}
