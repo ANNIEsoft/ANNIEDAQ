@@ -21,18 +21,20 @@ struct card_root_thread_args{
   // tree=intree;
   //}
 
-  card_root_thread_args(std::string outfile, zmq::context_t* incontext, int inTFileTTreeCap, long &infilepart){
+  card_root_thread_args(std::string outfile, std::string infilename, zmq::context_t* incontext, int inTFileTTreeCap, long &infilepart){
     
     OutFile=outfile;
     context=incontext;
     TFileTTreeCap=inTFileTTreeCap;
     filepart=&infilepart;
+    filename=infilename;
   }
   
   zmq::context_t* context;
   std::string OutFile;
   int TFileTTreeCap;
   long *filepart;
+  std::string filename;
 
 };
 

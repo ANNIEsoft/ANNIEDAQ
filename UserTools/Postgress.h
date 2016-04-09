@@ -22,8 +22,8 @@ class Postgress: public Tool {
  private:
 
   bool m_verbose;
-
-  pqxx::connection *C;
+  void PSQLSync();
+  std::vector<pqxx::connection*> C;
   
 
 

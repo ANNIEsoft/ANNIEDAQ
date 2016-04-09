@@ -16,6 +16,9 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
 
   m_filepart=0;  
   std::stringstream tmp;
+  tmp<<"DataR"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber;
+  std::string filename=tmp.str();
+  tmp.str("");
   tmp<<OutputPath<<"DataR"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber;
   OutFile=tmp.str();
   tmp<<"p0.root";
@@ -28,7 +31,7 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
   Isend = new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
   Isend->bind("inproc://RootWriter");
   
-  args=new card_root_thread_args(OutFile,m_data->context,m_TFileTTreeCap, m_filepart);
+  args=new card_root_thread_args(OutFile, filename, m_data->context,m_TFileTTreeCap, m_filepart);
   //  //pthread_create (&thread[0], NULL, CardDataRecorder::FlowManager, args);
   // pthread_create (&thread[0], NULL, CardDataRecorder::RootWriter, args);
   
@@ -179,11 +182,12 @@ bool CardDataRecorder::Finalise(){
   tree->Write();
   file.Write();
   file.Close();
-  std::stringstream compcommand;
-  compcommand<<"tar -cf "<<tmp.str()<<".tar && rm "<<tmp.str()<<" &"; 
-  system(compcommand.str().c_str());
-  
-  // sleep(5);
+  // std::stringstream compcommand;
+  //compcommand<<"sleep 5 && tar -cf "<<tmp.str()<<".tar -C /data/output/ "<<"DataR"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber<<"p"<<m_filepart<<".root &";//" && rm "<<tmp.str()<<" &"; 
+  //std::cout<<compcommand.str()<<std::endl;
+   
+  //  system("sleep 10  &");
+   // sleep(5);
 
   m_data->DeleteTTree("PMTData");
   tree=0;
@@ -291,9 +295,12 @@ void* CardDataRecorder::RootWriter(void* arg){
       file.Write();
       //std::cout<<"T Debug 6"<<std::endl;
       file.Close();
-      std::stringstream compcommand;
-      compcommand<<"tar -cf "<<tmp.str()<<".tar && rm "<<tmp.str()<<" &";
-      system(compcommand.str().c_str());
+
+
+      // std::stringstream compcommand;
+      //compcommand<<"tar -cf "<<tmp.str()<<".tar -C /data/output/ "<<args->filename<<"p"<<args->filepart<<".root &";//" && rm "<<tmp.str()<<" &";                                           
+      //std::cout<<compcommand.str()<<std::endl;                                    
+      // system(compcommand.str().c_str());
       
       //std::cout<<"T  Debug 7"<<std::endl;
       //sleep(5);

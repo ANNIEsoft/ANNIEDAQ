@@ -168,7 +168,7 @@ bool Trigger::Execute(){
   }
   
   m_data->triggered=trigger;
-  
+  //  std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
   return true;
   
 }

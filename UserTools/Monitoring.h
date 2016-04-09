@@ -10,6 +10,11 @@
 #include "TH1I.h"
 #include "TH2I.h"
 #include "TCanvas.h"
+#include "TThread.h"
+#include "TLegend.h"
+#include "TGraph2D.h"
+
+#include <pqxx/pqxx>
 
 struct monitor_thread_args{
 
@@ -23,7 +28,11 @@ struct monitor_thread_args{
   std::string outputpath;
 };
 
+struct PMT{
 
+  int gx,gy,gz,card,channel;
+
+};
 
 class Monitoring: public Tool {
 
@@ -42,9 +51,10 @@ class Monitoring: public Tool {
 
   zmq::socket_t *Isend;
   static void *MonitorThread(void* arg);
-  pthread_t thread;
-
+  //  pthread_t thread;
+  TThread *h1;
   monitor_thread_args *args;
+
 
 };
 

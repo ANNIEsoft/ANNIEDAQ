@@ -51,7 +51,7 @@ SQL Database</span>
 "          
 
 
-echo "Select * from runinformation" | psql annie  > /tmp/sql
+echo "Select * from runinformation order by id desc" | psql annie  > /tmp/sql
 
 echo "
 <table class=\"mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp\">

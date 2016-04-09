@@ -59,7 +59,7 @@ run=0
 subrun=0
 num=-1
 
-for file in `ls /data/output/`
+for file in `ls -t /data/output/`
 do
 
 #echo $file
@@ -88,7 +88,7 @@ num=-1
 fi
 
 num=`expr $num + 1`
-mod=`expr $num % 7`
+mod=`expr $num % 6`
 #echo "<td>$num</td>"
 #echo "<td>$mod</td>"
 if [ $mod -eq 0 ] && [ ${b[3]} -ne 0 ]

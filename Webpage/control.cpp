@@ -194,16 +194,29 @@ std::vector<Store*> RemoteServices;
     std::string ip;
     std::string service;
     std::string status;
-    
+    std::string colour;
+
     //*(it->second)>> output;
     ip=*((*(RemoteServices.at(i)))["ip"]);
     service=*((*(RemoteServices.at(i)))["msg_value"]);
     status=*((*(RemoteServices.at(i)))["status"]);
+    colour="#00FFFF";
+    if (status=="Online")colour="#FF00FF";
+    else if (status=="Waiting to Initialise ToolChain")colour="#FFFF00";
+    else{
+      std::stringstream tmpstatus(status);
+      tmpstatus>>status;
+      if(status=="ToolChain"){
+	tmpstatus>>status;
+	if(status=="running")colour="#00FF00";
+      }
+      status=tmpstatus.str();
+    }
 
-    cout<<"<tr> <td bgcolor=\"#00FF00\">["<<i<<"]</td>";
-    cout<<"<td bgcolor=\"#00FF00\">"<<ip<<"</td>";
-    cout<<"<td bgcolor=\"#00FF00\">"<<service<<"</td> ";
-    cout<<"<td bgcolor=\"#00FF00\">"<<status<<"</td> </tr> ";
+    cout<<"<tr> <td bgcolor=\""<<colour<<"\">["<<i<<"]</td>";
+    cout<<"<td bgcolor=\""<<colour<<"\">"<<ip<<"</td>";
+    cout<<"<td bgcolor=\""<<colour<<"\">"<<service<<"</td> ";
+    cout<<"<td bgcolor=\""<<colour<<"\">"<<status<<"</td> </tr> ";
 
 
     //std::cout<<"["<<i<<"]  "<<ip<<" , "<<service<<" , "<<status<<std::endl;

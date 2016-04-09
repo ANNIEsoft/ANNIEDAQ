@@ -2,7 +2,7 @@
 echo "
 
 <head>
-<meta http-equiv=\"refresh\" content=\"10\"><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> <title>Monitoring</title>
+<meta http-equiv=\"refresh\" content=\"60\"><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> <title>Monitoring</title>
 
 </head>
 
@@ -52,9 +52,9 @@ Monitoring</span>
 <!-- Your content goes here -->
 
 "
-for file in `ls /data/monitoring`
+for file in `ls /data/monitoringplots/`
 do
- echo " <img src=\"/data/monitoring/$file\"  width=\"90%\" height=\"10%\"> "
+ echo " <img src=\"../monitoringplots/$file\"  width=\"40%\" height=\"40%\"> "
 done
 
 
