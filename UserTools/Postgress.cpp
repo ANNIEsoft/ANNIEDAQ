@@ -159,7 +159,7 @@ bool Postgress::Finalise(){
     if(C.size()==2){
       if(m_verbose)std::cout << "Opened database successfully: " << C.at(0)->dbname() << std::endl;
 
-      //PSQLSync();
+      PSQLSync();
 
     }
 
@@ -199,8 +199,8 @@ bool Postgress::Finalise(){
       pqxx::nontransaction N(*C.at(i));
       
       
-      //N.exec(tmp.str().c_str());
-      //N.commit();
+      N.exec(tmp.str().c_str());
+      N.commit();
       
       C.at(i)->disconnect ();
       

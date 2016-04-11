@@ -1,6 +1,6 @@
 # Postgres config file
 
-Verbose 0
+Verbose 1
 
 dbname annie
 hostaddr1 192.168.163.11
