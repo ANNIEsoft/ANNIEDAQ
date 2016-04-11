@@ -3,5 +3,6 @@
 Verbose 0
 
 dbname annie
-hostaddr 127.0.0.1
+hostaddr1 192.168.163.11
+hostaddr2 192.168.163.12
 port 5432

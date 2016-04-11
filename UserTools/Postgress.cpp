@@ -38,9 +38,10 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     */
 
     if(C.size()==2){
-      if(m_verbose)std::cout << "Opened database successfully: " << C->dbname() << std::endl;
-     
+      if(m_verbose)std::cout << "Opened database successfully: " << C.at(0)->dbname() << std::endl;
+      //std::cout << "syncing started"<<std::endl;     
       PSQLSync();
+      //std::cout << "syncing ended"<<std::endl;
 
     }
 
@@ -102,21 +103,20 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     tmp<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents ) values("<<m_data->RunNumber<<","<<m_data->SubRunNumber<<",Now(),NULL,"<<m_data->RunType<<",NULL,0);";
     
 
-    //   pqxx::work W(*C);
+    // pqxx::work W(*C);
     N.exec(tmp.str().c_str());
     N.commit();
     
-    C.at(0)->disconnect ();
-
+   
+    
     if(C.size()==2){
-      pqxx::nontransaction N2(*(C.at(1)));
-      //   pqxx::work W(*C);
-      N2.exec(tmp.str().c_str());
-      N2.commit();
-
+      PSQLSync();
       C.at(1)->disconnect ();
     }
 
+    C.at(0)->disconnect ();
+
+    
   }catch (const std::exception &e){
     std::cerr << e.what() << std::endl;
     return false;
@@ -157,7 +157,7 @@ bool Postgress::Finalise(){
 
 
     if(C.size()==2){
-      if(m_verbose)std::cout << "Opened database successfully: " << C->dbname() << std::endl;
+      if(m_verbose)std::cout << "Opened database successfully: " << C.at(0)->dbname() << std::endl;
 
       //PSQLSync();
 
@@ -199,8 +199,8 @@ bool Postgress::Finalise(){
       pqxx::nontransaction N(*C.at(i));
       
       
-      N.exec(tmp.str().c_str());
-      N.commit();
+      //N.exec(tmp.str().c_str());
+      //N.commit();
       
       C.at(i)->disconnect ();
       
@@ -221,19 +221,24 @@ bool Postgress::Finalise(){
   return true;
 }
 
-void PSQLSync(){
+void Postgress::PSQLSync(){
+
+  //std::cout<<"d1"<<std::endl;
 
   bool pass=false;
   
   std::string query1("select count(id) from runinformation;");
   std::string query2("select runnumber, subrunnumber,starttime, stoptime, id  from runinformation order by runnumber asc, subrunnumber asc;");
+  //std::cout<<"d2"<<std::endl;
   
   std::vector<pqxx::result> server1;
   std::vector<pqxx::result> server2;
+  //std::cout<<"d3"<<std::endl;
   
   for(int i=0;i<C.size();i++){
     pqxx::nontransaction N(*(C.at(i)));
-    
+    //std::cout<<"d4"<<std::endl;
+
     /* Execute SQL query */
     pqxx::result Re1( N.exec( query1.c_str() ));
     if(i==0)server1.push_back(Re1);
@@ -248,14 +253,17 @@ void PSQLSync(){
     //  if(ce[0].is_null()) m_data->SubRunNumber=0;
     // else m_data->SubRunNumber=ce[0].as<int>()+1;
   }
-  
- pqxx:result::const_iterator c1=server1.at(0).begin();
- pqxx:result::const_iterator c2=server2.at(0).begin();
+
+  //std::cout<<"d5"<<std::endl;  
+  pqxx::result::const_iterator c1=server1.at(0).begin();
+  pqxx::result::const_iterator c2=server2.at(0).begin();
   
   pass= (c1[0].as<long>()==c2[0].as<long>());
   
+  //std::cout<<"d6 c1length="<<c1[0].as<long>()<<" c2length="<<c2[0].as<long>()<<std::endl;
   
   if(pass){
+    //std::cout<<"d7"<<std::endl;
     // List down all the records
     //pqxx:result::const_iterator c1;
     //pqxx:result::const_iterator c2;
@@ -264,8 +272,10 @@ void PSQLSync(){
       
       pass*=(c1[0].as<long>()==c2[0].as<long>());
       pass*=(c1[1].as<long>()==c2[1].as<long>());
-      pass*=(c1[2].as<string>()==c2[2].as<string>());
-      pass*=(c1[3].as<string>()==c2[3].as<string>());
+      pass*=(c1[2].as<std::string>()==c2[2].as<std::string>());
+      if(!(c1[3].is_null()) && !(c2[3].is_null()))pass*=(c1[3].as<std::string>()==c2[3].as<std::string>());
+      else if((c1[3].is_null()) && (c2[3].is_null()))pass*=true;
+      else pass*=false;
       if(!pass)break;
       
       /*
@@ -280,72 +290,104 @@ void PSQLSync(){
     }
   }
   
+  //std::cout<<"d8"<<std::endl;
+
   if(!pass){
+    //std::cout<<"d9"<<std::endl;
     pass=true;
     bool end=false;
     for ( c1 = server1.at(1).begin() , c2 = server2.at(1).begin(); !end; ) {
-      
+      pass=true;      
+      if(!(c1[0].is_null()) && !(c2[0].is_null())){  
+	//std::cout<<"d9.5 "<<" c1="<<c1[0].as<long>()<<" c2="<<c2[0].as<long>()<<" , c1="<<c1[1].as<long>()<<" c2="<<c2[1].as<long>()<<std::endl;
+
+	// std::cout<<c2[0].as<long>()<<std::endl;      
       pass*=(c1[0].as<long>()==c2[0].as<long>());
+      //std::cout<<"d9.51 pass="<<pass<<std::endl;      
       pass*=(c1[1].as<long>()==c2[1].as<long>());
-      pass*=(c1[2].as<string>()==c2[2].as<string>());
-      pass*=(c1[3].as<string>()==c2[3].as<string>());
-      if(!pass){
+      //std::cout<<"d9.52 pass="<<pass<<std::endl;
+      pass*=(c1[2].as<std::string>()==c2[2].as<std::string>());
+      //std::cout<<"d9.53 pass="<<pass<<std::endl;
+      if(!(c1[3].is_null()) && !(c2[3].is_null()))pass*=(c1[3].as<std::string>()==c2[3].as<std::string>());
+      else if((c1[3].is_null()) && (c2[3].is_null()))pass*=true;
+      else pass*=false;      
+      //std::cout<<"d9.6"<<std::endl;
+      }
+      if(!pass ){
+	//std::cout<<"d10 "<<" c1="<<c1[0].as<long>()<<" c2="<<c2[0].as<long>()<<" , c1="<<c1[1].as<long>()<<" c2="<<c2[1].as<long>()<<std::endl;
 	if(c1[0].as<long>()<c2[0].as<long>() || (c1[1].as<long>()<c2[1].as<long>())   ){
 	  
 	  std::stringstream query;
 	  query<<"select * from runinformation where id="<<c1[4].as<long>()<<";";
 	  pqxx::nontransaction N(*(C.at(0)));
 	  /* Execute SQL query */
-	  pqxx::result res( N.exec( query.c_str() ));
+	  pqxx::result res( N.exec( query.str().c_str() ));
 	  
 	  std::stringstream send;
-          send<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
+          send<<" insert into Runinformation(id, runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
 	  
-	pqxx:result::const_iterator item= res.begin();
+	  pqxx::result::const_iterator item= res.begin();
 	  
 	  send<<item[0];
-	  for ( int i=1; i<7;i++){
+	  for ( int i=1; i<8;i++){
 	    
-	    send<<", "<<item[i];
+	    if(!(item[i].is_null())){
+	      if(i==3 || i==4)send<<", TIMESTAMP '";
+	      else send<<", ";
+	      send<<item[i];
+	      if(i==3 || i==4)send<<"'";
+            }
+            else send<<", NULL";
+
+	    
 	  }
 	  
 	  send <<");";
 	  
-	  pqxx::nontransaction N(*(C.at(1)));
-	  N.exec(send.c_str());
-	  N.commit();
+	  pqxx::nontransaction N2(*(C.at(1)));
+	  N2.exec(send.str().c_str());
+	  N2.commit();
 	  //insert into c2
-	  
+	  //std::cout<<"insert into c2 "<<send.str()<<std::endl;
+
 	  if(c1!=server1.at(1).end())++c1;
 	  
 	}
 	else if( c1[0].as<long>()>c2[0].as<long>() || (c1[1].as<long>()>c2[1].as<long>())   ){
 	  
+	  // std::cout<<"d12"<<std::endl;
 	  std::stringstream query;
 	  query<<"select * from runinformation where id="<<c2[4].as<long>()<<";";
 	  pqxx::nontransaction N(*(C.at(1)));
 	  /* Execute SQL query */
-	  pqxx::result res( N.exec( query.c_str() ));
+	  pqxx::result res( N.exec( query.str().c_str() ));
 	  
 	  std::stringstream send;
-	  send<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
+	  send<<" insert into Runinformation(id, runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
 	  
-	pqxx:result::const_iterator item= res.begin();
+	  pqxx::result::const_iterator item= res.begin();
 	  
 	  send<<item[0];
-	  for ( int i=1; i<7;i++){
+	  for ( int i=1; i<8;i++){
 	    
-	    send<<", "<<item[i];
+	    if(!(item[i].is_null())){
+	    if(i==3 || i==4)send<<", TIMESTAMP '";
+            else send<<", ";
+	    send<<item[i];
+	    if(i==3 || i==4)send<<"'";
+	    }
+	    else send<<", NULL";
 	  }
 	  
 	  send <<");";
 	  
-	  pqxx::nontransaction N(*(C.at(0)));
-	  N.exec(send.c_str());
-	  N.commit();
+	  pqxx::nontransaction N2(*(C.at(0)));
+	  N2.exec(send.str().c_str());
+	  N2.commit();
 	  
 	  //	  insert into c1
-	  
+	  //std::cout<<"insert into c1 "<<send.str()<<std::endl;
+
 	  if(c2!=server2.at(1).end())++c2;
 	  
 	}
@@ -355,74 +397,96 @@ void PSQLSync(){
 	  std::cout<<"SERVER CONFLICT ERROR!!!"<<std::endl;
 	}
 	
+	//std::cout<<"d13"<<std::endl;
 	
       }
-      
+
       
       else{
-	
+	//std::cout<<"d14"<<std::endl;
 	if(c1!=server1.at(1).end() && c2!=server2.at(1).end()){++c1;++c2;}
 	else if(c1!=server1.at(1).end() && c2==server2.at(1).end()){
-	  
+	  //std::cout<<"d14a "<<c1[4].as<long>()<<std::endl;
 	  std::stringstream query;
-          query<<"select * from runinformation where id>"<<c1[4].as<long>()<<";";
+          query<<"select * from runinformation where id>="<<c1[4].as<long>()<<";";
 	  pqxx::nontransaction N(*(C.at(0)));
           /* Execute SQL query */
-	  pqxx::result res( N.exec( query.c_str() ));
-	  
-	  for( pqxx:result::const_iterator item= res.begin(); item!=res.end();item++){
-	    
+	  pqxx::result res( N.exec( query.str().c_str() ));
+	  //std::cout<<"d14a2"<<std::endl;	  
+	  for( pqxx::result::const_iterator item= res.begin(); item!=res.end();item++){
+	    //std::cout<<"d14a3"<<std::endl;
 	    
 	    std::stringstream send;
-	    send<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
+	    send<<" insert into Runinformation(id, runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
 	    
 	    send<<item[0];
-	    for ( int i=1; i<7;i++){
+	    for ( int i=1; i<8;i++){
 	      
-	      send<<", "<<item[i];
+	      if(!(item[i].is_null())){
+		if(i==3 || i==4)send<<", TIMESTAMP '";
+		else send<<", ";
+		send<<item[i];
+		if(i==3 || i==4)send<<"'";
+	      }
+	      else send<<", NULL";
+
 	    }
 	    
 	    send <<");";
-	    
+	    //std::cout<<"d14a4"<<std::endl;
 	    pqxx::nontransaction N(*(C.at(1)));
-	    N.exec(send.c_str());
+	    //std::cout<<"d14a4a"<<std::endl;	    
+	    N.exec(send.str().c_str());
+	    //std::cout<<"d14a4b"<<std::endl;
 	    N.commit();
+	    //std::cout<<"insert into c2 "<<send.str()<<std::endl;
 	    
 	  }
-	  
+	  //std::cout<<"d14a5"<<std::endl;
 	  end=true;	    
 	}
 	else if(c2!=server2.at(1).end() && c1==server1.at(1).end()){
-	  
+	  //std::cout<<"d14b"<<std::endl;
 	  std::stringstream query;
-          query<<"select * from runinformation where id>"<<c2[4].as<long>()<<";";
+          query<<"select * from runinformation where id>="<<c2[4].as<long>()<<";";
 	  pqxx::nontransaction N(*(C.at(1)));
           /* Execute SQL query */
-	  pqxx::result res( N.exec( query.c_str() ));
+	  pqxx::result res( N.exec( query.str().c_str() ));
 	  
-          for( pqxx:result::const_iterator item= res.begin(); item!=res.end();item++){
+          for( pqxx::result::const_iterator item= res.begin(); item!=res.end();item++){
 	    
 	    
 	    std::stringstream send;
-            send<<" insert into Runinformation(runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
+            send<<" insert into Runinformation(id, runnumber , subrunnumber, starttime , stoptime , runtype , runstatus , numevents) values(";
 	    
             send<<item[0];
-            for ( int i=1; i<7;i++){
+            for ( int i=1; i<8;i++){
 	      
-              send<<", "<<item[i];
+	      if(!(item[i].is_null())){
+		if(i==3 || i==4)send<<", TIMESTAMP '";
+		else send<<", ";
+		send<<item[i];
+		if(i==3 || i==4)send<<"'";
+	      }
+	      else send<<", NULL";
+
+
             }
 	    
             send <<");";
 	    
 	    pqxx::nontransaction N(*(C.at(0)));
-            N.exec(send.c_str());
+            N.exec(send.str().c_str());
             N.commit();
-	    
+	    //std::cout<<"insert into c1 "<<send.str()<<std::endl;
           }
 	  
 	  end=true;
 	}
-	else if(c1==server1.at(1).end() && c2==server2.at(1).end())end=true;
+	else if(c1==server1.at(1).end() && c2==server2.at(1).end()){
+	  //std::cout<<"d14c"<<std::endl;
+	  end=true;
+	}
       }
       
       
@@ -433,6 +497,6 @@ void PSQLSync(){
     
   }
   
-  
+  //std::cout<<"d15"<<std::endl;
 }
 
