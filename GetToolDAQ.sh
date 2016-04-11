@@ -135,7 +135,8 @@ ups tailor postgres
   > 
   >
 ## no longer needed chgrp  postgres /data/postgres/*
-cp /data/postgres/postgresql.conf /home/annie/ANNIEDAQ/setup/
+cp /home/annie/ANNIEDAQ/setup/postgresql.conf /data/postgres/
+cp /home/annie/ANNIEDAQ/setup/pg_hba.conf /data/postgres/
 /local/ups/prd/postgres/v9_3_9_x64/Linux-2-6/bin/postgres --config-file=/data/postgres/postgresql.conf &
 
 ##setting up dbs
