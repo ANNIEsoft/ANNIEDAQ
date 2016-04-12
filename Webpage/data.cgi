@@ -55,53 +55,59 @@ echo "
 <tr>
 "    
 
-run=0
-subrun=0
-num=-1
 
-for file in `ls -t /data/output/`
+R=`psql annie  --command "select max(runnumber) from runinformation" | sed '3q;\
+d'|sed s:' '::`
+#echo "R is $R"
+
+S=`psql annie --command "select max(subrunnumber) from runinformation" | sed '3q;d'|sed s:' '::`
+#echo "S is $S"
+
+#S=999999999
+#echo "S is $S"
+
+run=$R                                                                                                           
+subrun=0
+part=0
+
+while [ $run -gt -1 ]
 do
+    echo "<td><b> Run $run </b></td>"
+    #echo $subrun
+    #echo $S
+   while [ $subrun -le 10 ]
+    do
+	#echo test
+	if [ `ls /data/output/DataR${run}S${subrun}*.root* | wc -l` -gt 0 ]
+	then
+	   echo "</tr><tr><td><b> Sub Run  $subrun </></td>"
+	   
+	   for file in `ls -t /data/output/DataR${run}S${subrun}*.root*`
+	   do
+	       if [ `expr $part % 5` -eq 0 ]
+               then
+                   echo "</tr><tr><td></td>"
+               fi	
+	       name=`echo $file | sed s:'/data/output/'::`
+	       echo "<td><a href=\"/output/$name\"> $name </a></td>"
+	       part=`expr $part + 1`
+	   done
+	fi
+	part=0
+	subrun=`expr $subrun + 1`
+    done
+    subrun=0
+    run=`expr $run - 1`
+    echo "</tr><tr>"
+    echo "</tr><tr>"
 
-#echo $file
-a=`echo $file|sed s:'R':' ':|sed s:'S':' ': |sed s:'p':' ':|sed s:".root":"":`
-#echo $a
-#echo 'test'
-b=( $a )
-#echo ${b[0]}
-#echo 'test2'
+done	
 
-if [ ${b[1]} -ne $run ]
-then
-    run=${b[1]}
-   echo "</tr><tr>"
-echo "<td><b> Run $run </b></td>"
-subrun=0
-echo "</tr><tr><td><b> Sub Run  $subrun </></td>"
-num1=-1
-fi
 
-if [ ${b[2]} -ne $subrun ]
-then
-subrun=${b[2]}
-    echo "</tr><tr> <td><b> Sub Run  $subrun </></td>"
-num=-1
-fi
 
-num=`expr $num + 1`
-mod=`expr $num % 6`
-#echo "<td>$num</td>"
-#echo "<td>$mod</td>"
-if [ $mod -eq 0 ] && [ ${b[3]} -ne 0 ]
-then
-#echo "<td>in</td>"
- echo "</tr><tr><td></td>"
-fi 
 
-   echo "<td><a href=\"/output/$file\"> $file </a></td>"                                                                                                                                                                        
-                                                                                                                              
-done
 
-                            
+                     
 
 echo "                                                                                                                           </tr>                                                                                  
  </tbody>

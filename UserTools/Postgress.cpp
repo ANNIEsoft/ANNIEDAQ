@@ -195,16 +195,37 @@ bool Postgress::Finalise(){
     tmp<<"update runinformation set stoptime=NOW(), numevents="<<m_data->NumEvents<<" , runstatus=0 where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
     
      // Create a non-transactional object.
-    for(int i=0;i<C.size();i++){ 
-      pqxx::nontransaction N(*C.at(i));
+    //for(int i=0;i<C.size();i++){ 
+      pqxx::nontransaction N(*C.at(0));
       
       
       N.exec(tmp.str().c_str());
       N.commit();
       
-      C.at(i)->disconnect ();
+      if(C.size()==2){
+
+	pqxx::nontransaction Na(*C.at(0));
+	tmp.str("");
+        tmp<<"select stoptime from runinformation where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
+	pqxx::result Re( Na.exec( tmp.str().c_str() ));
+
+	pqxx::result::const_iterator ce = Re.begin();
+
+	tmp.str("");
+	tmp<<"update runinformation set stoptime=( timestamp '"<<ce[0].as<std::string>()<<"'), numevents="<<m_data->NumEvents<<" , runstatus=0 where runnumber="<<m_data->RunNumber<<" and subrunnumber="<<m_data->SubRunNumber<<";";
+	
+	pqxx::nontransaction N2(*C.at(1));
+	N2.exec(tmp.str().c_str());
+	N2.commit();
+   
+	C.at(1)->disconnect ();
+   
+   }
+
+
+      C.at(0)->disconnect ();
       
-    }
+      //}
     
   }catch (const std::exception &e){
     
@@ -392,9 +413,54 @@ void Postgress::PSQLSync(){
 	  
 	}
 	
+	else if( ((c1[3].is_null()) || (c2[3].is_null())) &&  (!((c1[3].is_null()) && (c2[3].is_null())))      ){
+	  std::stringstream tmp;	  
+	  if(c1[3].is_null()){
+
+	    pqxx::nontransaction Na(*C.at(1));
+	    tmp.str("");
+	    tmp<<"select stoptime , numevents, status from runinformation where runnumber="<<c2[0]<<" and subrunnumber="<<c2[1]<<";";
+	    pqxx::result Re( Na.exec( tmp.str().c_str() ));
+
+	    pqxx::result::const_iterator ce = Re.begin();
+
+	    tmp.str("");
+	    tmp<<"update runinformation set stoptime=( timestamp '"<<ce[0].as<std::string>()<<"'), numevents="<<ce[1]<<" , runstatus="<<ce[2]<<" where runnumber="<<c2[0]<<" and subrunnumber="<<c2[1]<<";";
+
+	    pqxx::nontransaction N2(*C.at(0));
+	    N2.exec(tmp.str().c_str());
+	    N2.commit();
+
+	  }
+	  
+	  else if (c2[3].is_null()){
+	    
+
+	    pqxx::nontransaction Na(*C.at(0));
+            tmp.str("");
+            tmp<<"select stoptime , numevents, status from runinformation where runnumber="<<c1[0]<<" and subrunnumber="<<c1[1]<<";";
+	    pqxx::result Re( Na.exec( tmp.str().c_str() ));
+
+	    pqxx::result::const_iterator ce = Re.begin();
+
+            tmp.str("");
+            tmp<<"update runinformation set stoptime=( timestamp '"<<ce[0].as<std::string>()<<"'), numevents="<<ce[1]<<" , runstatus="<<ce[2]<<" where runnumber="<<c1[0]<<" and subrunnumber="<<c1[1]<<";";
+
+	    pqxx::nontransaction N2(*C.at(1));
+            N2.exec(tmp.str().c_str());
+            N2.commit();
+
+
+
+	  }
+	  
+	}
+	
 	else {
 	  
 	  std::cout<<"SERVER CONFLICT ERROR!!!"<<std::endl;
+	  pass=true;  
+
 	}
 	
 	//std::cout<<"d13"<<std::endl;
@@ -402,7 +468,7 @@ void Postgress::PSQLSync(){
       }
 
       
-      else{
+      if(pass){
 	//std::cout<<"d14"<<std::endl;
 	if(c1!=server1.at(1).end() && c2!=server2.at(1).end()){++c1;++c2;}
 	else if(c1!=server1.at(1).end() && c2==server2.at(1).end()){
