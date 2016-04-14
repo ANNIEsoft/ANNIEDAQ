@@ -56,7 +56,7 @@ bool VMESendData::Execute(){
     
     for (int i=0;i<m_data->carddata.size();i++){
 
-      
+      // std::cout<<" card id= "<<m_data->carddata.at(i)->CardID<<std::endl;      
     //NEW ***************************************	  
     //Send->send(m_data->carddata.begin(),m_data->carddata.end());
 
