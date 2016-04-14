@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]){
   std::string conffile;
-  if (argc==1)conffile="configfiles/Data_ToolChain";
+  if (argc==1)conffile="configfiles/VME";
   else conffile=argv[1];
   ToolChain tools(conffile);
 

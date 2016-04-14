@@ -1,12 +1,12 @@
 #ifndef UC500ADCINTERFACE_H
 #define UC500ADCINTERFACE_H
 
-#include <list>
+#include <vector>
 #include <time.h>
 
-#include "HardwareInterface.h"
 #include "CardData.h"
 #include "ucadc.h"
+#include "HardwareInterface.h"
 
 
 class UC500ADCInterface: virtual public HardwareInterface {
@@ -22,10 +22,9 @@ public:
 	~UC500ADCInterface( void );
 	
 private:
-
 	int crate;
 	struct timespec start;
-	std::list<int> cards;
+	std::vector<int> cards;
 	VMEBus *bus;
 	CardControl *control;
 	CardTime *cardtime;

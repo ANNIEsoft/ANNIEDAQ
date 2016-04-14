@@ -84,7 +84,6 @@ bool VMETriggerSend::Finalise(){
 
   delete TriggerCom;
   TriggerCom=0; 
-
-
+    
   return true;
 }
