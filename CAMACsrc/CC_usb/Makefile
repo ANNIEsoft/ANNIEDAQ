@@ -14,9 +14,9 @@ LDFLAGS       = -O
 SOFLAGS       = -shared
 
 
-CXXLIBDIRS	= -L./../../lib/
+CXXLIBDIRS	= -L ../orig/src
 CXXLIBS		= -lxx_usb -lm -lusb -Wl,"-rpath=$(here)/../../lib"
-INCLUDEDIRS 	= -I./../../include/
+INCLUDEDIRS 	= -I./../include/
 
 CXXFLAGS      	= -O -Wall -fPIC -g $(INCLUDEDIRS)
 

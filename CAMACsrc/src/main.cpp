@@ -43,7 +43,6 @@ int main (int argc, char** argv)
 	}
 	fin.close();
 
-	int nL3377, nL4300b;
 	for (int i = 0; i < Lcard.size(); i++)
 	{
 		if (Lcard.at(i) == "Lecroy3377")
@@ -67,7 +66,6 @@ int main (int argc, char** argv)
 	}
 
 	int *ret = new int[Lcard.size()];
-	long pureData;
 	std::vector<std::vector<long> > vData;
 	vData.resize(Lcard.size()+list4300b.size());
 
@@ -77,20 +75,28 @@ int main (int argc, char** argv)
 	{
 		for (int i = 0; i < list3377.size(); i++)
 		{
+			std::cout << "c0.0" << std::endl;
 			k = list3377.at(i);
-			if (card.at(k)->TestEvent() == 1)
+			std::cout << "c0.1" << std::endl;
+		//	if (card.at(k)->TestEvent() == 1)
+			std::cout << "c0.2" << std::endl;
 				ret[k] = card.at(k)->ReadFIFOall(vData.at(k));
 		}
 		for (int i = 0; i < list4300b.size(); i++)
 		{
+			std::cout << "c1.0" << std::endl;
 			k = list4300b.at(i);
-			if (card.at(k)->TestLAM() == 1)
+			std::cout << "c1.1" << std::endl;
+		//	if (card.at(k)->TestLAM() == 1)
+			std::cout << "c1.2" << std::endl;
 				ret[k] = card.at(k)->GetData(vData.at(k), vData.at(k+list4300b.size()));
 		}
 		for (int i = 0; i < Lcard.size(); i++)
 		{
+			std::cout << "c2" << std::endl;
 			r = ret[i] < 0;
 			check = check && !r;
+			std::cout << "check " << check << std::endl;
 		}
 	}
 	while (check);

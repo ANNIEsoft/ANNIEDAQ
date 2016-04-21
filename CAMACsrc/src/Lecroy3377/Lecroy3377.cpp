@@ -23,11 +23,13 @@ int Lecroy3377::ReadFIFOall(std::vector<long> &vData) //Read FIFO data until end
 //COMMON START ONLY
 int Lecroy3377::ReadFIFO()	//F(0)·A(1): Read FIFO data always (Common Start only).
 {
+	return 0;
 }
 
 //COMMON START ONLY
 int Lecroy3377::ExFIFOOut()	// F(0)·A(2): Examine FIFO output, do not advance FIFO (Common Start only).
 {
+	return 0;
 }
 
 long Lecroy3377::ReadReg(int R) //Read Control Register R.
@@ -39,9 +41,10 @@ long Lecroy3377::ReadReg(int R) //Read Control Register R.
 	else return 0;
 }
 
-//COMMON START ONLY
+////COMMON START ONLY
 int Lecroy3377::ReadTestReg() //F(1)·A(6): Read CAMAC Test Register Common Start only
 {
+	return 0;
 }
 
 int Lecroy3377::TestLAM() //Test LAM.
@@ -71,11 +74,13 @@ int Lecroy3377::ClearLAM() //Clear LAM.
 //COMMON START ONLY
 int Lecroy3377::WriteFIFOData() //F(16)·A(0): Write 16-bit data to FIFO (Common Start only).
 {
+	return 0;
 }
 
 //COMMON START ONLY
 int Lecroy3377::WriteFIFOtag() // F(16)·A(1): Write FIFO tag bit (Common Start only).
 {
+	return 0;
 }
 
 int Lecroy3377::WriteReg(int R, long *Data) //Write Control Register R.
@@ -137,7 +142,8 @@ int Lecroy3377::TestBuff()	//Test buffering in progress (BIP), Q = 1 while BIP.
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 27, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy3377::TestBusy()	//Test busy, Q = 1 while busy.
@@ -145,7 +151,8 @@ int Lecroy3377::TestBusy()	//Test busy, Q = 1 while busy.
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(1, 27, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy3377::TestEvent()	//Test event ready, Q = 1 if event ready for readout.
@@ -153,7 +160,8 @@ int Lecroy3377::TestEvent()	//Test event ready, Q = 1 if event ready for readout
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(2, 27, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to be read next.
@@ -161,7 +169,8 @@ int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(3, 27, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 /*
@@ -193,7 +202,10 @@ int Lecroy3377::GetSlot()	//Return n of Slot of module
 void Lecroy3377::GetRegister()
 {
 	for (int i = 0; i < 4; i++)
+	{
 		Control[i] = ReadReg(i);
+		std::cout << "3377 GetReg control " << Control[i] << std::endl;
+	}
 }
 
 void Lecroy3377::SetRegister()

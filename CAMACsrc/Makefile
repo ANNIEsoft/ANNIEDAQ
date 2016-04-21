@@ -1,26 +1,31 @@
-LUSB = -lm -lusb 
-MAIN = src/main.cpp
-DCC = src/CamacCrate/CamacCrate.cpp
-DL3 = src/Lecroy3377/Lecroy3377.cpp
-DL4 = src/Lecroy4300b/Lecroy4300b.cpp
-DXX = src/XXUSB/libxxusb.cpp
+S = src
+MAIN = $S/main.cpp
+DEMO = $S/CC-USB_demo.cpp
+DCC = $S/CamacCrate
+DL3 = $S/Lecroy3377
+DL4 = $S/Lecroy4300b
+O1 = main
+O2 = demo
+LXX = -lm -lxx_usb
 
 all: cpinclude
-	g++ -o main $(MAIN) -I include -L lib $(DCC) $(DL3) $(DL4) $(DXX) $(LUSB)
+	g++ -g -fPIC -o $(O1) $(MAIN) -I include/ -L lib/ $(DCC)/*.cpp $(DL3)/*.cpp $(DL4)/*.cpp $(LXX)
+	@echo "Done."
 
 demo: cpinclude
-	g++ -v -o demo CC-USB_demo.cpp -I include/ -L lib/ -lusb src/XXUSB/libxxusb.cpp
+	g++ -g -fPIC -o $(O2) $(DEMO) -I include/ -L lib/ $(LXX)
+	@echo "Done."
 
 cpinclude:
-	cp src/CamacCrate/*.h include/
-	cp src/Lecroy3377/*.h include/
-	cp src/Lecroy4300b/*.h include/
-	cp src/XXUSB/*.h include/
-	cp src/libusb.so lib/
+	cp $(DCC)/*.h include/
+	cp $(DL3)/*.h include/
+	cp $(DL4)/*.h include/
+	cp $S/XXUSB/*.h include/
+	cp $S/makelib/libxx_usb.so lib/
 
 clean:
-	rm -f main
+	rm -f $(O1)
+	rm -f $(O2)
 	rm -f lib/*.so
 	rm -f include/*.h
-	rm -f demo
 

@@ -10,24 +10,24 @@ int Lecroy4300b::ReadReg(long &Data)		//Read status word register. Q = 1 if BUSY
 {
 	int Q = 0, X = 0;
 	int ret = READ(0, 0, Data, Q, X);
-	if (ret > 0) return Q;
-	else return ret;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::ReadPed(int Ch, long &Data)	//Read pedestal memory (8 bits) for the 16 channels. Q = 1 if BUSY = 0.
 {
 	int Q = 0, X = 0;
 	int ret = READ(Ch, 1, Data, Q, X);
-	if(ret > 0) return Q;
-	else return ret;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::ReadOut(long &Data, int Ch = 0)	//Random access or sequential readout of the 16 ADC values. Q = 1 if BUSY = 1.
 {
 	int Q = 0, X = 0;
 	int ret = READ(Ch, 2, Data, Q, X);
-	if(ret > 0) return Q;
-	else return ret;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::TestLAM()	//Test LAM. Q = 1 if LAM is present.
@@ -35,7 +35,8 @@ int Lecroy4300b::TestLAM()	//Test LAM. Q = 1 if LAM is present.
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 8, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::ClearAll()	//Clear Module (not pedestal?)
@@ -43,7 +44,8 @@ int Lecroy4300b::ClearAll()	//Clear Module (not pedestal?)
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 9, Data, Q, X);
-	return ret;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::ClearLAM()		//Test and clear LAM, if present.
@@ -51,22 +53,24 @@ int Lecroy4300b::ClearLAM()		//Test and clear LAM, if present.
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 10, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::WriteReg(long &Data)	//Write status word register. Q = 1 if BUSY = 0.
 {
 	int Q = 0, X = 0;
 	int ret = WRITE(0, 16, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::WritePed(int Ch, long &Data)	//Write pedestal memory (8 bits) for the 16 channels. Q = 1 if BUSY = 0.
 {
 	int Q = 0, X = 0;
 	int ret = WRITE(Ch, 17, Data, Q, X);
-	if(ret > 0) return Q;
-	else return ret;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::TestAll()	//Enable test. Q = 1 if BUSY = 0. 
@@ -74,7 +78,8 @@ int Lecroy4300b::TestAll()	//Enable test. Q = 1 if BUSY = 0.
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 25, Data, Q, X);
-	return Q;
+	if (ret < 0) return ret;
+	else return Q;
 }
 
 int Lecroy4300b::READ(int F, int A, long &Data, int &Q, int &X)	//Generic READ
@@ -171,6 +176,8 @@ void Lecroy4300b::EncRegister()
 void Lecroy4300b::GetRegister()
 {
 	int ret = ReadReg(Control);
+	std::cout << "4300b GetReg ret " << ret << std::endl;
+	std::cout << "4300b GetReg control " << Control << std::endl;
 }
 
 void Lecroy4300b::SetRegister()
@@ -182,16 +189,16 @@ void Lecroy4300b::PrintRegister()
 {
 	DecRegister();
 	std::cout << "[" << GetID() << "] :\t";
-	std::cout << "Lecroy3377 in slot " << GetSlot() << " register control\n";
-	std::cout << "- VSN" << VSN << std::endl;
-	std::cout << "- EPS" << EPS << std::endl;
-	std::cout << "- ECE" << ECE << std::endl;
-	std::cout << "- EEN" << EEN << std::endl;
-	std::cout << "- CPS" << CPS << std::endl;
-	std::cout << "- CCE" << CCE << std::endl;
-	std::cout << "- CSR" << CSR << std::endl;
-	std::cout << "- CLE" << CLE << std::endl;
-	std::cout << "- OFS" << OFS << std::endl;
+	std::cout << "Lecroy4300b in slot " << GetSlot() << " register control\n";
+	std::cout << "VSN " << VSN << std::endl;
+	std::cout << "EPS " << EPS << std::endl;
+	std::cout << "ECE " << ECE << std::endl;
+	std::cout << "EEN " << EEN << std::endl;
+	std::cout << "CPS " << CPS << std::endl;
+	std::cout << "CCE " << CCE << std::endl;
+	std::cout << "CSR " << CSR << std::endl;
+	std::cout << "CLE " << CLE << std::endl;
+	std::cout << "OFS " << OFS << std::endl;
 	std::cout << std::endl; 
 }
 

@@ -529,7 +529,7 @@ std::cout << "xxusb_serial_find\n";
   usb_dev_handle *udev;
   struct usb_bus *bus;
   struct usb_device *dev;  
-//struct usb_bus *usb_busses;
+struct usb_bus *usb_busses;
   char string[256];
   short ret;
    usb_init();
@@ -705,7 +705,7 @@ usb_dev_handle*  xxusb_serial_open(char *SerialString)
   usb_dev_handle *udev = NULL;
   struct usb_bus *bus;
   struct usb_device *dev;  
-//struct usb_bus *usb_busses;
+struct usb_bus *usb_busses;
 char string[7];
   short ret;
 // usb_set_debug(4);
