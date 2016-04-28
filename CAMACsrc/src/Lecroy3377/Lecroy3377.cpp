@@ -36,10 +36,10 @@ int Lecroy3377::ExFIFOOut()	// F(0)·A(2): Examine FIFO output, do not advance F
 long Lecroy3377::ReadReg(int R) //Read Control Register R.
 {
 	long Data = 0;
-	int Q = 0, X = 0, ret;
-	if (R < 4) ret = READ(R, 1, Data, Q, X);
-	if(ret > 0) return Data;
-	else return 0;
+	int Q = 0, X = 0;
+	int ret = READ(R, 1, Data, Q, X);
+	if (ret < 0) return ret;
+	else return Data;
 }
 
 ////COMMON START ONLY
@@ -87,10 +87,7 @@ int Lecroy3377::WriteFIFOtag() // F(16)·A(1): Write FIFO tag bit (Common Start 
 int Lecroy3377::WriteReg(int R, long *Data) //Write Control Register R.
 {
 	int Q = 0, X = 0;
-	int ret;
-	if (R < 4) ret = WRITE(R, 17, *Data, Q, X);
-	else ret = 0;
-	return ret;
+	return WRITE(R, 17, *Data, Q, X);
 }
 
 int Lecroy3377::DisLAM() //Disable LAM.
@@ -180,7 +177,6 @@ int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to
 
 int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Common Stop
 {
-	Common = 0;
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 30, Data, Q, X);
@@ -207,17 +203,27 @@ int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Commo
 
 int Lecroy3377::CommonStart()	//F(30): Begin the reprogramming sequence for Common Start
 {
-	Common = 1;
 	long Data = 0;
 	int Q = 0, X = 0, ret = 0;
 	ret = READ(0, 9, Data, Q, X);
+	std::cout << "0 " << ret << std::endl;
 	ret = READ(0, 30, Data, Q, X);
-	ret = READ(0, 21, Data, Q, X);
+	std::cout << "1 " << ret << std::endl;
+	Data = 0;
+	ret = WRITE(0, 21, Data, Q, X);
+	std::cout << "2 " << ret << std::endl;
 	ret = READ(0, 25, Data, Q, X);
-	usleep(500000);
+	std::cout << "3 " << ret << std::endl;
+
+	usleep(1000000);
 	do
+	{
+		std::cout << "wait...";
 		ret = READ(0, 13, Data, Q, X);
+	}
 	while (Q != 1);
+
+	std::cout << std::endl;
 	ret = READ(0, 9, Data, Q, X);
 
 	Data = 0x10ff;
@@ -230,8 +236,8 @@ int Lecroy3377::CommonStart()	//F(30): Begin the reprogramming sequence for Comm
 	WriteReg(3, &Data);	
 	Data = 0x000b;
 	WriteReg(4, &Data);	
-	Data = 0x0000;
-	WriteReg(5, &Data);	
+//	Data = 0x0101;
+//	WriteReg(5, &Data);	
 
 	ret = EnLAM();
 	ret = EnAcq();
@@ -293,7 +299,8 @@ void Lecroy3377::DecRegister()
         BuffMode = breg0.test(12);		
         HeaderMode = breg0.test(13);		
         Mode = BittoInt(breg0, 14, 15);		
-
+	
+	Common = (Mode % 2);
 	if (Common)
 	{
 		MPI = BittoInt(breg1, 10, 11);		
@@ -414,7 +421,8 @@ void Lecroy3377::PrintRegRaw()
 		std::cout << "3377 in Common Stop\n";
 	}
 	for (int i = 0; i < n_reg; i++)
-		std::cout << "Reg " << i << ":\t" << Control[i] << std::endl;
+		std::cout << "Reg " << i << ":\t" << std::hex << Control[i] << std::endl;
+	std::cout << std::dec << std::endl;
 }
 
 void Lecroy3377::PrintRegister()

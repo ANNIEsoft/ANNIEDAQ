@@ -95,7 +95,7 @@ int main (int argc,  char *argv[])
 				strcpy(&nafin[0], &nafinx[0]);
 			sscanf(nafin,"%i,%i,%i",&CamN,&CamA,&CamF);
 			fflush(stdin);
-			if ((CamF < 8) || (CamF > 23))	
+			if ((CamF < 8) || (CamF > 23) || CamF == 21 || CamF ==23)	
 			{
 				ret = CAMAC_read(udev, CamN, CamA, CamF, &CamD,&CamQ, &CamX);
 				if (ret < 0)
@@ -111,7 +111,7 @@ int main (int argc,  char *argv[])
 				else
 					printf("\n       X = %i, Q = %i\n\n",CamX, CamQ);
 			}
-			if ((CamF > 15) && (CamF < 24))
+			if ((CamF > 15) && (CamF < 24) && CamF != 21 && CamF != 23)
 			{	
 				WriteMode=1;
 				printf("     D (Use 0x Prefix for Hexadecimal)-> ");

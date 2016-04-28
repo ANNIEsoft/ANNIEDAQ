@@ -78,7 +78,7 @@ class CamacCrate
 		virtual void PrintRegRaw() { ; }
 		virtual int READ(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y) 
 		virtual int WRITE(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y)
-
+		virtual int GetSlot() { return 0; }
 
 	protected:
 

@@ -70,12 +70,12 @@ int main (int argc, char** argv)
 
 	std::vector<long> Data, Addr;
 
-	card.at(0)->ClearAll();
-	card.at(0)->TestAll();
-	int k;
-	bool check = true, r;
-	if (card.at(k)->TestLAM() == 1)
-		std::cout << "GetData " << card.at(k)->GetData(Data, Addr) << std::endl;
+	card.at(0)->PrintRegRaw();
+	std::cout << "Clear ALL " << card.at(0)->ClearAll() << std::endl;
+	std::cout << "Test ALL  " << card.at(0)->TestAll() << std::endl;
+	if (card.at(0)->TestLAM() == 1)
+		std::cout << "GetData " << card.at(0)->GetData(Data, Addr) << std::endl;
+	std::cout << "Datasize " << Data.size() << endl;
 	for (int i = 0; i < Data.size(); i++)
 		std::cout << i << " Addr\t" << Addr.at(i) << "\tData\t" << Data.at(i) << std::endl;
 

@@ -3,7 +3,7 @@
  * File output not implemented yet
  *
  * Author: Tommaso Boschi
- * /
+ */
 
 
 
@@ -71,7 +71,8 @@ int main (int argc, char** argv)
 	{
 		std::cout << "..Analysing card in slot " << Ncard.at(i) << std::endl;
 		card.at(i)->GetRegister();
-		card.at(i)->PrintRegister();
+		card.at(i)->DecRegister();
+		card.at(i)->PrintRegRaw();
 	}
 
 	int *ret = new int[Lcard.size()];

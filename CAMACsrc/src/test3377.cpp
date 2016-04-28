@@ -58,28 +58,30 @@ int main (int argc, char** argv)
 		else std::cout << "\n\nUnkown card\n\n";
 	}
 
-	for (int i = 0; i < card.size(); i++)
-	{
-		std::cout << "..Analysing card in slot " << Ncard.at(i) << std::endl;
-		card.at(i)->GetRegister();
-		card.at(i)->PrintRegister();
-	}
-
 	std::vector<long> Data;
 
 	card.at(0)->CommonStart();
+	std::cout << "Reading registers\n";
+	card.at(0)->GetRegister();
+	card.at(0)->DecRegister();
 	card.at(0)->PrintRegRaw();
-	card.at(0)->InitTest();
 
-	if (card.at(0)->TestEvent() == 1)
-		std::cout << "ReadFifo " << card.at(0)->ReadFIFOall(Data) << std::endl;
-	std::cout << "data size " << Data.size() << std::endl;
+	for (int i = 0; i < 100; i++)
+	{
+		std::cout << "Test " << i << std::endl;
+		card.at(0)->InitTest();
+		if (card.at(0)->TestEvent() == 1)
+			card.at(0)->ReadFIFOall(Data);
+	}
+
+	std::cout << "Data size " << Data.size() << std::endl;
+	std::ofstream fout (Rcard.at(0).c_str());
 	for (int i = 0; i < Data.size(); i++)
-		std::cout << i << " Data\t" << Data.at(i) << std::endl;
-	
+	{
+		fout << i << "\t" << std::hex << Data.at(i) << "\t";
+		fout << std::dec << Data.at(i) << std::endl;
+	}
+	fout.close();
+
 	return 0;
 }
-
-
-
-

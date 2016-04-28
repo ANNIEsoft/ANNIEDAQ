@@ -30,7 +30,6 @@ void CamacCrate::Init(int i)		//Initialize device
 void CamacCrate::USBFind()		//Find usb devices
 {
 	ndev = xxusb_devices_find(devices);
-	std::cout << ndev << " d2\n";
 	for (int i = 0; i < ndev; i++)
 		std::cout << i << " device is " << devices[i].SerialString << std::endl;
 }
@@ -38,7 +37,6 @@ void CamacCrate::USBFind()		//Find usb devices
 void CamacCrate::USBOpen(int i)		//Open i device and create handler
 {
 	Mdev = devices[i].usbdev;
-	std::cout << i << " d4\n";
 	Mudev = xxusb_device_open(Mdev); 
 	if(!Mudev) std::cout << "\n\nFailed to open CC-USB. \n\n";
 	else std::cout << "\n\nCC-USB opened. \n\n";
