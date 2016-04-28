@@ -48,7 +48,9 @@ class CamacCrate
 		virtual int TestBusy() { return 0; }		
 		virtual int TestEvent() { return 0; }		
 		virtual int TestFIFO() { return 0; }		
-		virtual int Reprog() { return 0; }
+		virtual int CommonStop() { return 0; }
+		virtual int CommonStart() { return 0; }
+
 
 		//LECROY4300B
 		virtual int ReadReg(long &Data)	{ return 0; }
@@ -61,18 +63,21 @@ class CamacCrate
 		virtual int DumpCompressed(std::vector<long> &vData, std::vector<long> &vSAD) { return 0; }
 		virtual int DumpAll(std::vector<long> &vData) { return 0; }
 		virtual void ParseCompData(long Word, long &Stat, long &Num, bool &B0) { ; }
+		virtual int SetPedFile(std::string fname) { return 0; }
+		virtual int GetPedFile(std::string fname) { return 0; }
 
 		//COMMON
 		virtual int ClearAll() { return 0; }				
 		virtual int ClearLAM() { return 0; }	
 		virtual int TestLAM() { return 0; }			
-		virtual int READ(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y) 
-		virtual int WRITE(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y)
 		virtual void DecRegister() { ; }
 		virtual void EncRegister() { ; }
 		virtual void GetRegister() { ; }
 		virtual void SetRegister() { ; }
 		virtual void PrintRegister() { ; }
+		virtual void PrintRegRaw() { ; }
+		virtual int READ(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y) 
+		virtual int WRITE(int F, int A, long &Data, int &Q, int &X) { return 0; }//F(x)·A(y)
 
 
 	protected:

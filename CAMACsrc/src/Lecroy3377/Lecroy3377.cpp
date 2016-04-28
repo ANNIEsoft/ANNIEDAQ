@@ -5,6 +5,7 @@ Lecroy3377::Lecroy3377(int NSlot, int i = 0) : CamacCrate(i)	//Subclass construc
 {
 	Slot.push_back(NSlot);
 	ID = Slot.size()-1;
+	ClearAll();
 }
 
 int Lecroy3377::ReadFIFOall(std::vector<long> &vData) //Read FIFO data until end of event, Q = 1 for valid data, Q = 0 at end.
@@ -115,6 +116,9 @@ int Lecroy3377::InitTest() //F(25)·A(0): Initiate test cycle (Common Start only
 {
 	long Data = 0;
 	int Q = 0, X = 0;
+	long Reg5 = 0x0101;		//Test Register
+	WriteReg(5, &Reg5);	
+
 	int ret = READ(0, 25, Data, Q, X);
 	return ret;
 
@@ -173,11 +177,68 @@ int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to
 	else return Q;
 }
 
-/*
-int Lecroy3377::Reprog(long *Data, int *Q, int *X)	//F(30): Begin the reprogramming sequence.
+
+int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Common Stop
 {
+	Common = 0;
+	long Data = 0;
+	int Q = 0, X = 0;
+	int ret = READ(0, 30, Data, Q, X);
+	ret = READ(0, 9, Data, Q, X);
+	ret = READ(0, 25, Data, Q, X);
+	usleep(500000);
+	do
+		ret = READ(0, 13, Data, Q, X);
+	while (Q != 1);
+	ret = READ(0, 9, Data, Q, X);
+
+	Data = 0x10ff;
+	WriteReg(0, &Data);	
+	Data = 0x00ff;
+	WriteReg(1, &Data);	
+	Data = 0x03f0;
+	WriteReg(2, &Data);	
+	Data = 0x0000;
+	WriteReg(3, &Data);	
+
+	if (ret < 0) return ret;
+	else return Q;
 }
-*/
+
+int Lecroy3377::CommonStart()	//F(30): Begin the reprogramming sequence for Common Start
+{
+	Common = 1;
+	long Data = 0;
+	int Q = 0, X = 0, ret = 0;
+	ret = READ(0, 9, Data, Q, X);
+	ret = READ(0, 30, Data, Q, X);
+	ret = READ(0, 21, Data, Q, X);
+	ret = READ(0, 25, Data, Q, X);
+	usleep(500000);
+	do
+		ret = READ(0, 13, Data, Q, X);
+	while (Q != 1);
+	ret = READ(0, 9, Data, Q, X);
+
+	Data = 0x10ff;
+	WriteReg(0, &Data);	
+	Data = 0x0000;
+	WriteReg(1, &Data);	
+	Data = 0x0000;
+	WriteReg(2, &Data);	
+	Data = 0x03f0;
+	WriteReg(3, &Data);	
+	Data = 0x000b;
+	WriteReg(4, &Data);	
+	Data = 0x0000;
+	WriteReg(5, &Data);	
+
+	ret = EnLAM();
+	ret = EnAcq();
+
+	if (ret < 0) return ret;
+	else return Q;
+}
 
 int Lecroy3377::READ(int F, int A, long &Data, int &Q, int &X)	//Generic READ
 {
@@ -201,120 +262,208 @@ int Lecroy3377::GetSlot()	//Return n of Slot of module
 
 void Lecroy3377::GetRegister()
 {
-	for (int i = 0; i < 4; i++)
-	{
+	int n_reg = 0;
+	if (Common) n_reg = 6;
+	else n_reg = 4;
+	for (int i = 0; i < n_reg; i++)
 		Control[i] = ReadReg(i);
-		std::cout << "3377 GetReg control " << Control[i] << std::endl;
-	}
 }
 
-void Lecroy3377::SetRegister()
+void Lecroy3377::SetRegister()	//Common stop only
 {
-	int ret;
-	for (int i = 0; i < 4; i++)
+	int ret, n_reg = 0;
+	if (Common) n_reg = 6;
+	else n_reg = 4;
+	for (int i = 0; i < n_reg; i++)
 		ret = WriteReg(i, Control+i);
 }
 
 void Lecroy3377::DecRegister()
 {
 	std::bitset<16> breg0(Control[0]);
-
-	ModIDcode = BittoInt(breg0, 0, 7);	//b0_0
-        RecEdges = breg0.test(10);		//b0_1
-        RedoutMode = breg0.test(11);		//b0_2
-        BuffMode = breg0.test(12);		//b0_3
-        HeaderMode = breg0.test(13);		//b0_4
-        Mode = BittoInt(breg0, 14, 15);		//b0_5
-
 	std::bitset<16> breg1(Control[1]);
-	
-	TrgWidth = BittoInt(breg1, 0, 3);	//b1_0
-	TrgDelay = BittoInt(breg1, 4, 7);	//b1_1
-	TrgClock = BittoInt(breg1, 8, 9);	//b1_2
-	MPI = BittoInt(breg1, 10, 11);		//b1_3
-	FFERAmode = breg1.test(12); 		//b1_4
-	EvSerNum = BittoInt(breg1, 13, 15);	//b1_5
-
 	std::bitset<16> breg2(Control[2]);
-
-	MaxHITS = BittoInt(breg2, 0, 3);	//b2_0
-	FullScale = BittoInt(breg2, 4, 15);	//b2_1
-	
 	std::bitset<16> breg3(Control[3]);
+	std::bitset<16> breg4(Control[4]);
+	std::bitset<16> breg5(Control[5]);
 
-	ReqDelay = BittoInt(breg3, 0, 3);	//b3_0
+	ModID = BittoInt(breg0, 0, 7);		
+        RecEdges = breg0.test(10);		
+        ReadoutMode = breg0.test(11);		
+        BuffMode = breg0.test(12);		
+        HeaderMode = breg0.test(13);		
+        Mode = BittoInt(breg0, 14, 15);		
+
+	if (Common)
+	{
+		MPI = BittoInt(breg1, 10, 11);		
+		FFERAmode = breg1.test(12); 		
+		EvSerNum = BittoInt(breg1, 13, 15);	
+	
+		MaxHITS = BittoInt(breg2, 0, 3);	
+		
+		ReqDelay = BittoInt(breg3, 0, 3);	
+		MaxTimeRange = BittoInt(breg3, 4, 15);	
+	
+		StartTO = BittoInt(breg4, 0, 9);	
+	
+		TestPulse = BittoInt(breg5, 0, 4);	
+		TestClock = BittoInt(breg5, 5, 6);	
+		TestFlag = breg5.test(8);		
+	}
+	else
+	{
+		TrgWidth = BittoInt(breg1, 0, 3);	
+		TrgDelay = BittoInt(breg1, 4, 7);	
+		TrgClock = BittoInt(breg1, 8, 9);	
+		MPI = BittoInt(breg1, 10, 11);		
+		FFERAmode = breg1.test(12); 		
+		EvSerNum = BittoInt(breg1, 13, 15);	
+
+		MaxHITS = BittoInt(breg2, 0, 3);	
+		FullScale = BittoInt(breg2, 4, 15);	
+	
+		ReqDelay = BittoInt(breg3, 0, 3);	
+	}
 }
 
 void Lecroy3377::EncRegister()
 {
-	std::string sbit = "";
-	std::bitset<2> b0_5(Mode);
-	sbit += b0_5.to_string();
-	std::bitset<1> b0_4(HeaderMode);
-	sbit += b0_4.to_string();
-	std::bitset<1> b0_3(BuffMode);
-	sbit += b0_3.to_string();
-	std::bitset<1> b0_2(RedoutMode);
-	sbit += b0_2.to_string();
-	std::bitset<1> b0_1(RecEdges);
-	sbit += b0_1.to_string();
-//	std::bitset<2> b0_emp;
-//	sbit += b0_emp.to_string();
-	std::bitset<10> b0_0(ModIDcode);
-	sbit += b0_0.to_string();
-	std::bitset<16> b0_TOT(sbit);
-	Control[0] = b0_TOT.to_ulong();
+	Control[0] = 0;
+	Control[0] += Mode;
+	Control[0] << 1;
+	Control[0] += HeaderMode;
+	Control[0] << 1;
+	Control[0] += BuffMode;
+	Control[0] << 1;
+	Control[0] += ReadoutMode;
+	Control[0] << 1;
+	Control[0] += RecEdges;
+	Control[0] << 2;
+	Control[0] += TDCRes;
+	Control[0] << 8;
+	Control[0] += ModID;
 
-	sbit = "";
-	std::bitset<3> b1_5(EvSerNum);	
-	sbit += b1_5.to_string();
-	std::bitset<1> b1_4(FFERAmode);	
-	sbit += b1_4.to_string();
-	std::bitset<2> b1_3(MPI);	
-	sbit += b1_3.to_string();
-	std::bitset<2> b1_2(TrgClock);	
-	sbit += b1_2.to_string();
-	std::bitset<4> b1_1(TrgDelay);	
-	sbit += b1_1.to_string();
-	std::bitset<4> b1_0(TrgWidth);	
-	sbit += b1_0.to_string();
-	std::bitset<16> b1_TOT(sbit);
-	Control[1] = b1_TOT.to_ulong();
+	if (Common)
+	{
+		Control[1] = 0;
+		Control[1] += EvSerNum;
+		Control[1] << 1;
+		Control[1] += FFERAmode;
+		Control[1] << 2;
+		Control[1] += MPI;
+		Control[1] << 10;
 	
-	sbit = "";
-	std::bitset<12> b2_1(FullScale);
-	sbit += b2_1.to_string();
-	std::bitset<4> b2_0(MaxHITS);
-	sbit += b2_0.to_string();
-	std::bitset<16> b2_TOT(sbit);
-	Control[2] = b2_TOT.to_ulong();
+		Control[2] = 0xffff;
+		Control[2] << 4;
+		Control[2] += MaxHITS;
+	
+		Control[3] = 0;
+		Control[3] += MaxTimeRange;
+		Control[3] << 4;
+		Control[3] += ReqDelay;
+	
+		Control[4] = 0;
+		Control[4] << 10;
+		Control[4] += StartTO;
+	
+		Control[5] = 0;
+		Control[5] << 1;
+		Control[5] += TestFlag;	
+		Control[5] << 3;
+		Control[5] += TestClock;
+		Control[5] << 5;
+		Control[5] += TestPulse;
+	}
+	else
+	{
+		Control[1] = 0;
+		Control[1] += EvSerNum;
+		Control[1] << 1;
+		Control[1] += FFERAmode;
+		Control[1] << 2;
+		Control[1] += MPI;
+		Control[1] << 2;
+		Control[1] += TrgClock;
+		Control[1] << 4;
+		Control[1] += TrgDelay;
+		Control[1] << 4;
+		Control[1] += TrgWidth;
+	
+		Control[2] = 0;
+		Control[2] += FullScale;
+		Control[2] << 4;
+		Control[2] += MaxHITS;
+	
+		Control[3] = 0;
+		Control[3] += ReqDelay;
+	}
+}
 
-	sbit = "";
-	std::bitset<16> b3_0(ReqDelay);
-	Control[3] = b3_0.to_ulong();
+void Lecroy3377::PrintRegRaw()
+{
+	int n_reg;
+	if (Common)
+	{
+		n_reg = 6;
+		std::cout << "Lecroy 3377 in Common Start\n";
+	}
+	else 
+	{
+		n_reg = 4;
+		std::cout << "3377 in Common Stop\n";
+	}
+	for (int i = 0; i < n_reg; i++)
+		std::cout << "Reg " << i << ":\t" << Control[i] << std::endl;
 }
 
 void Lecroy3377::PrintRegister()
 {	
-	DecRegister();
-	std::cout << "[" << GetID() << "] :\t";
-	std::cout << "Lecroy3377 in slot " << GetSlot() << " register control\n";
-	std::cout << "- Module ID code\t" << ModIDcode << std::endl; 
-	std::cout << "- Record Edges\t" << RecEdges << std::endl; 
-	std::cout << "- Redout Mode\t" << RedoutMode << std::endl; 
-	std::cout << "- Buffer Mode\t" << BuffMode << std::endl; 
-	std::cout << "- Header Mode\t" << HeaderMode << std::endl; 
-	std::cout << "- Mode in use\t" << Mode << std::endl; 
-	std::cout << "- Trg Width\t"  << TrgWidth << std::endl; 
-	std::cout << "- Trg Delay\t" << TrgDelay << std::endl; 
-	std::cout << "- Trg Clock\t" << TrgClock << std::endl; 
-	std::cout << "- MPI\t\t" << MPI << std::endl; 
-	std::cout << "- Fast FERA\t" << FFERAmode << std::endl; 
-	std::cout << "- Event Serial\t" << EvSerNum << std::endl; 
-	std::cout << "- Max HITS\t" << MaxHITS << std::endl; 
-	std::cout << "- Full Scale\t" << FullScale << std::endl; 
-	std::cout << "- Request Delay\t" << ReqDelay << std::endl; 
+
+	if (Common)
+	{
+		DecRegister();
+		std::cout << "[" << GetID() << "] :\t";
+		std::cout << "Lecroy3377 in slot " << GetSlot() << " register control\n";
+		std::cout << "- Module ID code\t" << ModID << std::endl; 
+		std::cout << "- Record Edges\t" << RecEdges << std::endl; 
+		std::cout << "- Readout Mode\t" << ReadoutMode << std::endl; 
+		std::cout << "- Buffer Mode\t" << BuffMode << std::endl; 
+		std::cout << "- Header Mode\t" << HeaderMode << std::endl; 
+		std::cout << "- Mode in use\t" << Mode << std::endl; 
+		std::cout << "- MPI\t\t" << MPI << std::endl; 
+		std::cout << "- Fast FERA\t" << FFERAmode << std::endl; 
+		std::cout << "- Event Serial\t" << EvSerNum << std::endl; 
+		std::cout << "- Max HITS\t" << MaxHITS << std::endl; 
+		std::cout << "- Full Scale\t" << FullScale << std::endl; 
+		std::cout << "- Request Delay\t" << ReqDelay << std::endl; 
+		std::cout << "- Max Time Range\t" << MaxTimeRange << std::endl; 
+		std::cout << "- Start Timeout\t" << StartTO << std::endl; 
+		std::cout << "- Pulse number\t" << TestPulse << std::endl; 
+		std::cout << "- Test mode clk\t" << TestClock << std::endl; 
+		std::cout << "- Test Enable\t" << TestFlag << std::endl; 
+	}
+	else
+	{	
+		DecRegister();
+		std::cout << "[" << GetID() << "] :\t";
+		std::cout << "Lecroy3377 in slot " << GetSlot() << " register control\n";
+		std::cout << "- Module ID code\t" << ModID << std::endl; 
+		std::cout << "- Record Edges\t" << RecEdges << std::endl; 
+		std::cout << "- Readout Mode\t" << ReadoutMode << std::endl; 
+		std::cout << "- Buffer Mode\t" << BuffMode << std::endl; 
+		std::cout << "- Header Mode\t" << HeaderMode << std::endl; 
+		std::cout << "- Mode in use\t" << Mode << std::endl; 
+		std::cout << "- MPI\t\t" << MPI << std::endl; 
+		std::cout << "- Fast FERA\t" << FFERAmode << std::endl; 
+		std::cout << "- Event Serial\t" << EvSerNum << std::endl; 
+		std::cout << "- Max HITS\t" << MaxHITS << std::endl; 
+		std::cout << "- Full Scale\t" << FullScale << std::endl; 
+		std::cout << "- Request Delay\t" << ReqDelay << std::endl; 
+		std::cout << "- Trg Width\t"  << TrgWidth << std::endl; 
+		std::cout << "- Trg Delay\t" << TrgDelay << std::endl; 
+		std::cout << "- Trg Clock\t" << TrgClock << std::endl; 
+	}
+
 	std::cout << std::endl; 
 }
-
-

@@ -1,12 +1,3 @@
-/*
- * Main code
- * File output not implemented yet
- *
- * Author: Tommaso Boschi
- * /
-
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -67,6 +58,9 @@ int main (int argc, char** argv)
 		else std::cout << "\n\nUnkown card\n\n";
 	}
 
+
+
+
 	for (int i = 0; i < card.size(); i++)
 	{
 		std::cout << "..Analysing card in slot " << Ncard.at(i) << std::endl;
@@ -74,44 +68,16 @@ int main (int argc, char** argv)
 		card.at(i)->PrintRegister();
 	}
 
-	int *ret = new int[Lcard.size()];
-	std::vector<std::vector<long> > vData;
-	vData.resize(Lcard.size()+list4300b.size());
+	std::vector<long> Data, Addr;
 
+	card.at(0)->ClearAll();
+	card.at(0)->TestAll();
 	int k;
 	bool check = true, r;
-	do
-	{
-		for (int i = 0; i < list3377.size(); i++)
-		{
-			std::cout << "c0.0" << std::endl;
-			k = list3377.at(i);
-			std::cout << "c0.1" << std::endl;
-		//	if (card.at(k)->TestEvent() == 1)
-			std::cout << "c0.2" << std::endl;
-				ret[k] = card.at(k)->ReadFIFOall(vData.at(k));
-		}
-		for (int i = 0; i < list4300b.size(); i++)
-		{
-			std::cout << "c1.0" << std::endl;
-			k = list4300b.at(i);
-			std::cout << "c1.1" << std::endl;
-		//	if (card.at(k)->TestLAM() == 1)
-			std::cout << "c1.2" << std::endl;
-				ret[k] = card.at(k)->GetData(vData.at(k), vData.at(k+list4300b.size()));
-		}
-		for (int i = 0; i < Lcard.size(); i++)
-		{
-			std::cout << "c2" << std::endl;
-			r = ret[i] < 0;
-			check = check && !r;
-			std::cout << "check " << check << std::endl;
-		}
-	}
-	while (check);
-
-	for (int i = 0; i < vData.size(); i++)
-		std::cout << i % Lcard.size() << "\t" << vData.at(i).size() << std::endl;
+	if (card.at(k)->TestLAM() == 1)
+		std::cout << "GetData " << card.at(k)->GetData(Data, Addr) << std::endl;
+	for (int i = 0; i < Data.size(); i++)
+		std::cout << i << " Addr\t" << Addr.at(i) << "\tData\t" << Data.at(i) << std::endl;
 
 	return 0;
 }

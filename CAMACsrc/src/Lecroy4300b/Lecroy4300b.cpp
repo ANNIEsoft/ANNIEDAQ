@@ -176,13 +176,16 @@ void Lecroy4300b::EncRegister()
 void Lecroy4300b::GetRegister()
 {
 	int ret = ReadReg(Control);
-	std::cout << "4300b GetReg ret " << ret << std::endl;
-	std::cout << "4300b GetReg control " << Control << std::endl;
 }
 
 void Lecroy4300b::SetRegister()
 {
 	int ret = WriteReg(Control);
+}
+
+void Lecroy4300b::PrintRegRaw()
+{
+	std::cout << "Lecroy 4300b\nReg:\t" << Control << std::endl;
 }
 
 void Lecroy4300b::PrintRegister()
@@ -208,6 +211,56 @@ void Lecroy4300b::ParseCompData(long Word, long &Stat, long &Num, bool &B1)
 	B1 = bWord.test(15);
 	Num = BittoInt(bWord, 11, 15);
 	Stat = BittoInt(bWord, 0, 10);
+}
+
+int Lecroy4300b::GetPedestal()
+{
+	int ret;
+	for (int i = 0; i < 16; i++)
+		ret = ReadPed(i, Ped[i]);
+	return ret;
+}
+
+int Lecroy4300b::SetPedestal()
+{
+	int ret;
+	for (int i = 0; i < 16; i++)
+		ret = WritePed(i, Ped[i]);
+	return ret;
+}
+
+int Lecroy4300b::GetPedFile(std::string fname)
+{
+	std::ofstream fout(fname.c_str());
+	int ret = GetPedestal();
+	std::cout << "#Pedestal saved on ";
+	std::time_t now = std::time(NULL);
+	std::cout << std::asctime(std::localtime(&now)) << std::endl;	
+	for (int i = 0; i < 16; i++)
+		fout << Ped[i] << std::endl;
+	return ret;
+}
+
+int Lecroy4300b::SetPedFile(std::string fname)
+{
+	std::ifstream fin(fname.c_str());
+	std::string line;
+	std::stringstream ss;
+	int ped;
+	std::vector<int> vPed;
+	while (getline(fin, line))
+	{
+		if (line[0] == '#') continue;
+		ss.str("");
+		ss.clear();
+		ss << line;
+		ss >> ped;
+		vPed.push_back(ped);
+	}
+	if (vPed.size() == 16) 
+		for (int i = 0; i < 16; i++)
+			Ped[i] = vPed.at(i);
+	return SetPedestal();
 }
 
 int Lecroy4300b::GetID()	//Return ID of module
