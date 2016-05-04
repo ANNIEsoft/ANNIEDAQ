@@ -9,6 +9,9 @@
 #define CamacCrate_H
 
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <fstream>
 #include <vector>
 #include <bitset>
 
@@ -19,10 +22,23 @@ class CamacCrate
 	public:
 
 		//CAMACCRATE
-		CamacCrate(int i);
+		CamacCrate(int i = 0);
 		~CamacCrate();
 		int READ(int ID, int F, int A, long &Data, int &Q, int &X);
 		int WRITE(int ID, int F, int A, long &Data, int &Q, int &X);
+		int LoadStack(std::string fname);	//Load stack from file
+		int LoadStack(char *fname);		//Load stack from file
+		int ReadStack();	//Load stack from file
+		int StartStack();		//Start Acquisition Mode
+		int StopStack();		//Stop Acquisition Mode
+		int SetLAMmask(std::string &Mask);	//Set LAM mask as a binary string
+		int SetLAMmask(char *Mask);	//Set LAM mask as a binary char array
+		int SetLAMmask(long &Mask);		//Set LAM mask as an integer
+		int GlobalRegister(std::string &Reg);	//Write the CC global register as a string
+		int GlobalRegister(char *Reg);		//Write the CC global register as a char array
+		int GlobalRegister(long &Reg);		//Write the CC global register as an int
+		int ReadFIFO(std::vector<std::string> &vData);	//Read USB fifo
+		int ClearFIFO();
 		int GetSlot(int ID);
 		void ListSlot();
 

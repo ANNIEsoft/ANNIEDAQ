@@ -26,7 +26,7 @@ class Lecroy3377 : public CamacCrate
 			ID = Slot.size()-1;
 		}
 */
-		Lecroy3377(int NSlot, int i);// : CamacCrate(i);	//Constructor !
+		Lecroy3377(int NSlot, int i = 0);// : CamacCrate(i);	//Constructor !
 //		~Lecroy3377();
 		int ReadFIFOall(std::vector<long> &vData);	//F(0)·A(0) 
 		int ReadFIFO();					//F(0)·A(1)	COMMON START	

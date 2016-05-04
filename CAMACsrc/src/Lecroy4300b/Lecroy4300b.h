@@ -21,7 +21,7 @@
 class Lecroy4300b : public CamacCrate
 {
 	public:
-		Lecroy4300b(int NSlot, int i);
+		Lecroy4300b(int NSlot, int i = 0);
 		int ReadReg(long &Data);		//F(0)·A(0)
 		int ReadPed(int Ch, long &Data);	//F(1)·A(0-15)
 		int ReadOut(long &Data, int);		//F(2)·A(0-15)

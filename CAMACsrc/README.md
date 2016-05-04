@@ -39,7 +39,7 @@ make demo
 ```
 ##DAQ
 Code provided in XXUSB libraries.
-Test for CCUSB stack mode.
+Test for CCUSB stack mode using Lecroy 2249A.
 
 **
 ###Building
@@ -54,6 +54,40 @@ make daq
 ```
 ./daq
 ```
+##StackBuilder
+Stack words creator, from text file to text file.
+
+The format is the following:
+
+```
+N	A	F	C	M
+```
+
+where:
+- N is the slot Number;
+- A is the function subAddress;
+- F is the Function number;
+- C is the Continuation bit. Set this to 1 to complex stack lines, mainly used for Q-stop mode;
+- M is the Maximum number of repetetion in Q-stop mode. Don't care if C is 0;
+
+**
+###Building
+**
+```
+make clean
+make stackbuild
+```
+**
+###Usage 
+**
+```
+./stackbuild Input Output
+
+```
+
+Input is the file with the commands to be encoded. Default name is "Stackconfig".
+Output is the file with the encoded lines in. Default name is "Stackline".
+
 **
 ##Other utilities
 **

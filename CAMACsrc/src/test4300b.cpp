@@ -57,27 +57,30 @@ int main (int argc, char** argv)
 		}
 		else std::cout << "\n\nUnkown card\n\n";
 	}
+	std::cout << "1 read register \n";
+	card.at(0)->GetRegister();
+	card.at(0)->PrintRegRaw();
 
-
-
-
-	for (int i = 0; i < card.size(); i++)
-	{
-		std::cout << "..Analysing card in slot " << Ncard.at(i) << std::endl;
-		card.at(i)->GetRegister();
-		card.at(i)->PrintRegister();
-	}
 
 	std::vector<long> Data, Addr;
 
-	card.at(0)->PrintRegRaw();
 	std::cout << "Clear ALL " << card.at(0)->ClearAll() << std::endl;
+
+	std::cout << "1 read register \n";
+	card.at(0)->GetRegister();
+	card.at(0)->PrintRegRaw();
+
 	std::cout << "Test ALL  " << card.at(0)->TestAll() << std::endl;
 	if (card.at(0)->TestLAM() == 1)
 		std::cout << "GetData " << card.at(0)->GetData(Data, Addr) << std::endl;
-	std::cout << "Datasize " << Data.size() << endl;
+	std::cout << "Datasize " << Data.size() << std::endl;
+	std::cout << "Datasize " << Addr.size() << std::endl;
 	for (int i = 0; i < Data.size(); i++)
-		std::cout << i << " Addr\t" << Addr.at(i) << "\tData\t" << Data.at(i) << std::endl;
+	{
+//		std::cout << i << " Addr\t" << Addr.at(i) << "\tData\t" << Data.at(i) << std::endl;
+		std::cout << i << " Data\t" << std::dec << Data.at(i) << "\t";
+		std::cout << std::hex << Data.at(i) << std::endl;
+	}
 
 	return 0;
 }

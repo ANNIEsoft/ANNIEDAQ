@@ -1,7 +1,7 @@
 #include "CamacCrate.h"
 #include "Lecroy3377.h"
 
-Lecroy3377::Lecroy3377(int NSlot, int i = 0) : CamacCrate(i)	//Subclass constructor, n of Slot given
+Lecroy3377::Lecroy3377(int NSlot, int i) : CamacCrate(i)	//Subclass constructor, n of Slot given
 {
 	Slot.push_back(NSlot);
 	ID = Slot.size()-1;
@@ -180,13 +180,14 @@ int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Commo
 	long Data = 0;
 	int Q = 0, X = 0;
 	int ret = READ(0, 30, Data, Q, X);
-	ret = READ(0, 9, Data, Q, X);
+	ret = ClearAll();
 	ret = READ(0, 25, Data, Q, X);
+
 	usleep(500000);
 	do
 		ret = READ(0, 13, Data, Q, X);
 	while (Q != 1);
-	ret = READ(0, 9, Data, Q, X);
+	ret = ClearAll();
 
 	Data = 0x10ff;
 	WriteReg(0, &Data);	
@@ -215,16 +216,13 @@ int Lecroy3377::CommonStart()	//F(30): Begin the reprogramming sequence for Comm
 	ret = READ(0, 25, Data, Q, X);
 	std::cout << "3 " << ret << std::endl;
 
-	usleep(1000000);
+	usleep(500000);
 	do
-	{
-		std::cout << "wait...";
 		ret = READ(0, 13, Data, Q, X);
-	}
 	while (Q != 1);
 
 	std::cout << std::endl;
-	ret = READ(0, 9, Data, Q, X);
+	ret = ClearAll();
 
 	Data = 0x10ff;
 	WriteReg(0, &Data);	

@@ -1,6 +1,6 @@
 #include "Lecroy4300b.h"
 
-Lecroy4300b::Lecroy4300b(int NSlot, int i = 0) : CamacCrate(i)
+Lecroy4300b::Lecroy4300b(int NSlot, int i) : CamacCrate(i)
 {
 	Slot.push_back(NSlot);
 	ID = Slot.size()-1;
@@ -77,6 +77,10 @@ int Lecroy4300b::TestAll()	//Enable test. Q = 1 if BUSY = 0.
 {	
 	long Data = 0;
 	int Q = 0, X = 0;
+
+	Control = 0x6000;
+	SetRegister();
+
 	int ret = READ(0, 25, Data, Q, X);
 	if (ret < 0) return ret;
 	else return Q;
@@ -149,28 +153,27 @@ void Lecroy4300b::DecRegister()
 
 void Lecroy4300b::EncRegister()
 {
-	std::string sbit = "";
-	std::bitset<1> b8(OFS);
-	sbit += b8.to_string();
-	std::bitset<1> b7(CLE);
-	sbit += b7.to_string();
-	std::bitset<1> b6(CSR);
-	sbit += b6.to_string();
-	std::bitset<1> b5(CCE);
-	sbit += b5.to_string();
-	std::bitset<1> b4(CPS);
-	sbit += b4.to_string();
-	std::bitset<1> b3(EEN);
-	sbit += b3.to_string();
-	std::bitset<1> b2(ECE);
-	sbit += b2.to_string();
-	std::bitset<1> b1(EPS);
-	sbit += b1.to_string();
-	std::bitset<8> b0(VSN);
-	sbit += b0.to_string();
+	Control = 0;
+	Control += OFS;
+	Control << 1;
+	Control += CLE;
+	Control << 1;
+	Control += CSR;
+	Control << 1;
+	Control += CCE;
+	Control << 1;
+	Control += CPS;
+	Control << 1;
+	Control += EEN;
+	Control << 1;
+	Control += ECE;
+	Control << 1;
+	Control += EPS;
+	Control << 8;
+	Control += VSN;
 
-	std::bitset<16> bTOT(sbit);
-	Control = bTOT.to_ulong();
+	std::cout << "Register is " << std::hex << Control;
+	std::cout << std::dec << std::endl;
 }
 
 void Lecroy4300b::GetRegister()
@@ -185,7 +188,8 @@ void Lecroy4300b::SetRegister()
 
 void Lecroy4300b::PrintRegRaw()
 {
-	std::cout << "Lecroy 4300b\nReg:\t" << Control << std::endl;
+	std::cout << "Lecroy 4300b\nReg:\t" << std::hex;
+	std::cout << Control << std::dec << std::endl;
 }
 
 void Lecroy4300b::PrintRegister()
