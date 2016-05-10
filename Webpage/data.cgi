@@ -56,26 +56,31 @@ echo "
 "    
 
 
-R=`psql annie  --command "select max(runnumber) from runinformation" | sed '3q;\
-d'|sed s:' '::`
+R=`psql annie  --command "select max(runnumber) from runinformation" | sed '3q;d'|sed s:' '::g`
 #echo "R is $R"
 
-S=`psql annie --command "select max(subrunnumber) from runinformation" | sed '3q;d'|sed s:' '::`
+S=`psql annie --command "select max(subrunnumber) from runinformation" | sed '3q;d'|sed s:' '::g`
 #echo "S is $S"
 
 #S=999999999
 #echo "S is $S"
 
 run=$R                                                                                                           
-subrun=0
+subrun=$S
 part=0
 
 while [ $run -gt -1 ]
 do
+    type=`psql annie --command "select runtype from runinformation where runnumber=$run" | sed '3q;d'|sed s:' '::`
+    
     echo "<td><b> Run $run </b></td>"
+    if [ $type -eq 0 ]
+    then
+	echo "<td><b> Run Type: Testing </b></td>"
+    fi
     #echo $subrun
     #echo $S
-   while [ $subrun -le 10 ]
+   while [ $subrun -gt -1 ]
     do
 	#echo test
 	if [ `ls /data/output/DataR${run}S${subrun}*.root* | wc -l` -gt 0 ]
@@ -94,9 +99,9 @@ do
 	   done
 	fi
 	part=0
-	subrun=`expr $subrun + 1`
+	subrun=`expr $subrun - 1`
     done
-    subrun=0
+    subrun=$S
     run=`expr $run - 1`
     echo "</tr><tr>"
     echo "</tr><tr>"

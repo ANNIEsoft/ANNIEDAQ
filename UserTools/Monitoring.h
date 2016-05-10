@@ -13,6 +13,7 @@
 #include "TThread.h"
 #include "TLegend.h"
 #include "TGraph2D.h"
+#include "TF1.h"
 
 #include <pqxx/pqxx>
 

@@ -47,7 +47,7 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
   //std::cout<<"i d2"<<std::endl;  
   m_card.Data=new uint16_t[160000];
   //std::cout<<"i d3"<<std::endl;
-  TTree *tree = new TTree("PMTData0","PMTData0");
+  TTree *tree = new TTree("PMTData","PMTData");
   //std::cout<<"i d4"<<std::endl;
   tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
   tree->Branch("SequenceID",&(m_card.SequenceID),"SequenceID/I");
@@ -72,6 +72,9 @@ bool CardDataRecorder::Execute(){
     //    boost::progress_timer t;
 
   m_data->NumEvents++;
+  std::stringstream eventstatus;
+  eventstatus<<"Trigger events ="<<  m_data->NumEvents;
+  m_data->vars.Set("Status", eventstatus.str());
   
   TTree *tree=m_data->GetTTree("PMTData");
   //std::cout<<"Debug 2"<<std::endl;
@@ -96,7 +99,8 @@ bool CardDataRecorder::Execute(){
     //std::cout<<"Debug 5"<<std::endl;
     m_treenum++;
     std::stringstream tmp;
-    tmp<<"PMTData"<<m_treenum;
+    // tmp<<"PMTData"<<m_treenum;
+    tmp<<"PMTData";
     //std::cout<<"Debug 6 m_tmp = "<<tmp.str()<<std::endl;
     tree=new TTree(tmp.str().c_str(),tmp.str().c_str());
     //std::cout<<"Debug 7"<<std::endl;
@@ -160,7 +164,7 @@ bool CardDataRecorder::Execute(){
 
 bool CardDataRecorder::Finalise(){
 
- 
+  m_data->vars.Set("Status", "");
 
   zmq::message_t message(256);
   std::string send="Quit 0x00";

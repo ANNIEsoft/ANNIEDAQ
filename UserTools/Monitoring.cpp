@@ -92,6 +92,7 @@ void* Monitoring::MonitorThread(void* arg){
   
   //  std::vector<CardData*> carddata;
   std::vector<TH1I> freqplots;
+  std::map<int,std::vector<std::vector<float > > > pedpars;
   TCanvas c1("c1","c1",600,400);
   
   
@@ -151,7 +152,7 @@ void* Monitoring::MonitorThread(void* arg){
     if(arg1=="Data"){
       std::vector<TGraph2D*> mg;
       TH2I EventDisplay ("Event Display", "Event Display", 10, -1, 8, 10, -1, 8);
-      std::vector<TH1I> temporalplots;
+      std::vector<TH1F> temporalplots;
       CardData* carddata;
       int size=0;
       iss>>size;  
@@ -169,8 +170,12 @@ void* Monitoring::MonitorThread(void* arg){
 	  for(int j=0;j<carddata->channels;j++){
 	    std::stringstream tmp;
 	    tmp<<"Channel "<<(i*4)+j<<" frequency";
-	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),200,300,500);
+	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),200,200,399);
 	    freqplots.push_back(tmpfreq);
+	    std::vector<float> tmppedpars;
+	    tmppedpars.push_back(0);
+	    tmppedpars.push_back(0);
+	    pedpars[carddata->CardID].push_back(tmppedpars);
 	  }
 	  if(i==size-1)init=false;
 	}
@@ -181,7 +186,7 @@ void* Monitoring::MonitorThread(void* arg){
 	  std::stringstream tmp;
 	  tmp<<"Channel "<<(i*4)+j<<" temporal";
 	  
-	  TH1I temporal(tmp.str().c_str(),tmp.str().c_str(),carddata->buffersize,0,carddata->buffersize);
+	  TH1F temporal(tmp.str().c_str(),tmp.str().c_str(),carddata->buffersize,0,carddata->buffersize-1);
 	  long sum=0;
 	
 	  //  std::cout<<"d2"<<std::endl;
@@ -189,11 +194,35 @@ void* Monitoring::MonitorThread(void* arg){
 	for(int k=0;k<carddata->buffersize;k++){
 	  //	  std::cout<<"i="<<i<<" j="<<j<<std::endl;
 	  //std::cout<<"d2.5 "<<(i*4)+j<<" feqplot.size = "<<freqplots.size()<<std::endl;
-	  sum+=carddata->Data[(j*carddata->buffersize)+k];  
+	  if(carddata->Data[(j*carddata->buffersize)+k]>pedpars[carddata->CardID].at(j).at(0)+(pedpars[carddata->CardID].at(j).at(1)*5))sum+=carddata->Data[(j*carddata->buffersize)+k];  
 	  freqplots.at((i*4)+j).Fill(carddata->Data[(j*carddata->buffersize)+k]);
-	  temporal.SetBinContent(k,carddata->Data[(j*carddata->buffersize)+k]);	      
+
+	  //temporal.SetBinContent(k,carddata->Data[(j*carddata->buffersize)+k]);	      
 	}
+
+	freqplots.at((i*4)+j).Fit("gaus");
+	TF1 *gaus = freqplots.at((i*4)+j).GetFunction("gaus");
+        pedpars[carddata->CardID].at(j).at(0)=(gaus->GetParameter(1));
+        pedpars[carddata->CardID].at(j).at(1)=(gaus->GetParameter(2));
+	gaus->SetLineColor(j+1);
+       
+
 	
+	for(int k=0;k<carddata->buffersize/4;k++){
+          //std::cout<<"j*4 = "<<j*4<<std::endl;
+          //std::cout<<"(i*BufferSize)+(j*4) = "<<(i*BufferSize)+(j*4)<<std::endl;
+          //std::cout<<"i*BufferSize)+(j*4)+(BufferSize/2) = "<<(i*BufferSize)+(j*4)+(BufferSize/2)<<std::endl;
+          //std::cout<<"(i*BufferSize)+(j*4)+(BufferSize/2)+1 = "<<(i*BufferSize)+(j*4)+(BufferSize/2)+1<<std::endl;
+	  int offset=pedpars[carddata->CardID].at(j).at(0);
+          double conversion=2.415/pow(2.0, 12.0);
+	  temporal.SetBinContent(k*4,(carddata->Data[(j*carddata->buffersize)+(k*2)]-offset)*conversion);
+	  temporal.SetBinContent((k*4)+1,(carddata->Data[(j*carddata->buffersize)+(k*2)+1]-offset)*conversion);
+	  temporal.SetBinContent((k*4)+2,(carddata->Data[(j*carddata->buffersize)+(k*2)+(carddata->buffersize/2)]-offset)*conversion);
+	  temporal.SetBinContent((k*4)+3,(carddata->Data[(j*carddata->buffersize)+(k*2)+(carddata->buffersize/2)+1]-offset)*conversion);
+
+        }
+
+
 	//std::cout<<"d3"<<std::endl;
 	
 	temporalplots.push_back(temporal);
