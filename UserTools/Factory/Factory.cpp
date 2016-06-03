@@ -15,11 +15,17 @@ if (tool=="Trigger") ret=new Trigger;
 if (tool=="NetworkSendData") ret=new NetworkSendData;
 if (tool=="NetworkReceiveData") ret=new NetworkReceiveData;
 
- if (tool=="VMETriggerSend")ret=new VMETriggerSend;
- if (tool=="VMESendData")ret=new VMESendData;
- if (tool=="CardDataRecorder") ret=new CardDataRecorder;
- if (tool=="Logger") ret=new Logger;
- 
+if (tool=="VMETriggerSend")ret=new VMETriggerSend;
+if (tool=="VMESendData")ret=new VMESendData;
+//if (tool=="CardDataRecorder") ret=new CardDataRecorder;
+if (tool=="Logger") ret=new Logger;
+
+if (tool=="CCDAQ") ret=new CCDAQ;
+if (tool=="TreeRecorder") ret=new TreeRecorder;
+//if (tool=="CCUSB") ret=new CCUSB;
+//if (tool=="DAQInit") ret=new DAQInit;
+if (tool=="CCTrigger") ret=new CCTrigger;
+  if (tool=="Lecroy") ret=new Lecroy;
 return ret;
 }
 

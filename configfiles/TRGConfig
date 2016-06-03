@@ -1,0 +1,3 @@
+configcc configfiles/ModuleConfig
+verbose 1
+percent 20

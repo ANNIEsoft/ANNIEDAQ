@@ -1,0 +1,44 @@
+#List of modules, tab spacing
+#Supported modules are
+#TDC: Lecroy3377
+#ADC: Lecroy4300b
+#
+#Type		Slot
+#
+TDC	18  
+TDC	19  
+TDC	18  
+TDC	19  
+TDC	18  
+TDC	19  
+TDC	18  
+TDC	19  
+TDC	18  
+TDC	19  
+TDC	18  
+TDC	19  
+TDC	18  
+
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  
+ADC	21  

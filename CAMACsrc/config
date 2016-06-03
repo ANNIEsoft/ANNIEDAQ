@@ -1,8 +1,0 @@
-#List of modules, tab spacing
-#Supported modules are Lecroy3377 and Lecroy4300b
-#
-#
-#Type		Slot	Outputfile
-#
-Lecroy3377	22	Reg3377
-Lecroy4300b	21	Reg3377
