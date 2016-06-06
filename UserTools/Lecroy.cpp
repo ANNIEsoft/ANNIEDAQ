@@ -46,30 +46,36 @@ bool Lecroy::Initialise(std::string configfile, DataModel &data)
 
 bool Lecroy::Execute()
 {
+	bool probe;
 	if (m_data->TRG)
 	{
 		for (int i = 0; i < m_data->List.CC[DC].size(); i++)
 		{
-			if (rand() % (100/perc) > 0) continue;
+			if (m_data->trg_mode)
+				probe = true;
+			else probe = rand() % (100/perc) == 0;
 
-			m_data->List.CC[DC].at(i)->ClearAll();
-
-			if (DC == "TDC")
+			if (probe)
 			{
-				m_data->List.CC[DC].at(i)->InitTest();
-				if (m_data->List.CC[DC].at(i)->TestEvent() == 1)
-					m_data->List.CC[DC].at(i)->ReadFIFOall(Data.ch);
-			}
+				m_data->List.CC[DC].at(i)->ClearAll();
 
-			else if (DC == "ADC")
-			{
-				m_data->List.CC[DC].at(i)->TestAll();
-				while (m_data->List.CC[DC].at(i)->TestLAM())
-					m_data->List.CC[DC].at(i)->DumpAll(Data.ch);
+				if (DC == "TDC")
+				{
+					if (!m_data->trg_mode) m_data->List.CC[DC].at(i)->InitTest();
+					if (m_data->List.CC[DC].at(i)->TestEvent() == 1)
+						m_data->List.CC[DC].at(i)->ReadFIFOall(Data.ch);
+				}
+	
+				else if (DC == "ADC")
+				{
+					if (!m_data->trg_mode) m_data->List.CC[DC].at(i)->TestAll();
+					while (m_data->List.CC[DC].at(i)->TestLAM())
+						m_data->List.CC[DC].at(i)->DumpAll(Data.ch);
+				}
+	
+				m_data->List.Data[DC].Slot.push_back(m_data->List.CC[DC].at(i)->GetSlot());
+				m_data->List.Data[DC].Num.push_back(Data);
 			}
-
-			m_data->List.Data[DC].Slot.push_back(m_data->List.CC[DC].at(i)->GetSlot());
-			m_data->List.Data[DC].Num.push_back(Data);
 		}
 	}
 

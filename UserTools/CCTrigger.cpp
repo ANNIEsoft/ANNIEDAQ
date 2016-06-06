@@ -12,6 +12,7 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	m_data= &data;
 	m_variables.Get("verbose", verb);		//Module slots
 	m_variables.Get("configcc", configcc);		//Module slots
+	m_variables.Get("trg_mode", m_data->trg_mode);		//Module slots
 
 	std::ifstream fin (configcc.c_str());
 	std::string Line;
@@ -49,7 +50,11 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 			m_data->List.CC[Lcard.at(i)].push_back(Create(Lcard.at(i), Ncard.at(i)));	//They use CC at 0
 		}
 
-		else if (Lcard.at(i) == "TRG");
+		else if (Lcard.at(i) == "TRG")
+		{
+			m_data->List.CC["TDC"].push_back(Create("TDC", Ncard.at(i)));	//They use CC at 0
+			trg_pos = i;
+		}
 
 		else std::cout << "\n\nUnkown card\n" << std::endl;
 	}
@@ -60,12 +65,12 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 
 bool CCTrigger::Execute()
 {
-	if (true)
+	if (m_data->trg_mode)	//1 is real trg, 0 is soft trg
 	{
-		m_data->TRG = true;		//20% of full read of card
-		std::cout << "Trigger!" << std::endl;
+		if (m_data->List.CC["TDC"].at(trg_pos)->TestEvent() == 1)
+			m_data->TRG = true;
 	}
-	else m_data->TRG = false;
+	else m_data->TRG = true;
 
 	return true;
 }
@@ -79,7 +84,7 @@ bool CCTrigger::Finalise()
 	return true;
 }
 
-CamacCrate* CCTrigger::Create(std::string cardname, int cardslot)
+inline CamacCrate* CCTrigger::Create(std::string cardname, int cardslot)
 {
 	CamacCrate* ccp;
 	if (cardname == "TDC")

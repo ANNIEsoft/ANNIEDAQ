@@ -2,9 +2,10 @@
 #Supported modules are
 #TDC: Lecroy3377
 #ADC: Lecroy4300b
+#TRG: Lecroy3377 with RWM as input, always fired
 #
-#Type		Slot
 #
+#Type	Slot
 TDC	18  
 TDC	19  
 TDC	18  
@@ -18,6 +19,8 @@ TDC	19
 TDC	18  
 TDC	19  
 TDC	18  
+TDC	18  
+TRG	18  
 
 ADC	21  
 ADC	21  
