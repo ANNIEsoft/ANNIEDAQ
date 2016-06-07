@@ -1,4 +1,4 @@
-TreeCap 100
+TreeCap 500
 FileCap 1
 OutPath test/ 
 OutName dummy 

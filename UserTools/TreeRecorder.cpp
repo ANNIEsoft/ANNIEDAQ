@@ -185,24 +185,30 @@ bool TreeRecorder::Finalise(){
 //		delete vADC.at(i);
 
 
+	std::cout << "d0" << std::endl;
 	delete tree;
 	tree = 0;
 
+	std::cout << "d1" << std::endl;
 	delete h1;
 	h1 = 0;
 
+	std::cout << "d2" << std::endl;
 	delete Isend;
 	Isend = 0;
 	
+	std::cout << "d3" << std::endl;
 	delete args;
 	args = 0;
 
-	for (int i = 0; i < m_data->List.CC.size(); i++)
-	{
+	std::cout << "d4 " << m_data->List.CC.size() << std::endl;
+	for (int i = 0; i < m_data->List.CC["TDC"].size(); i++)
 		delete m_data->List.CC["TDC"].at(i);
+	std::cout << "d5" << std::endl;
+	for (int i = 0; i < m_data->List.CC["ADC"].size(); i++)
 		delete m_data->List.CC["ADC"].at(i);
-	}
 
+	std::cout << "d6" << std::endl;
 	m_data->List.CC.clear();
 	m_data->List.Data.clear();
 	
