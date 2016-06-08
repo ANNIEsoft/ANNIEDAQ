@@ -26,7 +26,8 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	Isend = new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
 	Isend->bind("inproc://RootWriter");
 	
-	args = new card_root_thread_args(OutName, m_data->context, FileCap, FileCount);
+//	args = new card_root_thread_args(OutName, m_data->context, FileCap, FileCount);
+	args = new card_root_thread_args(OutName, m_data->context, FileCount);
 	
 	h1 = new TThread("h1", TreeRecorder::RootWriter, args);
 	h1->Run();
@@ -49,55 +50,9 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
 //... and ends here
 
-/*
-	std::ifstream fin (configcc.c_str());
-	while (getline(fin, Line))
-	{
-		if (Line[0] == '#') continue;
-		else
-		{
-			ssL.str("");
-			ssL.clear();
-			ssL << Line;
-			if (ssL.str() != "")
-			{
-				ssL >> sEmp;
-				Lcard.push_back(sEmp);		//Modeli L
-				ssL >> iEmp;
-				Ncard.push_back(iEmp);		//Slot N
-			}
-		}
-	}
-	fin.close();
-
-	for (int i = 0; i < Lcard.size(); i++)
-	{
-		if (Lcard.at(i) == "Lecroy3377")
-		{
-			ssL.str("");
-			ssL.clear();
-			ssL << "TDC" << Ncard.at(i);
-			sEmp = ssL.str();
-			ssL << "[32]/I";
-			vTDC.push_back(new int[32]);
-			tree->Branch(sEmp.c_str(), vTDC.at(vTDC.size()-1), ssL.str().c_str());
-		}
-		else if (Lcard.at(i) == "Lecroy4300b")
-		{
-			ssL.str("");
-			ssL.clear();
-			ssL << "ADC" << Ncard.at(i);
-			sEmp = ssL.str();
-			ssL << "[16]/I";
-			vADC.push_back(new int[16]);
-			tree->Branch(sEmp.c_str(), vTDC.at(vTDC.size()-1), ssL.str().c_str());
-		}
-		else if (Lcard.at(i) != "CamacCrate")
-			std::cout << "\n\nUnkown card\n" << std::endl;
-	}
-*/
 	Trigger = 0;
 	ThreadCount = 0;
+	Entries = TreeCap;
 	return true;
 }
 
@@ -146,7 +101,8 @@ bool TreeRecorder::Execute()
 	
 		tree->Fill();
 	
-		if (tree->GetEntriesFast() >= TreeCap*(1+ThreadCount))
+//		if (tree->GetEntriesFast() >= TreeCap*(1+ThreadCount))
+		if (tree->GetEntriesFast() == TreeCap)
 		{
 			zmq::message_t message(512);
 			std::stringstream tmptree;
@@ -154,8 +110,17 @@ bool TreeRecorder::Execute()
 		
 			snprintf ((char *) message.data(), 512, "%s", tmptree.str().c_str()) ;
 			Isend->send(message);
-			if (++ThreadCount >= FileCap) 
-				ThreadCount = 0;
+
+			tree = new TTree("CCData", "ccdata");
+
+			tree->Branch("Trigger", &Trigger, "Trigger/i");
+			tree->Branch("OutNumber", &OutN, "OutN/i");
+			tree->Branch("TDC", TDC, "TDC[OutN]/i");
+			tree->Branch("TCardID", &TCardID, "TCardID[OutN]/i");
+			tree->Branch("TChannel", &TChannel, "TChannel[OutN]/i" );
+			tree->Branch("ADC", ADC, "ADC[OutN]/i");
+			tree->Branch("ACardID", &ACardID, "ACardID[OutN]/i");
+			tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
 		}
 	}
 	
@@ -166,7 +131,7 @@ bool TreeRecorder::Finalise(){
 
 	zmq::message_t message(256);
 	std::string send = "Quit 0x00";
-	snprintf ((char *) message.data(), 256 , "%s" ,send.c_str()) ;
+	snprintf ((char *) message.data(), 256, "%s", send.c_str()) ;
 	Isend->send(message);
 
 	h1->Join();
@@ -185,30 +150,23 @@ bool TreeRecorder::Finalise(){
 //		delete vADC.at(i);
 
 
-	std::cout << "d0" << std::endl;
-	delete tree;
+	tree->Delete();
 	tree = 0;
 
-	std::cout << "d1" << std::endl;
 	delete h1;
 	h1 = 0;
 
-	std::cout << "d2" << std::endl;
 	delete Isend;
 	Isend = 0;
 	
-	std::cout << "d3" << std::endl;
 	delete args;
 	args = 0;
 
-	std::cout << "d4 " << m_data->List.CC.size() << std::endl;
 	for (int i = 0; i < m_data->List.CC["TDC"].size(); i++)
 		delete m_data->List.CC["TDC"].at(i);
-	std::cout << "d5" << std::endl;
 	for (int i = 0; i < m_data->List.CC["ADC"].size(); i++)
 		delete m_data->List.CC["ADC"].at(i);
 
-	std::cout << "d6" << std::endl;
 	m_data->List.CC.clear();
 	m_data->List.Data.clear();
 	
@@ -227,6 +185,7 @@ void* TreeRecorder::RootWriter(void* arg)
 	*(args->part) = 0;
 	int Count = 0;	 
 	std::string Opt = "RECREATE";
+	TTree *tree;
 	
 	while (running)
 	{
@@ -235,8 +194,7 @@ void* TreeRecorder::RootWriter(void* arg)
 		
 		std::istringstream iss(static_cast<char*>(comm.data()));
 		std::string arg1 = "";
-		long long unsigned int arg2;		
-		TTree *tree;
+		unsigned long long arg2;		
 		
 		iss >> arg1 >> std::hex >> arg2;
 
@@ -251,17 +209,21 @@ void* TreeRecorder::RootWriter(void* arg)
 
 			file.Write();
 			file.Close();
+			++(*(args->part));	//FileCount
 
-			Opt = "UPDATE";
+			tree->Delete();
+			tree = 0;
 
-			if (++Count >= args->cap)
-			{
-				(*(args->part))++;	//FileCount
-				Count = 0;	
-				Opt = "RECREATE";
-				tree->Reset();
-				tree = 0;
-			}
+//			Opt = "UPDATE";
+
+//			if (++Count >= args->cap)
+//			{
+//				++(*(args->part));	//FileCount
+//				Count = 0;	
+//				Opt = "RECREATE";
+//				tree->Reset();
+//				tree = 0;
+//			}
 		}
 		else if (arg1 == "Quit")
 			running = false;

@@ -24,18 +24,19 @@ struct card_root_thread_args
 	// tree=intree;
 	//}
 
-	card_root_thread_args(std::string outfile, zmq::context_t* incontext, int inFileCap, int &inFileCount)
+//	card_root_thread_args(std::string outfile, zmq::context_t* incontext, int inFileCap, int &inFileCount)
+	card_root_thread_args(std::string outfile, zmq::context_t* incontext, int &inFileCount)
 	{
 		
 		out = outfile;
 		context = incontext;
-		cap = inFileCap;
+//		cap = inFileCap;
 		part = &inFileCount;
 	}
 	
 	zmq::context_t* context;
 	std::string out;
-	int cap;
+//	int cap;
 	int *part;
 };
 
@@ -63,7 +64,7 @@ class TreeRecorder: public Tool
 	
 		std::string OutPath, OutName, configcc;
  
-		int TreeCap, FileCap, FileCount;
+		int TreeCap, FileCap, FileCount, Entries;
 		int ThreadCount;
  
 		std::vector<std::string> Lcard;

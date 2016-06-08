@@ -23,6 +23,6 @@ service_kick_sec 60
 Tools_File configfiles/CCToolsConfig
 
 ##### Run Type #####
-Inline 2000
+Inline 1000000
 Interactive 0
 Remote 0
