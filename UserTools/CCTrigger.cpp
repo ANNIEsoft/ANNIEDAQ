@@ -13,7 +13,6 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	m_variables.Get("verbose", verb);		//Module slots
 	m_variables.Get("configcc", configcc);		//Module slots
 	m_variables.Get("trg_mode", m_data->trg_mode);		//Module slots
-	std::cout << "trigger mode " << m_data->trg_mode << std::endl;
 	m_data->TRG = false;
 
 	std::ifstream fin (configcc.c_str());
@@ -70,11 +69,7 @@ bool CCTrigger::Execute()
 	if (m_data->trg_mode)	//1 is real trg, 0 is soft trg
 	{
 		if (m_data->List.CC["TDC"].at(trg_pos)->TestEvent() == 1)
-		{
 			m_data->TRG = true;
-			std::cout << "Trigger " << m_data->TRG << std::endl;
-		}
-			
 	}
 	else m_data->TRG = true;
 
