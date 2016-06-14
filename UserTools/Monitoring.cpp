@@ -92,7 +92,13 @@ void* Monitoring::MonitorThread(void* arg){
   Ireceive.connect("inproc://MonitorThread");
   
   //  std::vector<CardData*> carddata;
-  std::vector<TH1I> freqplots;
+
+  std::map<int,std::vector<TH1F> > PedTime;
+  std::map<int,std::vector<TH1F> > PedRMSTime;
+  std::vector<TH1F> rates;
+  std::vector<TH1F> averagesize;
+
+  std::vector<TH1I> tfreqplots;
   std::map<int,std::vector<std::vector<float > > > pedpars;
   TCanvas c1("c1","c1",600,400);
   
@@ -128,6 +134,8 @@ void* Monitoring::MonitorThread(void* arg){
 
   //pqxx::result::const_iterator c = R.begin();
 
+
+  ///////// Fill PMT Info//////////////// 
   for ( pqxx::result::const_iterator c = R.begin(); c != R.end(); ++c) {
 
     PMT tmp;
@@ -157,16 +165,20 @@ void* Monitoring::MonitorThread(void* arg){
     
 
     if(arg1=="Data"){
+
+      ////////// Setting up plots/////////
       std::vector<TGraph2D*> mg;
       TH2I EventDisplay ("Event Display", "Event Display", 10, -1, 8, 10, -1, 8);
+      TH2I RMSDisplay ("RMS Display", "RMS Display", 10, -1, 8, 10, -1, 8);
       std::vector<TH1F> temporalplots;
+      std::vector<TH1I> freqplots;
       CardData* carddata;
       int size=0;
       iss>>size;  
       
       //freqplots.clear();
-      //std::cout<<"d6"<<std::endl;
-
+  //std::cout<<"d6"<<std::endl;
+  
       for(int i=0;i<size;i++){
 	//std::cout<<"d7"<<std::endl;
 
@@ -175,12 +187,22 @@ void* Monitoring::MonitorThread(void* arg){
 	
 	carddata=(reinterpret_cast<CardData *>(pointer));
 	
-	if(init){
+	if(init){ ////make initial freq  plot and ped vector ped time and ped rms////
 	  for(int j=0;j<carddata->channels;j++){
 	    std::stringstream tmp;
 	    tmp<<"Channel "<<(i*4)+j<<" frequency";
-	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),200,200,399);
-	    freqplots.push_back(tmpfreq);
+	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    tfreqplots.push_back(tmpfreq);
+
+	    tmp.str("");
+	    tmp<<"Channel "<<(i*4)+j<<" Pedistal";
+	    TH1F tmppedtime(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    PedTime[carddata->CardID].push_back(tmppedtime);
+
+	    tmp.str("");
+	    tmp<<"Channel "<<(i*4)+j<<" Pedistal RMS";
+	    TH1F tmppedrmstime(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    PedRMSTime[carddata->CardID].push_back(tmppedrmstime);
 	    std::vector<float> tmppedpars;
 	    tmppedpars.push_back(0);
 	    tmppedpars.push_back(0);
@@ -193,15 +215,27 @@ void* Monitoring::MonitorThread(void* arg){
 
 	//	std::cout<<"d1"<<std::endl;
 
+	///////Make temporal plot //////////
 	for(int j=0;j<carddata->channels;j++){
 	  std::stringstream tmp;
 	  tmp<<"Channel "<<(i*4)+j<<" temporal";
 	  
 	  TH1F temporal(tmp.str().c_str(),tmp.str().c_str(),carddata->buffersize,0,carddata->buffersize-1);
 	  long sum=0;
+
+	  //////////Make freq plot///////////////
+	  tmp.str("");
+	  tmp<<"Channel "<<(i*4)+j<<" frequency";
+	  TH1I freq(tmp.str().c_str(),tmp.str().c_str(),200,200,399);
+
 	
 	  //  std::cout<<"d2"<<std::endl;
+
 	  //std::cout<<"d9"<<std::endl;
+
+	
+	  ///// Calculate sum for event dispkay and fill freq plots /////////
+
 
 	for(int k=0;k<carddata->buffersize;k++){
 	  //std::cout<<"d10"<<std::endl;
@@ -209,20 +243,30 @@ void* Monitoring::MonitorThread(void* arg){
 	  //	  std::cout<<"i="<<i<<" j="<<j<<std::endl;
 	  //std::cout<<"d2.5 "<<(i*4)+j<<" feqplot.size = "<<freqplots.size()<<std::endl;
 	  if(carddata->Data[(j*carddata->buffersize)+k]>pedpars[carddata->CardID].at(j).at(0)+(pedpars[carddata->CardID].at(j).at(1)*5))sum+=carddata->Data[(j*carddata->buffersize)+k];  
-	  freqplots.at((i*4)+j).Fill(carddata->Data[(j*carddata->buffersize)+k]);
+	  freq.Fill(carddata->Data[(j*carddata->buffersize)+k]);
 
 	  //temporal.SetBinContent(k,carddata->Data[(j*carddata->buffersize)+k]);	      
 	}
 
-	freqplots.at((i*4)+j).Fit("gaus");
-	TF1 *gaus = freqplots.at((i*4)+j).GetFunction("gaus");
+	freqplots.push_back(freq);
+
+	//////// find pedistall fill ped temporals//////////
+	freq.Fit("gaus");
+	TF1 *gaus = freq.GetFunction("gaus");
         pedpars[carddata->CardID].at(j).at(0)=(gaus->GetParameter(1));
         pedpars[carddata->CardID].at(j).at(1)=(gaus->GetParameter(2));
 	gaus->SetLineColor(j+1);
        
 	//std::cout<<"d11"<<std::endl;
 
-	
+	for(int bin=999;bin>0;bin--){
+	  PedTime[carddata->CardID].at(j).SetBinContent(bin,PedTime[carddata->CardID].at(j).GetBinContent(bin-1));
+	  PedRMSTime[carddata->CardID].at(j).SetBinContent(bin,PedTime[carddata->CardID].at(j).GetBinContent(bin-1));
+	}
+	PedTime[carddata->CardID].at(j).SetBinContent(0, pedpars[carddata->CardID].at(j).at(0));
+	PedRMSTime[carddata->CardID].at(j).SetBinContent(0, pedpars[carddata->CardID].at(j).at(1));
+
+	//////// fill temporal plot/////////
 	for(int k=0;k<carddata->buffersize/4;k++){
 	  //std::cout<<"d12"<<std::endl;
 
@@ -245,6 +289,8 @@ void* Monitoring::MonitorThread(void* arg){
 	
 	temporalplots.push_back(temporal);
 
+
+	////// find x,y,z fill event display /////////
 	int x=-10;
 	int z=-10;
 	int y=-10;
@@ -279,7 +325,9 @@ void* Monitoring::MonitorThread(void* arg){
 
 	  //std::cout<<"gx = "<<x<<" , gz="<<z<<std::endl;
 	  EventDisplay.SetBinContent(x+2,z+2,sum);
+	  RMSDisplay.SetBinContent(x+2,z+2,gaus->GetParameter(2));
 
+	  //// Attempted 2ne event display ///
 	  TGraph2D *dt=new TGraph2D(1);
 	  dt->SetPoint(0,x,z,z);
 	  dt->SetMarkerStyle(20);
@@ -292,6 +340,10 @@ void* Monitoring::MonitorThread(void* arg){
 	}
 	
 	//std::cout<<"d18"<<std::endl;
+
+	
+
+	///////Find max freq for scaling//////////
 
 	int maxplot=0;
 	long maxvalue=0;
@@ -306,7 +358,10 @@ void* Monitoring::MonitorThread(void* arg){
 	  }
 	}
 	
+
 	//std::cout<<"d20"<<std::endl;
+
+	////////Find current time and plot frewuency plot
 
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime( & t );
@@ -336,8 +391,14 @@ for(int j=(i*4);j<(i*4)+4;j++){
 	tmp<<outpath<<carddata->CardID<<"freq.jpg";
 	c1.SaveAs(tmp.str().c_str());
 
+
 	//std::cout<<"d25"<<std::endl;
-	////temporal
+
+
+
+	///////find max tmporal plot for scaling
+	
+	///temporal
 	maxplot=0;
 	maxvalue=0;
 
@@ -349,7 +410,12 @@ for(int j=(i*4);j<(i*4)+4;j++){
             maxplot=j;
           }
         }
+
 	//std::cout<<"d27"<<std::endl;
+
+
+	//////// Find time and plot temporal plot
+
 	t = time(0);   // get time now
         now = localtime( & t );
 	std::stringstream title2;
@@ -379,6 +445,23 @@ for(int j=(i*4);j<(i*4)+4;j++){
 	c1.SaveAs(tmp2.str().c_str());
 	//std::cout<<"d32"<<std::endl;
 
+
+	///////plotting PED time and ped rms time //////
+	 PedTime[carddata->CardID].at(0).Draw();
+	for (int channel=1;channel<4;channel++){
+	  PedTime[carddata->CardID].at(channel).Draw("same");
+	}
+	tmp2.str("");
+	tmp2<<outpath<<"plots2/"<<carddata->CardID<<"PedTime.jpg";
+	c1.SaveAs(tmp2.str().c_str());
+
+	PedRMSTime[carddata->CardID].at(0).Draw();
+	for (int channel=1;channel<4;channel++){
+	  PedRMSTime[carddata->CardID].at(channel).Draw("same");
+	}
+	tmp2.str("");
+	tmp2<<outpath<<"plots2/"<<carddata->CardID<<"PedRMSTime.jpg";
+	c1.SaveAs(tmp2.str().c_str());
 
 	delete carddata;
 
@@ -429,12 +512,26 @@ for(int j=(i*4);j<(i*4)+4;j++){
       c1.SaveAs(tmp2.str().c_str());
       */
       //std::cout<<"d33"<<std::endl;
+
+
+      /////////plot event display /////////
+
       EventDisplay.Draw("COLZ");
       std::stringstream tmp3;
       tmp3<<outpath<<"0EventDisplay.jpg";
       c1.SaveAs(tmp3.str().c_str());
       
+
       //std::cout<<"d34 ="<<mg.size()<<std::endl;
+
+/////////plot RMS display /////////
+      RMSDisplay.Draw("COLZ");
+      tmp3.str("");
+      tmp3<<outpath<<"0RMSDisplay.jpg";
+      c1.SaveAs(tmp3.str().c_str());
+
+      ///plot  atempted 3d event display///////
+
       tmp3.str("");
       if(mg.size()>0)      mg.at(0)->Draw();
       for(int plots=1;plots<mg.size();plots++){
@@ -442,14 +539,18 @@ for(int j=(i*4);j<(i*4)+4;j++){
 	//std::cout<<"d35"<<std::endl;
       }
       tmp3<<outpath<<"0EventDisplay3D.jpg";
-      c1.SaveAs(tmp3.str().c_str());
-      //std::cout<<"d36"<<std::endl;
+      //c1.SaveAs(tmp3.str().c_str());
+
+
+
+
+
     }
     
     
     
     else if(arg1=="Quit"){
-      freqplots.clear();
+      tfreqplots.clear();
       running=false;
       //std::cout<<"d37"<<std::endl;
     }
