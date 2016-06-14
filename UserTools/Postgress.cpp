@@ -419,7 +419,7 @@ void Postgress::PSQLSync(){
 
 	    pqxx::nontransaction Na(*C.at(1));
 	    tmp.str("");
-	    tmp<<"select stoptime , numevents, status from runinformation where runnumber="<<c2[0]<<" and subrunnumber="<<c2[1]<<";";
+	    tmp<<"select stoptime , numevents, runstatus from runinformation where runnumber="<<c2[0]<<" and subrunnumber="<<c2[1]<<";";
 	    pqxx::result Re( Na.exec( tmp.str().c_str() ));
 
 	    pqxx::result::const_iterator ce = Re.begin();
@@ -438,7 +438,7 @@ void Postgress::PSQLSync(){
 
 	    pqxx::nontransaction Na(*C.at(0));
             tmp.str("");
-            tmp<<"select stoptime , numevents, status from runinformation where runnumber="<<c1[0]<<" and subrunnumber="<<c1[1]<<";";
+            tmp<<"select stoptime , numevents, runstatus from runinformation where runnumber="<<c1[0]<<" and subrunnumber="<<c1[1]<<";";
 	    pqxx::result Re( Na.exec( tmp.str().c_str() ));
 
 	    pqxx::result::const_iterator ce = Re.begin();

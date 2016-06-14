@@ -43,22 +43,33 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
   //std::cout<<"i d1 "<<std::endl;
   // std::cout<<m_data->carddata.at(0)->channels<<std::endl;
 
-  m_card.PMTID=new int[4];
+  //  m_card.PMTID=new int[4];
   //std::cout<<"i d2"<<std::endl;  
   m_card.Data=new uint16_t[160000];
+  m_card.Rates=new uint32_t[160000];
+  m_card.triggerCounts=new uint64_t[160000];
   //std::cout<<"i d3"<<std::endl;
   TTree *tree = new TTree("PMTData","PMTData");
   //std::cout<<"i d4"<<std::endl;
-  tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
+  tree->Branch("LastSync",&(m_card.LastSync),"LastSync/l");
   tree->Branch("SequenceID",&(m_card.SequenceID),"SequenceID/I");
-  tree->Branch("StartTime",&(m_card.StartTime),"StartTime/I");
+  tree->Branch("StartTimeSec",&(m_card.StartTimeSec),"StartTimeSec/I");
+  tree->Branch("StartTimeNSec",&(m_card.StartTimeNSec),"StartTimeNSec/I");
+  tree->Branch("StartCount",&(m_card.StartCount),"StartCount/l");
+  tree->Branch("TriggerNumber",&(m_card.triggerNumber),"TriggerNumber/I");
+  tree->Branch("TriggerCounts",m_card.triggerCounts,"TriggerCounts[TriggerNumber]/l");
+  //  tree->Branch("TriggerCounts",&(m_card.triggerCounts)); 
+ //tree->Branch("Rates",&(m_card.Rates)); 
   tree->Branch("CardID",&(m_card.CardID),"CardID/I");
   tree->Branch("Channels",&(m_card.channels),"Channels/I");
-  tree->Branch("PMTID",m_card.PMTID,"PMTID[Channels]/I");
+  tree->Branch("Rates",m_card.Rates,"Rates[Channels]/i");
+  //tree->Branch("PMTID",m_card.PMTID,"PMTID[Channels]/I");
   tree->Branch("BufferSize",&(m_card.buffersize),"BufferSize/I");
+  tree->Branch("Eventsize",&(m_card.eventsize),"Eventsize/I");
   tree->Branch("FullBufferSize",&(m_card.fullbuffsize),"FullBufferSize/I");
+  //tree->Branch("Data",&(m_card.Data));
   tree->Branch("Data",m_card.Data,"Data[FullBufferSize]/s");
-  //std::cout<<"i d5"<<std::endl;
+ //std::cout<<"i d5"<<std::endl;
   m_data->AddTTree("PMTData",tree);
   //std::cout<<"i d6"<<std::endl;
   return true;
@@ -106,15 +117,27 @@ bool CardDataRecorder::Execute(){
     //std::cout<<"Debug 7"<<std::endl;
     m_data->AddTTree("PMTData",tree);
     //std::cout<<"Debug 8"<<std::endl;
-    tree->Branch("LastSync",&(m_card.LastSync),"LastSync/I");
+    tree->Branch("LastSync",&(m_card.LastSync),"LastSync/l");
     tree->Branch("SequenceID",&(m_card.SequenceID),"SequenceID/I");
-    tree->Branch("StartTime",&(m_card.StartTime),"StartTime/I");
+    tree->Branch("StartTimeSec",&(m_card.StartTimeSec),"StartTimeSec/I");
+    tree->Branch("StartTimeNSec",&(m_card.StartTimeNSec),"StartTimeNSec/I");
+    tree->Branch("StartCount",&(m_card.StartCount),"StartCount/l");
+    tree->Branch("TriggerNumber",&(m_card.triggerNumber),"TriggerNumber/I");
+    tree->Branch("TriggerCounts",m_card.triggerCounts,"TriggerCounts[TriggerNumber]/l");
+    //  tree->Branch("TriggerCounts",&(m_card.triggerCounts));
+    //tree->Branch("Rates",&(m_card.Rates));
     tree->Branch("CardID",&(m_card.CardID),"CardID/I");
     tree->Branch("Channels",&(m_card.channels),"Channels/I");
-    tree->Branch("PMTID",(m_card.PMTID),"PMTID[Channels]/I");
+    tree->Branch("Rates",m_card.Rates,"Rates[Channels]/i");
+
+    //tree->Branch("PMTID",m_card.PMTID,"PMTID[Channels]/I");
     tree->Branch("BufferSize",&(m_card.buffersize),"BufferSize/I");
+    tree->Branch("Eventsize",&(m_card.eventsize),"Eventsize/I");
     tree->Branch("FullBufferSize",&(m_card.fullbuffsize),"FullBufferSize/I");
-    tree->Branch("Data",(m_card.Data),"Data[FullBufferSize]/s");
+    //tree->Branch("Data",&(m_card.Data));
+    tree->Branch("Data",m_card.Data,"Data[FullBufferSize]/s");
+    //std::cout<<"i d5"<<std::endl;
+    m_data->AddTTree("PMTData",tree);
     //std::cout<<"Debug 9"<<std::endl;
   }
 
@@ -124,12 +147,28 @@ bool CardDataRecorder::Execute(){
     //std::cout<<"Debug 11"<<std::endl;
     m_card.LastSync=m_data->carddata.at(i)->LastSync;
     m_card.SequenceID=m_data->carddata.at(i)->SequenceID;
-    m_card.StartTime=m_data->carddata.at(i)->StartTime;
+    m_card.StartTimeSec=m_data->carddata.at(i)->StartTimeSec;
+    m_card.StartTimeNSec=m_data->carddata.at(i)->StartTimeNSec;
+    m_card.StartCount=m_data->carddata.at(i)->StartCount;
+    m_card.triggerNumber=m_data->carddata.at(i)->triggerNumber;
+
+    memcpy(m_card.triggerCounts, m_data->carddata.at(i)->triggerCounts, m_card.triggerNumber*sizeof(uint64_t));
+    memcpy(m_card.Rates, m_data->carddata.at(i)->Rates, m_card.triggerNumber*sizeof(uint32_t));
+    //m_card.triggerCounts=m_data->carddata.at(i)->triggerCounts;
+    //m_card.Rates=m_data->carddata.at(i)->Rates;
+
     m_card.CardID=m_data->carddata.at(i)->CardID;
     m_card.channels=m_data->carddata.at(i)->channels;
     m_card.buffersize=m_data->carddata.at(i)->buffersize;
+    m_card.eventsize=m_data->carddata.at(i)->eventsize;
     m_card.fullbuffsize=m_data->carddata.at(i)->fullbuffsize;
-    //std::cout<<"Debug 12"<<std::endl;
+    
+    memcpy(m_card.Data, m_data->carddata.at(i)->Data, m_card.fullbuffsize*(sizeof(uint16_t)) );
+    //m_card.Data=m_data->carddata.at(i)->Data;
+
+
+    /*
+//std::cout<<"Debug 12"<<std::endl;
     for(int j=0;j<m_card.channels;j++){
       //std::cout<<"Debug 13"<<std::endl;
 
@@ -147,6 +186,7 @@ bool CardDataRecorder::Execute(){
 
     }
     
+    */
     //std::cout<<"Debug 18 i= "<<m_data->NumEvents<<std::endl;
      tree->Fill();
      //std::cout<<"Debug 19"<<std::endl;
@@ -209,11 +249,11 @@ bool CardDataRecorder::Finalise(){
   delete args;
   args=0;
 
-  delete m_card.PMTID;
-  m_card.PMTID=0;
+  //  delete m_card.PMTID;
+  // m_card.PMTID=0;
   
-  delete m_card.Data;
-  m_card.Data=0;
+  //delete m_card.Data;
+  //m_card.Data=0;
   
   return true;
 }

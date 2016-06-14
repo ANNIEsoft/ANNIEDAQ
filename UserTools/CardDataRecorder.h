@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "Tool.h"
 #include <zmq.hpp>

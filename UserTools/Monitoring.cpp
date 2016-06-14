@@ -84,8 +84,9 @@ bool Monitoring::Finalise(){
 
 void* Monitoring::MonitorThread(void* arg){
   
-  monitor_thread_args* args= static_cast<monitor_thread_args*>(arg);
-  
+  //std::cout<<"d1"<<std::endl;
+  monitor_thread_args* args= static_cast<monitor_thread_args*>(arg);  
+
   std::string outpath=args->outputpath;
   zmq::socket_t Ireceive (*(args->context), ZMQ_PAIR);
   Ireceive.connect("inproc://MonitorThread");
@@ -101,6 +102,7 @@ void* Monitoring::MonitorThread(void* arg){
 
   std::vector<PMT> PMTInfo;
   /////////////////// Connect to sql ///////////////////////
+//std::cout<<"d2"<<std::endl;
 
   pqxx::connection *C;
   std::stringstream tmp;
@@ -137,10 +139,12 @@ void* Monitoring::MonitorThread(void* arg){
     PMTInfo.push_back(tmp);
   }
 
+//std::cout<<"d3"<<std::endl;
 
   
   while (running){
-    
+    //std::cout<<"d4"<<std::endl;
+
     
     zmq::message_t comm;
     Ireceive.recv(&comm);
@@ -148,7 +152,10 @@ void* Monitoring::MonitorThread(void* arg){
     std::istringstream iss(static_cast<char*>(comm.data()));
     std::string arg1="";
     iss>>arg1;
+
+    //std::cout<<"d5"<<std::endl;
     
+
     if(arg1=="Data"){
       std::vector<TGraph2D*> mg;
       TH2I EventDisplay ("Event Display", "Event Display", 10, -1, 8, 10, -1, 8);
@@ -158,8 +165,10 @@ void* Monitoring::MonitorThread(void* arg){
       iss>>size;  
       
       //freqplots.clear();
-      
+      //std::cout<<"d6"<<std::endl;
+
       for(int i=0;i<size;i++){
+	//std::cout<<"d7"<<std::endl;
 
 	long long unsigned int pointer;
 	iss>>std::hex>>pointer;
@@ -180,6 +189,8 @@ void* Monitoring::MonitorThread(void* arg){
 	  if(i==size-1)init=false;
 	}
 
+	//std::cout<<"d8"<<std::endl;
+
 	//	std::cout<<"d1"<<std::endl;
 
 	for(int j=0;j<carddata->channels;j++){
@@ -190,8 +201,11 @@ void* Monitoring::MonitorThread(void* arg){
 	  long sum=0;
 	
 	  //  std::cout<<"d2"<<std::endl;
-	
+	  //std::cout<<"d9"<<std::endl;
+
 	for(int k=0;k<carddata->buffersize;k++){
+	  //std::cout<<"d10"<<std::endl;
+
 	  //	  std::cout<<"i="<<i<<" j="<<j<<std::endl;
 	  //std::cout<<"d2.5 "<<(i*4)+j<<" feqplot.size = "<<freqplots.size()<<std::endl;
 	  if(carddata->Data[(j*carddata->buffersize)+k]>pedpars[carddata->CardID].at(j).at(0)+(pedpars[carddata->CardID].at(j).at(1)*5))sum+=carddata->Data[(j*carddata->buffersize)+k];  
@@ -206,9 +220,12 @@ void* Monitoring::MonitorThread(void* arg){
         pedpars[carddata->CardID].at(j).at(1)=(gaus->GetParameter(2));
 	gaus->SetLineColor(j+1);
        
+	//std::cout<<"d11"<<std::endl;
 
 	
 	for(int k=0;k<carddata->buffersize/4;k++){
+	  //std::cout<<"d12"<<std::endl;
+
           //std::cout<<"j*4 = "<<j*4<<std::endl;
           //std::cout<<"(i*BufferSize)+(j*4) = "<<(i*BufferSize)+(j*4)<<std::endl;
           //std::cout<<"i*BufferSize)+(j*4)+(BufferSize/2) = "<<(i*BufferSize)+(j*4)+(BufferSize/2)<<std::endl;
@@ -222,6 +239,7 @@ void* Monitoring::MonitorThread(void* arg){
 
         }
 
+	//std::cout<<"d13"<<std::endl;
 
 	//std::cout<<"d3"<<std::endl;
 	
@@ -231,12 +249,15 @@ void* Monitoring::MonitorThread(void* arg){
 	int z=-10;
 	int y=-10;
 	for(int pmt=0;pmt<PMTInfo.size();pmt++){
+	  //std::cout<<"d4"<<std::endl;
 
 	  if(PMTInfo.at(pmt).card==carddata->CardID && PMTInfo.at(pmt).channel==j){
 	    x=PMTInfo.at(pmt).gx;
 	    z=PMTInfo.at(pmt).gz;
 	    y=PMTInfo.at(pmt).gy;
-	  }
+	    //std::cout<<"d15"<<std::endl;
+	  
+}
 	}
 
 	/*
@@ -251,7 +272,11 @@ void* Monitoring::MonitorThread(void* arg){
 	EventDisplay.SetBinContent(x+1,y+1,sum);
 	//EventDisplay.SetBinContent(((i*4)+j),sum);
 	*/
+	//std::cout<<"d16"<<std::endl;
+
 	if(x!=-10 && z!=-10){
+	  //std::cout<<"d17"<<std::endl;
+
 	  //std::cout<<"gx = "<<x<<" , gz="<<z<<std::endl;
 	  EventDisplay.SetBinContent(x+2,z+2,sum);
 
@@ -266,28 +291,37 @@ void* Monitoring::MonitorThread(void* arg){
 	
 	}
 	
-	
+	//std::cout<<"d18"<<std::endl;
+
 	int maxplot=0;
 	long maxvalue=0;
 	
 	//std::cout<<"i="<<i<<" (i*4)="<<(i*4)<<" (i*4)+4="<<(i*4)+4<<" size="<<freqplots.size()<<std::endl;
 	for(int j=(i*4);j<(i*4)+4;j++){
 	  if (freqplots.at(j).GetMaximum()>maxvalue){
-	    maxvalue=freqplots.at(j).GetMaximum();
+	    //std::cout<<"d19"<<std::endl;
+	 
+   maxvalue=freqplots.at(j).GetMaximum();
 	    maxplot=j;
 	  }
 	}
 	
+	//std::cout<<"d20"<<std::endl;
+
 	time_t t = time(0);   // get time now
 	struct tm * now = localtime( & t );
 	std::stringstream title;
 	title<<"Card "<<carddata->CardID<<" frequency: "<<(now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->tm_min<<':'<<now->tm_sec;
+	//std::cout<<"d21"<<std::endl;
 	freqplots.at(maxplot).SetTitle(title.str().c_str());	
 	freqplots.at(maxplot).SetLineColor((maxplot%4)+1);
 	freqplots.at(maxplot).Draw();
 	TLegend leg(0.8,0.4,1.0,0.7);
 	//leg.SetHeader("The Legend Title");
-	for(int j=(i*4);j<(i*4)+4;j++){
+	
+	//std::cout<<"d22"<<std::endl;
+for(int j=(i*4);j<(i*4)+4;j++){
+  //std::cout<<"d23"<<std::endl;
 	  std::stringstream legend;
 	  legend<<"Channel "<<j-(i*4);
 	  leg.AddEntry(&freqplots.at(j),legend.str().c_str(),"l");	  
@@ -297,33 +331,37 @@ void* Monitoring::MonitorThread(void* arg){
 	  
 	}
 	leg.Draw();
-
+	//std::cout<<"d24"<<std::endl;
 	std::stringstream tmp;
 	tmp<<outpath<<carddata->CardID<<"freq.jpg";
 	c1.SaveAs(tmp.str().c_str());
 
-
+	//std::cout<<"d25"<<std::endl;
 	////temporal
 	maxplot=0;
 	maxvalue=0;
 
 	//std::cout<<"i="<<i<<" (i*4)="<<(i*4)<<" (i*4)+4="<<(i*4)+4<<" size="<<freqplots.size()<<std::endl;
         for(int j=(i*4);j<(i*4)+4;j++){
+	  //std::cout<<"d26"<<std::endl;
           if (temporalplots.at(j).GetMaximum()>maxvalue){
             maxvalue=temporalplots.at(j).GetMaximum();
             maxplot=j;
           }
         }
-
+	//std::cout<<"d27"<<std::endl;
 	t = time(0);   // get time now
         now = localtime( & t );
 	std::stringstream title2;
         title2<<"Card "<<carddata->CardID<<" Temporal: "<<(now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->tm_min<<':'<<now->tm_sec;
+	//std::cout<<"d28"<<std::endl;
         temporalplots.at(maxplot).SetTitle(title2.str().c_str());
         temporalplots.at(maxplot).SetLineColor((maxplot%4)+1);
         temporalplots.at(maxplot).Draw();
 	TLegend leg2(0.8,0.4,1.0,0.7);
+	//std::cout<<"d29"<<std::endl;
 	for(int j=(i*4);j<(i*4)+4;j++){
+	  //std::cout<<"d30"<<std::endl;
 	  std::stringstream legend;
 	  legend<<"Channel "<<j-(i*4);	  
 	  leg2.AddEntry(&temporalplots.at(j),legend.str().c_str(),"l");
@@ -332,13 +370,14 @@ void* Monitoring::MonitorThread(void* arg){
 	  else temporalplots.at(j).Draw("same");
 
 	}
+	//std::cout<<"d31"<<std::endl;
 	leg2.Draw();
 	//std::cout<<"d6"<<std::endl;
 
 	std::stringstream tmp2;
 	tmp2<<outpath<<carddata->CardID<<"temporal.jpg";
 	c1.SaveAs(tmp2.str().c_str());
-
+	//std::cout<<"d32"<<std::endl;
 
 
 	delete carddata;
@@ -389,20 +428,22 @@ void* Monitoring::MonitorThread(void* arg){
       tmp2<<outpath<<"temporal.jpg";
       c1.SaveAs(tmp2.str().c_str());
       */
+      //std::cout<<"d33"<<std::endl;
       EventDisplay.Draw("COLZ");
       std::stringstream tmp3;
       tmp3<<outpath<<"0EventDisplay.jpg";
       c1.SaveAs(tmp3.str().c_str());
       
-
+      //std::cout<<"d34 ="<<mg.size()<<std::endl;
       tmp3.str("");
-      mg.at(0)->Draw();
+      if(mg.size()>0)      mg.at(0)->Draw();
       for(int plots=1;plots<mg.size();plots++){
 	mg.at(plots)->Draw("same");
+	//std::cout<<"d35"<<std::endl;
       }
       tmp3<<outpath<<"0EventDisplay3D.jpg";
       c1.SaveAs(tmp3.str().c_str());
-
+      //std::cout<<"d36"<<std::endl;
     }
     
     
@@ -410,10 +451,10 @@ void* Monitoring::MonitorThread(void* arg){
     else if(arg1=="Quit"){
       freqplots.clear();
       running=false;
-      
+      //std::cout<<"d37"<<std::endl;
     }
     
   }
   
-  
+//std::cout<<"d38"<<std::endl;
 }

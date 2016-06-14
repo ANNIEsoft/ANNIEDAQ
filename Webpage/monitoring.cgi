@@ -51,6 +51,9 @@ Monitoring</span>
     <div class=\"page-content\">
 <!-- Your content goes here -->
 
+
+<p><a href=\"/cgi-bin/monitoringnr.cgi\">Disable refresh</a></p>
+
 "
 for file in `ls /data/monitoringplots/`
 do

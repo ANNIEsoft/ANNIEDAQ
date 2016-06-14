@@ -78,6 +78,19 @@ do
     then
 	echo "<td><b> Run Type: Testing </b></td>"
     fi
+    if [ $type -eq 1 ]
+    then
+        echo "<td><b> Run Type: LED </b></td>"
+    fi
+    if [ $type -eq 2 ]
+    then
+        echo "<td><b> Run Type: Ped </b></td>"
+    fi
+    if [ $type -eq 3 ]
+    then
+        echo "<td><b> Run Type: Beam </b></td>"
+    fi
+    
     #echo $subrun
     #echo $S
    while [ $subrun -gt -1 ]
