@@ -464,10 +464,8 @@ for(int j=(i*4);j<(i*4)+4;j++){
 
 	t = time(0);   // get time now
         now = localtime( & t );
-	std::stringstream title2;
-        title2<<"Card "<<carddata->CardID<<" Pedistal Variation: "<<(now->tm_year + 1900) <\
-	  < '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->\
-	  tm_min<<':'<<now->tm_sec;
+	title2.str("");
+        title2<<"Card "<<carddata->CardID<<" Pedistal Variation: "<<(now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->tm_min<<':'<<now->tm_sec;
         //std::cout<<"d28"<<std::endl;
         PedTime[carddata->CardID].at(maxplot).SetTitle(title2.str().c_str());
 	PedTime[carddata->CardID].at(maxplot).GetXaxis()->SetTitle("Samples");
