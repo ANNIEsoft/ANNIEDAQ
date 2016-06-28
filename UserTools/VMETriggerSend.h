@@ -27,7 +27,7 @@ class VMETriggerSend: public Tool {
   int m_verbose;
   int Trigger_port;
   int m_crate_num;
-
+  bool m_soft;
 
 
 };

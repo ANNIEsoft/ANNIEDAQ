@@ -45,14 +45,18 @@ lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
-	cp UserTools/HardwareInterface.h include/
+	cp uc500adc/include/HardwareInterface.h include/
 	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp UserTools/UC500ADCInterface.cpp UserTools/ucadc.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	cp uc500adc/include/CardSync.h include/
+	cp uc500adc/include/trigger.h include/
+	cp uc500adc/include/UC500ADCInterface.h include/
+	cp uc500adc/include/ucadc.h include/
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp uc500adc/src/UC500ADCInterface.cc uc500adc/src/ucadc.cc uc500adc/src/trigger.cc uc500adc/src/CardSync.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./

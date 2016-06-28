@@ -15,6 +15,7 @@ bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
   m_variables.Get("Trigger_port",Trigger_port);
   m_variables.Get("verbose",m_verbose);
   m_variables.Get("Crate_Num",m_crate_num);
+  m_soft=false;
 
   TriggerCom = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
   int a=12000;
@@ -26,7 +27,7 @@ bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
   TriggerCom->bind(tmp.str().c_str());
 
   m_data->Crate= new UC500ADCInterface(m_crate_num);
-  m_data->Crate->Initialise();
+  m_data->Crate->Initialise(m_variables);
 
   m_data->Crate->EnableTrigger();
 
@@ -53,6 +54,7 @@ bool VMETriggerSend::Execute(){
       }
       else {
 	m_data->triggered=false;
+	if(m_soft)m_data->Crate->ForceTriggerNow();
 	//usleep(10000);
       }
       
@@ -61,6 +63,30 @@ bool VMETriggerSend::Execute(){
       
       
       
+    }
+    else if(iss.str()=="Initialise"){
+      //  std::cout<<"got initialise"<<std::endl;
+      TriggerCom->recv(&receive);
+      //std::cout<<"d1"<<std::endl;
+      std::istringstream iss2(static_cast<char*>(receive.data()));
+      //std::cout<<"d2"<<std::endl;
+      m_variables.JsonPaser(iss2.str());
+      //std::cout<<"d3"<<std::endl;
+      //m_data->Crate->Finalise();
+      //std::cout<<"d4"<<std::endl;
+      //  delete m_data->Crate;
+      // sleep(2);
+      //std::cout<<"d5"<<std::endl;
+      // m_data->Crate= new UC500ADCInterface(m_crate_num);
+      // std::cout<<"d6"<<std::endl;
+      m_data->Crate->Initialise(m_variables);
+      //std::cout<<"d7"<<std::endl;
+      m_data->Crate->EnableTrigger();
+      //std::cout<<"d8"<<std::endl;
+      ret="Initialised";
+      //std::cout<<"d9"<<std::endl;
+      m_variables.Get("Soft_Trigger",m_soft);
+      if(m_soft)m_data->Crate->ForceTriggerNow();
     }
 
     else ret="ERROR unknown message";

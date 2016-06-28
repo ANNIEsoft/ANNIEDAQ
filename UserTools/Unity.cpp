@@ -5,3 +5,4 @@
 #include "CrateReader.cpp"
 #include "VMESendData.cpp"
 #include "DummyVMETriggerSend.cpp"
+#include "CrateReaderDummy.cpp"
