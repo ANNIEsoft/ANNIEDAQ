@@ -191,17 +191,17 @@ void* Monitoring::MonitorThread(void* arg){
 	  for(int j=0;j<carddata->channels;j++){
 	    std::stringstream tmp;
 	    tmp<<"Channel "<<(i*4)+j<<" frequency";
-	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    TH1I tmpfreq(tmp.str().c_str(),tmp.str().c_str(),10,0,9);
 	    tfreqplots.push_back(tmpfreq);
 
 	    tmp.str("");
 	    tmp<<"Channel "<<(i*4)+j<<" Pedistal";
-	    TH1F tmppedtime(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    TH1F tmppedtime(tmp.str().c_str(),tmp.str().c_str(),100,0,99);
 	    PedTime[carddata->CardID].push_back(tmppedtime);
 
 	    tmp.str("");
 	    tmp<<"Channel "<<(i*4)+j<<" Pedistal RMS";
-	    TH1F tmppedrmstime(tmp.str().c_str(),tmp.str().c_str(),1000,0,999);
+	    TH1F tmppedrmstime(tmp.str().c_str(),tmp.str().c_str(),100,0,99);
 	    PedRMSTime[carddata->CardID].push_back(tmppedrmstime);
 	    std::vector<float> tmppedpars;
 	    tmppedpars.push_back(0);
@@ -249,7 +249,6 @@ void* Monitoring::MonitorThread(void* arg){
 	}
 
 	freqplots.push_back(freq);
-
 	//////// find pedistall fill ped temporals//////////
 	freq.Fit("gaus");
 	TF1 *gaus = freq.GetFunction("gaus");
@@ -259,9 +258,9 @@ void* Monitoring::MonitorThread(void* arg){
        
 	//std::cout<<"d11"<<std::endl;
 
-	for(int bin=999;bin>0;bin--){
+	for(int bin=99;bin>0;bin--){
 	  PedTime[carddata->CardID].at(j).SetBinContent(bin,PedTime[carddata->CardID].at(j).GetBinContent(bin-1));
-	  PedRMSTime[carddata->CardID].at(j).SetBinContent(bin,PedTime[carddata->CardID].at(j).GetBinContent(bin-1));
+	  PedRMSTime[carddata->CardID].at(j).SetBinContent(bin,PedRMSTime[carddata->CardID].at(j).GetBinContent(bin-1));
 	}
 	PedTime[carddata->CardID].at(j).SetBinContent(0, pedpars[carddata->CardID].at(j).at(0));
 	PedRMSTime[carddata->CardID].at(j).SetBinContent(0, pedpars[carddata->CardID].at(j).at(1));
@@ -325,7 +324,7 @@ void* Monitoring::MonitorThread(void* arg){
 
 	  //std::cout<<"gx = "<<x<<" , gz="<<z<<std::endl;
 	  EventDisplay.SetBinContent(x+2,z+2,sum);
-	  RMSDisplay.SetBinContent(x+2,z+2,gaus->GetParameter(2));
+	  RMSDisplay.SetBinContent(x+2,z+2,gaus->GetParameter(2)*100);
 
 	  //// Attempted 2ne event display ///
 	  TGraph2D *dt=new TGraph2D(1);
@@ -368,7 +367,9 @@ void* Monitoring::MonitorThread(void* arg){
 	std::stringstream title;
 	title<<"Card "<<carddata->CardID<<" frequency: "<<(now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->tm_min<<':'<<now->tm_sec;
 	//std::cout<<"d21"<<std::endl;
-	freqplots.at(maxplot).SetTitle(title.str().c_str());	
+	freqplots.at(maxplot).SetTitle(title.str().c_str());
+	freqplots.at(maxplot).GetXaxis()->SetTitle("ADC Value");
+	freqplots.at(maxplot).GetYaxis()->SetTitle("Frequency");	
 	freqplots.at(maxplot).SetLineColor((maxplot%4)+1);
 	freqplots.at(maxplot).Draw();
 	TLegend leg(0.8,0.4,1.0,0.7);
@@ -422,6 +423,8 @@ for(int j=(i*4);j<(i*4)+4;j++){
         title2<<"Card "<<carddata->CardID<<" Temporal: "<<(now->tm_year + 1900) << '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->tm_min<<':'<<now->tm_sec;
 	//std::cout<<"d28"<<std::endl;
         temporalplots.at(maxplot).SetTitle(title2.str().c_str());
+	temporalplots.at(maxplot).GetXaxis()->SetTitle("Samples");
+	temporalplots.at(maxplot).GetYaxis()->SetTitle("Volate (V)");
         temporalplots.at(maxplot).SetLineColor((maxplot%4)+1);
         temporalplots.at(maxplot).Draw();
 	TLegend leg2(0.8,0.4,1.0,0.7);
@@ -447,13 +450,50 @@ for(int j=(i*4);j<(i*4)+4;j++){
 
 
 	///////plotting PED time and ped rms time //////
-	 PedTime[carddata->CardID].at(0).Draw();
-	for (int channel=1;channel<4;channel++){
-	  PedTime[carddata->CardID].at(channel).Draw("same");
-	}
+        maxplot=0;
+        maxvalue=0;
+
+      
+        for(int j=0;j<4;j++){
+          //std::cout<<"d26"<<std::endl;
+          if ( PedTime[carddata->CardID].at(j).GetMaximum()>maxvalue){
+            maxvalue=PedTime[carddata->CardID].at(j).GetMaximum();
+            maxplot=j;
+          }
+        }
+
+	t = time(0);   // get time now
+        now = localtime( & t );
+	std::stringstream title2;
+        title2<<"Card "<<carddata->CardID<<" Pedistal Variation: "<<(now->tm_year + 1900) <\
+	  < '-' << (now->tm_mon + 1) << '-' <<  now->tm_mday<<','<<now->tm_hour<<':'<<now->\
+	  tm_min<<':'<<now->tm_sec;
+        //std::cout<<"d28"<<std::endl;
+        PedTime[carddata->CardID].at(maxplot).SetTitle(title2.str().c_str());
+	PedTime[carddata->CardID].at(maxplot).GetXaxis()->SetTitle("Samples");
+	PedTime[carddata->CardID].at(maxplot).GetYaxis()->SetTitle("ADC Value");
+	PedTime[carddata->CardID].at(maxplot).SetLineColor((maxplot%4)+1);
+	PedTime[carddata->CardID].at(maxplot).Draw();
+        TLegend leg3(0.8,0.4,1.0,0.7);
+        //std::cout<<"d29"<<std::endl;
+	for(int j=0;j<4;j++){
+          //std::cout<<"d30"<<std::endl;
+	  std::stringstream legend;
+          legend<<"Channel "<<j;
+          leg3.AddEntry(&PedTime[carddata->CardID].at(j),legend.str().c_str(),"l");
+	  PedTime[carddata->CardID].at(j).SetLineColor((j%4)+1);
+          PedTime[carddata->CardID].at(j).Draw("same");
+
+        }
+        //std::cout<<"d31"<<std::endl;
+        leg3.Draw();
+        //std::cout<<"d6"<<std::endl;
+
 	tmp2.str("");
 	tmp2<<outpath<<"plots2/"<<carddata->CardID<<"PedTime.jpg";
 	c1.SaveAs(tmp2.str().c_str());
+
+
 
 	PedRMSTime[carddata->CardID].at(0).Draw();
 	for (int channel=1;channel<4;channel++){
