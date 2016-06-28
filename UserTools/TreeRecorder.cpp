@@ -37,7 +37,7 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	std::string sEmp;
 	int iEmp;
 
-	tree = new TTree("CCData", "ccdata");
+	tree = new TTree("CCData", "CCData");
 
 //Edit starts here, Wed 1 Jun, ...
 	tree->Branch("Trigger", &Trigger, "Trigger/i");
@@ -60,19 +60,23 @@ bool TreeRecorder::Execute()
 {
 	if (m_data->TRG)
 	{
-		Trigger++;
+		++Trigger;
 		TOutN = 0, AOutN = 0;
+		std::fill(TDC, TDC+512, 0);
+		std::fill(ADC, ADC+512, 0);
 
 		int i, j;
 		if (m_data->List.Data.size() > 0)
 		{
 			i = 0, j = 0;
 			is = m_data->List.Data["TDC"].Num.begin();
-			for (; is != m_data->List.Data["TDC"].Num.end(); is++, i++)
+			//loop on active cards
+			for (; is != m_data->List.Data["TDC"].Num.end(); ++is, ++i)
 			{
 				it = is->ch.begin();
 				TOutN += is->ch.size();	//number of channels on
-				for (; it != is->ch.end(); it++, j++)
+				//loop on active channels
+				for (; it != is->ch.end(); ++it, ++j)
 				{
 					*(TCardID+j) = m_data->List.Data["TDC"].Slot.at(i);
 					*(TChannel+j) = it->first;
@@ -82,11 +86,11 @@ bool TreeRecorder::Execute()
 
 			i = 0, j = 0;
 			is = m_data->List.Data["ADC"].Num.begin();
-			for (; is != m_data->List.Data["ADC"].Num.end(); is++, i++)
+			for (; is != m_data->List.Data["ADC"].Num.end(); ++is, ++i)
 			{
 				it = is->ch.begin();
 				AOutN += is->ch.size();	//number of channels on
-				for (; it != is->ch.end(); it++, j++)
+				for (; it != is->ch.end(); ++it, ++j)
 				{
 					*(ACardID+j) = m_data->List.Data["ADC"].Slot.at(i);
 					*(AChannel+j) = it->first;
@@ -99,7 +103,7 @@ bool TreeRecorder::Execute()
 
 		OutN = (TOutN >= AOutN) ? TOutN : AOutN;
 	
-		tree->Fill();
+		if (OutN != 0) tree->Fill();
 	
 //		if (tree->GetEntriesFast() >= TreeCap*(1+ThreadCount))
 		if (tree->GetEntriesFast() == TreeCap)
@@ -111,7 +115,7 @@ bool TreeRecorder::Execute()
 			snprintf ((char *) message.data(), 512, "%s", tmptree.str().c_str()) ;
 			Isend->send(message);
 
-			tree = new TTree("CCData", "ccdata");
+			tree = new TTree("CCData", "CCData");
 
 			tree->Branch("Trigger", &Trigger, "Trigger/i");
 			tree->Branch("OutNumber", &OutN, "OutN/i");

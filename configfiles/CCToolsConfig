@@ -1,4 +1,4 @@
 trig CCTrigger configfiles/TRGConfig
 ltdc Lecroy configfiles/TDCConfig
-#ladc Lecroy configfiles/ADCConfig
+ladc Lecroy configfiles/ADCConfig
 treer TreeRecorder configfiles/TreeConfig

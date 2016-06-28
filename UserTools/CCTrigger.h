@@ -22,16 +22,19 @@ class CCTrigger: public Tool
 
 	private:
 		
-		inline CamacCrate* Create(std::string cardname, int cardslot);
+		inline CamacCrate* Create(std::string cardname, std::string config, int cardslot);
 
 		CamacCrate* CC;
-		std::vector<std::string> Lcard;
+		std::vector<std::string> Lcard, Ccard;
 		std::vector<int> Ncard;
 	
 		int verb;
 		std::string configcc;
 		bool trg_mode;
 		int trg_pos;
+
+		std::map<std::string, std::vector<CamacCrate*> >::iterator iL;	//Iterates over Module.CC
+		std::vector<CamacCrate*>::iterator iC;				//Iterates over Module.CC<vector>
 
 };
 

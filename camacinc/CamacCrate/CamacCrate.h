@@ -58,7 +58,6 @@ class CamacCrate
 		virtual int WriteReg(int R, int *Data) { return 0; }	
 		virtual int DisLAM() { return 0; }		
 		virtual int DisAcq() { return 0; }			
-		virtual int InitTest() { return 0; }				
 		virtual int EnLAM() { return 0; }					
 		virtual int EnAcq() { return 0; }		
 		virtual int TestBuff() { return 0; }		
@@ -67,8 +66,8 @@ class CamacCrate
 		virtual int TestFIFO() { return 0; }		
 		virtual int CommonStop() { return 0; }
 		virtual int CommonStart() { return 0; }
-		virtual void StartTestReg() { ; }
-		virtual void StopTestReg() { ; }
+//		virtual void StartTestReg() { ; }
+//		virtual void StopTestReg() { ; }
 
 		//LECROY4300B
 		virtual int ReadReg(int &Data)	{ return 0; }
@@ -76,17 +75,20 @@ class CamacCrate
 		virtual int ReadOut(int &Data, int) { return 0; }
 		virtual int WriteReg(int &Data) { return 0; }
 		virtual int WritePed(int Ch, int &Data) { return 0; }
-		virtual int TestAll() { return 0; }
-		virtual int GetData(std::map<int, int> &mData) { return 0; }
 		virtual int DumpCompressed(std::map<int, int> &mData) { return 0; }
 		virtual int DumpAll(std::map<int, int> &mData) { return 0; }
-		virtual int SetPedFile(std::string fname) { return 0; }
-		virtual int GetPedFile(std::string fname) { return 0; }
+		virtual int GetPedestal() { return 0; }					//Get Pedestal from card
+		virtual int SetPedestal() { return 0; }					//Set Pedestal to card
+		virtual void LoadPedestal(std::string fname) { ; }
+		virtual void PrintPedestal() { ; }
+
 
 		//COMMON
+		virtual int GetData(std::map<int, int> &mData) { return 0; }
 		virtual int ClearAll() { return 0; }				
 		virtual int ClearLAM() { return 0; }	
 		virtual int TestLAM() { return 0; }			
+		virtual int InitTest() { return 0; }				
 		virtual void ParseCompData(int Word, int &Stat, int &Num, bool &B0) { ; }
 		virtual void DecRegister() { ; }
 		virtual void EncRegister() { ; }
@@ -94,6 +96,7 @@ class CamacCrate
 		virtual void SetRegister() { ; }
 		virtual void PrintRegister() { ; }
 		virtual void PrintRegRaw() { ; }
+		virtual void SetConfig(std::string config) { ; }
 		virtual int READ(int F, int A, int &Data, int &Q, int &X) { return 0; }//F(x)·A(y) 
 		virtual int WRITE(int F, int A, int &Data, int &Q, int &X) { return 0; }//F(x)·A(y)
 		virtual int GetSlot() { return 0; }

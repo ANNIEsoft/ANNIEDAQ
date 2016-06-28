@@ -1,9 +1,27 @@
 #include "Lecroy4300b.h"
 
-Lecroy4300b::Lecroy4300b(int NSlot, int i) : CamacCrate(i)
+Lecroy4300b::Lecroy4300b(int NSlot, std::string config, int i) : CamacCrate(i)
 {
 	Slot.push_back(NSlot);
 	ID = Slot.size()-1;
+	ClearAll();
+	SetConfig(config);
+	LoadPedestal(config);
+//	SetPedestal();
+	EncRegister();
+	SetRegister();
+}
+
+int Lecroy4300b::GetData(std::map<int, int> &mData) 
+{
+	int ret = 0;
+
+	while (TestLAM())
+	{
+		if (ECE || CCE) ret = DumpCompressed(mData);
+		else ret = DumpAll(mData);
+	}
+	return ret;
 }
 
 int Lecroy4300b::ReadReg(int &Data)		//Read status word register. Q = 1 if BUSY = 0.
@@ -73,7 +91,7 @@ int Lecroy4300b::WritePed(int Ch, int &Data)	//Write pedestal memory (8 bits) fo
 	else return Q;
 }
 
-int Lecroy4300b::TestAll()	//Enable test. Q = 1 if BUSY = 0. 
+int Lecroy4300b::InitTest()	//Enable test. Q = 1 if BUSY = 0. 
 {	
 	int Data = 0;
 	int Q = 0, X = 0;
@@ -100,17 +118,9 @@ int Lecroy4300b::WRITE(int F, int A, int &Data, int &Q, int &X)	//Gneric WRITE
 	return CamacCrate::WRITE(GetID(), F, A, lData, Q, X);
 }
 
-int Lecroy4300b::GetData(std::map<int, int> &mData) 
-{
-	int ret;
-	if (ECE || CCE) ret = DumpCompressed(mData);
-	else ret = DumpAll(mData);
-	return ret;
-}
 
 int Lecroy4300b::DumpCompressed(std::map<int, int> &mData) 
 {
-	mData.clear();
 	int Data = 0, Chan = 0, Word = 0;
 	bool Head;
 	int ret = ReadOut(Word);
@@ -130,7 +140,6 @@ int Lecroy4300b::DumpCompressed(std::map<int, int> &mData)
 
 int Lecroy4300b::DumpAll(std::map<int, int> &mData)
 {
-	mData.clear();
 	int Data = 0;
 	int ret;
 	for (int i = 0; i < 16; i++)
@@ -159,21 +168,21 @@ void Lecroy4300b::EncRegister()
 {
 	Control = 0;
 	Control += OFS;
-	Control << 1;
+	Control = Control << 1;
 	Control += CLE;
-	Control << 1;
+	Control = Control << 1;
 	Control += CSR;
-	Control << 1;
+	Control = Control << 1;
 	Control += CCE;
-	Control << 1;
+	Control = Control << 1;
 	Control += CPS;
-	Control << 1;
+	Control = Control << 1;
 	Control += EEN;
-	Control << 1;
+	Control = Control << 1;
 	Control += ECE;
-	Control << 1;
+	Control = Control << 1;
 	Control += EPS;
-	Control << 8;
+	Control = Control << 8;
 	Control += VSN;
 
 	std::cout << "Register is " << std::hex << Control;
@@ -198,7 +207,7 @@ void Lecroy4300b::PrintRegRaw()
 
 void Lecroy4300b::PrintRegister()
 {
-	DecRegister();
+//	DecRegister();
 	std::cout << "[" << GetID() << "] :\t";
 	std::cout << "Lecroy4300b in slot " << GetSlot() << " register control" << std::endl;
 	std::cout << "VSN " << VSN << std::endl;
@@ -237,38 +246,80 @@ int Lecroy4300b::SetPedestal()
 	return ret;
 }
 
-int Lecroy4300b::GetPedFile(std::string fname)
-{
-	std::ofstream fout(fname.c_str());
-	int ret = GetPedestal();
-	std::cout << "#Pedestal saved on ";
-	std::time_t now = std::time(NULL);
-	std::cout << std::asctime(std::localtime(&now)) << std::endl;	
-	for (int i = 0; i < 16; i++)
-		fout << Ped[i] << std::endl;
-	return ret;
-}
-
-int Lecroy4300b::SetPedFile(std::string fname)
+void Lecroy4300b::LoadPedestal(std::string fname)
 {
 	std::ifstream fin(fname.c_str());
-	std::string line;
-	std::stringstream ss;
-	int ped;
-	std::vector<int> vPed;
-	while (getline(fin, line))
+	std::string Line;
+	std::stringstream ssL;
+	int ped, chan;
+	bool bPed = false;
+
+	while (getline(fin, Line))
 	{
-		if (line[0] == '#') continue;
-		ss.str("");
-		ss.clear();
-		ss << line;
-		ss >> ped;
-		vPed.push_back(ped);
+		if (Line.find("StartPed") != std::string::npos) bPed = true;
+		if (Line.find("EndPed") != std::string::npos) bPed = false;
+		
+		Line.erase(Line.begin()+Line.find('#'), Line.end());
+		if (Line.empty()) continue;
+
+		if (bPed)
+		{
+			ssL.str("");
+			ssL.clear();
+			ssL << Line;
+			ssL >> chan >> ped;
+			if (chan >= 0 && chan < 16)
+				Ped[chan] = ped;
+		}
 	}
-	if (vPed.size() == 16) 
-		for (int i = 0; i < 16; i++)
-			Ped[i] = vPed.at(i);
-	return SetPedestal();
+}
+
+void Lecroy4300b::PrintPedestal()
+{
+	std::cout << "[" << GetID() << "] :\t";
+	std::cout << "Lecroy4300b in slot " << GetSlot() << " pedestal" << std::endl;
+	for (int i = 0; i < 16; i++)
+		std::cout << "Channel 0:\t" << Ped[i] << std::endl;
+}
+
+void Lecroy4300b::SetConfig(std::string config)
+{
+	std::ifstream fin (config.c_str());
+	std::string Line;
+	std::stringstream ssL;
+
+	std::string sEmp;
+	int iEmp;
+
+	while (getline(fin, Line))
+	{
+		if (Line[0] == '#') continue;
+		else if (Line.empty()) continue;
+		else
+		{
+			Line.erase(Line.begin()+Line.find('#'), Line.end());
+
+			ssL.str("");
+			ssL.clear();
+			ssL << Line;
+			if (ssL.str() != "")
+			{
+				ssL >> sEmp >> iEmp;
+
+				if (sEmp == "VSN") VSN = iEmp;
+
+				if (sEmp == "EPS") EPS = iEmp;
+				if (sEmp == "ECE") ECE = iEmp;
+				if (sEmp == "EEN") EEN = iEmp;
+				if (sEmp == "CPS") CPS = iEmp;
+				if (sEmp == "CCE") CCE = iEmp;
+				if (sEmp == "CSR") CSR = iEmp;
+				if (sEmp == "CLE") CLE = iEmp;
+				if (sEmp == "OFS") OFS = iEmp;
+			}
+		}
+	}
+	fin.close();
 }
 
 int Lecroy4300b::GetID()	//Return ID of module

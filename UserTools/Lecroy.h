@@ -25,6 +25,9 @@ class Lecroy: public Tool
 		DataModel::Channel Data;
 		std::string DC;
 		int perc;
+		int val;
+		int verb;
+		int array[5];
 
 };
 

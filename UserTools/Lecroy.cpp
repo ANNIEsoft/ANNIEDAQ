@@ -5,36 +5,23 @@ Lecroy::Lecroy():Tool(){}
 
 bool Lecroy::Initialise(std::string configfile, DataModel &data)
 {
-
 	if(configfile!="")  m_variables.Initialise(configfile);
 	//m_variables.Print();
 
 	m_data= &data;
 	m_variables.Get("lecroy", DC);		//Module slots DC is TDC or ADC
 	m_variables.Get("perc", perc);		//Module slots
+	m_variables.Get("verb", verb);		//Module slots
+	std::string reg;
+	std::stringstream ssreg;
 
-	int k;
 
-	//
-	
+	Log("Clearing modules and printing the registers\n", 1, verb);
+
 	for (int i = 0; i < m_data->List.CC[DC].size(); i++)
 	{
 		m_data->List.CC[DC].at(i)->ClearAll();
-
-		if (DC == "TDC")
-		{
-			m_data->List.CC[DC].at(i)->CommonStart() ;
-		}
-		else if (DC == "ADC")
-		{
-			int array = 0x6000;
-			m_data->List.CC[DC].at(i)->WriteReg(array);
-		}
-		
-		std::cout << "Reading registers" << std::endl;
 		m_data->List.CC[DC].at(i)->GetRegister();
-		m_data->List.CC[DC].at(i)->DecRegister();
-		m_data->List.CC[DC].at(i)->PrintRegister();
 		m_data->List.CC[DC].at(i)->PrintRegRaw();
 	}
 	
@@ -51,14 +38,19 @@ bool Lecroy::Execute()
 	{
 		for (int i = 0; i < m_data->List.CC[DC].size(); i++)
 		{
+			Data.ch.clear();
 			if (m_data->trg_mode)
 				probe = true;
 			else probe = rand() % (100/perc) == 0;
 
 			if (probe)
 			{
-				m_data->List.CC[DC].at(i)->ClearAll();
 
+				if (!m_data->trg_mode) m_data->List.CC[DC].at(i)->InitTest();
+				m_data->List.CC[DC].at(i)->GetData(Data.ch);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 				if (DC == "TDC")
 				{
 					if (!m_data->trg_mode) m_data->List.CC[DC].at(i)->InitTest();
@@ -72,9 +64,13 @@ bool Lecroy::Execute()
 					while (m_data->List.CC[DC].at(i)->TestLAM())
 						m_data->List.CC[DC].at(i)->DumpAll(Data.ch);
 				}
-	
-				m_data->List.Data[DC].Slot.push_back(m_data->List.CC[DC].at(i)->GetSlot());
-				m_data->List.Data[DC].Num.push_back(Data);
+
+*/
+				if (Data.ch.size() != 0)
+				{
+					m_data->List.Data[DC].Slot.push_back(m_data->List.CC[DC].at(i)->GetSlot());
+					m_data->List.Data[DC].Num.push_back(Data);
+				}
 			}
 		}
 	}

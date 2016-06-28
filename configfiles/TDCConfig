@@ -1,2 +1,4 @@
-lecroy TDC
-perc 100
+#TDC config file
+#
+lecroy TDC #card type
+perc 50	#probability of firing in test
