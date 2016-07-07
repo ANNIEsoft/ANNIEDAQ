@@ -29,6 +29,8 @@ class Lecroy: public Tool
 		int verb;
 		int array[5];
 
+		unsigned int count, sum, times;
+
 };
 
 

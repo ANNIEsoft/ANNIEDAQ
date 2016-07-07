@@ -71,8 +71,8 @@ class TreeRecorder: public Tool
 		std::vector<int> Ncard;
 
 		unsigned int TOutN, AOutN, OutN, Trigger;
-		unsigned int TCardID[512], TChannel[512];
-		unsigned int ACardID[512], AChannel[512];
+		unsigned int TSlot[512], TChannel[512];
+		unsigned int ASlot[512], AChannel[512];
 		int TDC[512], ADC[512];
 
 		std::vector<DataModel::Channel>::iterator is;	//Iterator over the Cards, a vec of Channels map 

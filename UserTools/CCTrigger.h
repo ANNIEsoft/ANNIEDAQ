@@ -29,6 +29,7 @@ class CCTrigger: public Tool
 		std::vector<int> Ncard;
 	
 		int verb;
+		int perc;
 		std::string configcc;
 		bool trg_mode;
 		int trg_pos;

@@ -146,7 +146,7 @@ int Lecroy3377::InitTest() //F(25)·A(0): Initiate test cycle (Common Start only
 	int ret;
 	if (!TestFlag)
 	{
-		std::cout << "WARNING: test flag not set in register\n" << std::endl;
+		std::cout << "WARNING: Test flag not set in register\n" << std::endl;
 		ret = -1;
 	}
 	else

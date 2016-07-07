@@ -3,12 +3,12 @@
 #TDC: Lecroy3377
 #ADC: Lecroy4300b
 #TRG: Lecroy3377 with RWM as input, fires always
-#
+#If TRG is not specified, the first TDC found is used
 #
 #Type	Slot	#Register file
 TDC	18	configfiles/TDCreg
-TDC	17	configfiles/TDCreg
-TRG	14	configfiles/TDCreg
+#TDC	17	configfiles/TDCreg
+#TDC	14	configfiles/TDCreg
 #TDC	18	configfiles/TDCreg
 #TDC	17	configfiles/TDCreg
 #TDC	14	configfiles/TDCreg

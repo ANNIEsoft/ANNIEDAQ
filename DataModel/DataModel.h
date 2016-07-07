@@ -74,8 +74,8 @@ class DataModel{
 	
 		Module List;					//Data Model for Lecroys
 	
-		bool TRG;			//Trigger boolean
-		bool trg_mode;
+		bool TRG;		//Trigger?	Activate other tools
+		int trg_mode;		//Trigger mode	0 for real, 1 for soft, 2 for test
 	
 		boost::posix_time::ptime begin, end;		//Measuring real time
 

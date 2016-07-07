@@ -43,10 +43,10 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	tree->Branch("Trigger", &Trigger, "Trigger/i");
 	tree->Branch("OutNumber", &OutN, "OutN/i");
 	tree->Branch("TDC", TDC, "TDC[OutN]/i");
-	tree->Branch("TCardID", &TCardID, "TCardID[OutN]/i");
+	tree->Branch("TSlot", &TSlot, "TSlot[OutN]/i");
 	tree->Branch("TChannel", &TChannel, "TChannel[OutN]/i" );
 	tree->Branch("ADC", ADC, "ADC[OutN]/i");
-	tree->Branch("ACardID", &ACardID, "ACardID[OutN]/i");
+	tree->Branch("ASlot", &ASlot, "ASlot[OutN]/i");
 	tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
 //... and ends here
 
@@ -60,7 +60,6 @@ bool TreeRecorder::Execute()
 {
 	if (m_data->TRG)
 	{
-		++Trigger;
 		TOutN = 0, AOutN = 0;
 		std::fill(TDC, TDC+512, 0);
 		std::fill(ADC, ADC+512, 0);
@@ -78,7 +77,7 @@ bool TreeRecorder::Execute()
 				//loop on active channels
 				for (; it != is->ch.end(); ++it, ++j)
 				{
-					*(TCardID+j) = m_data->List.Data["TDC"].Slot.at(i);
+					*(TSlot+j) = m_data->List.Data["TDC"].Slot.at(i);
 					*(TChannel+j) = it->first;
 					*(TDC+j) = it->second;
 				}
@@ -92,7 +91,7 @@ bool TreeRecorder::Execute()
 				AOutN += is->ch.size();	//number of channels on
 				for (; it != is->ch.end(); ++it, ++j)
 				{
-					*(ACardID+j) = m_data->List.Data["ADC"].Slot.at(i);
+					*(ASlot+j) = m_data->List.Data["ADC"].Slot.at(i);
 					*(AChannel+j) = it->first;
 					*(ADC+j) = it->second;
 				}
@@ -105,6 +104,8 @@ bool TreeRecorder::Execute()
 	
 		if (OutN != 0) tree->Fill();
 	
+		++Trigger;
+
 //		if (tree->GetEntriesFast() >= TreeCap*(1+ThreadCount))
 		if (tree->GetEntriesFast() == TreeCap)
 		{
@@ -120,10 +121,10 @@ bool TreeRecorder::Execute()
 			tree->Branch("Trigger", &Trigger, "Trigger/i");
 			tree->Branch("OutNumber", &OutN, "OutN/i");
 			tree->Branch("TDC", TDC, "TDC[OutN]/i");
-			tree->Branch("TCardID", &TCardID, "TCardID[OutN]/i");
+			tree->Branch("TSlot", &TSlot, "TSlot[OutN]/i");
 			tree->Branch("TChannel", &TChannel, "TChannel[OutN]/i" );
 			tree->Branch("ADC", ADC, "ADC[OutN]/i");
-			tree->Branch("ACardID", &ACardID, "ACardID[OutN]/i");
+			tree->Branch("ASlot", &ASlot, "ASlot[OutN]/i");
 			tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
 		}
 	}

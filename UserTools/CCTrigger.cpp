@@ -10,9 +10,10 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	//m_variables.Print();
 
 	m_data= &data;
-	m_variables.Get("verbose", verb);		//Module slots
+	m_variables.Get("verbose", verb);		//Verbosity
 	m_variables.Get("configcc", configcc);		//Module slots
-	m_variables.Get("trg_mode", m_data->trg_mode);		//Module slots
+	m_variables.Get("percent", perc);		//firing probability
+	m_variables.Get("trg_mode", m_data->trg_mode);	//Trigger mode
 	m_data->TRG = false;
 
 	std::ifstream fin (configcc.c_str());
@@ -45,30 +46,34 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 
 	std::cout << "Number of cards: " << Lcard.size() << std::endl;
 //	CC = new CamacCrate;				//CamacCrate at 0
-								//must implemented for more CC
+
+	trg_pos = 0;								//must implemented for more CC
 	for (int i = 0; i < Lcard.size(); i++)	//CHECK i
 	{
 		if (Lcard.at(i) == "TDC" || Lcard.at(i) == "ADC")
 		{
 			m_data->List.CC[Lcard.at(i)].push_back(Create(Lcard.at(i), Ccard.at(i), Ncard.at(i)));	//They use CC at 0
 		}
-
 		else if (Lcard.at(i) == "TRG")
 		{
+			trg_pos = m_data->List.CC["TDC"].size();
 			m_data->List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i)));	//They use CC at 0
-			trg_pos = i;
 		}
-
 		else std::cout << "\n\nUnkown card\n" << std::endl;
 	}
 
+	std::cout << "Trigger is in slot ";
+	std::cout << m_data->List.CC["TDC"].at(trg_pos)->GetSlot() << std::endl;
+
+	srand(time(0));
 	return true;
 }
 
 
 bool CCTrigger::Execute()
 {
-//Clearing all the cards, using interators
+//Clearing all the cards, using iterators
+/*
 	iL = m_data->List.CC.begin();		//iL is an iterator over a map<string, vector<CamacCrate*> >
 	for ( ; iL != m_data->List.CC.end(); ++iL)
 	{
@@ -76,7 +81,7 @@ bool CCTrigger::Execute()
 		for ( ; iC != iL->second.end(); ++iC)
 			(*iC)->ClearAll();
 	}
-
+*/
 /*	
 //Clearing all the cards, using indices
 	for (int i = 0; i < m_data->List.CC["TDC"].size(); i++)
@@ -85,15 +90,25 @@ bool CCTrigger::Execute()
 		m_data->List.CC["ADC"].at(i)->ClearAll();
 */
 
-	if (m_data->trg_mode)	//1 is real trg, 0 is soft trg
+	m_data->TRG = false;
+	switch (m_data->trg_mode) //0 is real trg, 1 is soft trg, 2 is with test
 	{
-		if (m_data->List.CC["TDC"].at(trg_pos)->TestEvent() == 1)
-		{
+		case 0:
+			if(m_data->List.CC["TDC"].at(trg_pos)->TestEvent() == 1)
+				m_data->TRG = true;
+			break;
+
+		case 1:
 			m_data->TRG = true;
-			Log("TRG!\n", 2, verb);
-		}
+			break;
+		
+		case 2:
+			m_data->TRG = rand() % (100/perc) == 0;
+			break;
+		
+		default:
+			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
-	else m_data->TRG = true;
 
 	return true;
 }

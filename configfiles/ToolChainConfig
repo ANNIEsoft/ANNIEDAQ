@@ -1,7 +1,7 @@
 B1;3409;0c#ToolChain dynamic setup file
 
 ##### Runtime Paramiters #####
-verbose 0
+verbose 1
 error_level 2 # 0= do not exit, 1= exit on unhandeled errors only, 2= exit on unhandeled errors and handeled errors
 attempt_recover 1
 remote_port 24002
@@ -23,6 +23,6 @@ service_kick_sec 60
 Tools_File configfiles/CCToolsConfig
 
 ##### Run Type #####
-Inline 1000
-Interactive 0
+Inline 0
+Interactive 1
 Remote 0
