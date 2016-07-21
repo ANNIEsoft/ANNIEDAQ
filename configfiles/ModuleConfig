@@ -7,8 +7,8 @@
 #
 #Type	Slot	#Register file
 TDC	18	configfiles/TDCreg
-#TDC	17	configfiles/TDCreg
-#TDC	14	configfiles/TDCreg
+TDC	17	configfiles/TDCreg
+TDC	14	configfiles/TDCreg
 #TDC	18	configfiles/TDCreg
 #TDC	17	configfiles/TDCreg
 #TDC	14	configfiles/TDCreg

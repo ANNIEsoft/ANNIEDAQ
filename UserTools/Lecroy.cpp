@@ -39,6 +39,7 @@ bool Lecroy::Execute()
 	if (m_data->TRG)
 	{
 		std::cout << "TRG on!\n" << std::endl;
+		m_data->LocalTime = boost::posix_time::microsec_clock::local_time();
 //		++count;
 //		Log("TRG!\n", 2, verb);
 
@@ -68,8 +69,8 @@ bool Lecroy::Execute()
 */
 			if (Data.ch.size() != 0)
 			{
-				std::cout << "Data\t" << m_data->List.CC[DC].at(i)->GetSlot();
-				std::cout << "\t" << Data.ch.size() << std::endl;
+//				std::cout << "Data\t" << m_data->List.CC[DC].at(i)->GetSlot();
+//				std::cout << "\t" << Data.ch.size() << std::endl;
 //				sum += count;
 //				++times;
 //				count = 0;

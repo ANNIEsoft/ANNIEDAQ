@@ -13,12 +13,12 @@
 #include "CamacCrate.h"
 
 #include <zmq.hpp>
-
+#include "boost/date_time/gregorian/gregorian.hpp"
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/chrono.hpp>
 
 
 class DataModel{
-
-
 
 	public:
 	  
@@ -76,9 +76,11 @@ class DataModel{
 	
 		bool TRG;		//Trigger?	Activate other tools
 		int trg_mode;		//Trigger mode	0 for real, 1 for soft, 2 for test
-	
-		boost::posix_time::ptime begin, end;		//Measuring real time
 
+		boost::posix_time::ptime begin, end;		//Measuring time
+		boost::posix_time::ptime LocalTime;		//Get local time
+//		boost::posix_time::ptime Epoch(boost::gregorian::date());	//Epoch
+//		boost::posix_time::time_duration Time;	
 
 	private:
   

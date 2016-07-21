@@ -13,7 +13,7 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	m_variables.Get("FileCap", FileCap);
 	m_variables.Get("OutPath", OutPath);
 	m_variables.Get("OutName", OutName);
-	m_variables.Get("configcc", configcc);		//Module slots
+	m_variables.Get("StartTime", StartTime);
 
 	FileCount = 0;	
 	std::stringstream Tmp;
@@ -48,11 +48,15 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 	tree->Branch("ADC", ADC, "ADC[OutN]/i");
 	tree->Branch("ASlot", &ASlot, "ASlot[OutN]/i");
 	tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
+	tree->Branch("TimeStamp", &TimeStamp, "TimeStamp/l" );
 //... and ends here
 
 	Trigger = 0;
 	ThreadCount = 0;
 	Entries = TreeCap;
+
+	Epoch = new boost::posix_time::ptime(boost::gregorian::from_string(StartTime));
+
 	return true;
 }
 
@@ -60,9 +64,12 @@ bool TreeRecorder::Execute()
 {
 	if (m_data->TRG)
 	{
+		boost::posix_time::time_duration Time = m_data->LocalTime - *Epoch;
+		TimeStamp = Time.total_milliseconds();
+//		std::cout << "TimeStamp " << TimeStamp << std::endl; 	
 		TOutN = 0, AOutN = 0;
-		std::fill(TDC, TDC+512, 0);
-		std::fill(ADC, ADC+512, 0);
+//		std::fill(TDC, TDC+512, 0);
+//		std::fill(ADC, ADC+512, 0);
 
 		int i, j;
 		if (m_data->List.Data.size() > 0)
@@ -126,6 +133,7 @@ bool TreeRecorder::Execute()
 			tree->Branch("ADC", ADC, "ADC[OutN]/i");
 			tree->Branch("ASlot", &ASlot, "ASlot[OutN]/i");
 			tree->Branch("AChannel", &AChannel, "AChannel[OutN]/i" );
+			tree->Branch("TimeStamp", &TimeStamp, "TimeStamp/l" );
 		}
 	}
 	
@@ -174,6 +182,9 @@ bool TreeRecorder::Finalise(){
 
 	m_data->List.CC.clear();
 	m_data->List.Data.clear();
+
+	delete Epoch;
+	Epoch = 0;
 	
 	return true;
 }

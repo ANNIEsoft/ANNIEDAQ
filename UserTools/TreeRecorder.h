@@ -15,6 +15,8 @@
 #include "TRandom3.h"
 
 #include <boost/progress.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 struct card_root_thread_args
 {
@@ -62,7 +64,7 @@ class TreeRecorder: public Tool
 		TTree *tree;
 		card_root_thread_args *args;
 	
-		std::string OutPath, OutName, configcc;
+		std::string OutPath, OutName;
  
 		int TreeCap, FileCap, FileCount, Entries;
 		int ThreadCount;
@@ -73,10 +75,14 @@ class TreeRecorder: public Tool
 		unsigned int TOutN, AOutN, OutN, Trigger;
 		unsigned int TSlot[512], TChannel[512];
 		unsigned int ASlot[512], AChannel[512];
-		int TDC[512], ADC[512];
+		unsigned int TDC[512], ADC[512];
+		ULong64_t TimeStamp;
 
 		std::vector<DataModel::Channel>::iterator is;	//Iterator over the Cards, a vec of Channels map 
 		std::map<int, int>::iterator it;		//Iterator over the Channel of a Card
+
+		boost::posix_time::ptime *Epoch;
+		std::string StartTime;
 
 };
 

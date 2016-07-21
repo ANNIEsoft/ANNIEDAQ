@@ -1,4 +1,5 @@
 TreeCap 1000000
 FileCap 1
 OutPath test/ 
-OutName hello
+OutName Epoch3
+StartTime 1970/1/1	#Use the format yyyy/mm/dd
