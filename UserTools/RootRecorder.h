@@ -1,5 +1,5 @@
-#ifndef TreeRecorder_H
-#define TreeRecorder_H
+#ifndef RootRecorder_H
+#define RootRecorder_H
 
 #include <string>
 #include <iostream>
@@ -18,37 +18,11 @@
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-struct card_root_thread_args1
-{
-	
-	//root_thread_args(std::string outfile, TTree* intree){
-	// OutFile=outfile;
-	// tree=intree;
-	//}
-
-//	card_root_thread_args1(std::string outfile, zmq::context_t* incontext, int inFileCap, int &inFileCount)
-	card_root_thread_args1(std::string outfile, zmq::context_t* incontext, int &inFileCount)
-	{
-		
-		out = outfile;
-		context = incontext;
-//		cap = inFileCap;
-		part = &inFileCount;
-	}
-	
-	zmq::context_t* context;
-	std::string out;
-//	int cap;
-	int *part;
-};
-
-
-
-class TreeRecorder: public Tool
+class RootRecorder: public Tool
 {
 	public:
 
-		TreeRecorder();
+		RootRecorder();
 		bool Initialise(std::string configfile,DataModel &data);
 		bool Execute();
 		bool Finalise();
@@ -57,12 +31,9 @@ class TreeRecorder: public Tool
 	
 		static void *RootWriter(void* arg);
 	
-		zmq::socket_t *Isend;
+		zmq::socket_t *sPort;
 
-//		pthread_t thread[2];
-		TThread *h1;
 		TTree *tree;
-		card_root_thread_args1 *args;
 	
 		std::string OutPath, OutName;
  
@@ -72,11 +43,7 @@ class TreeRecorder: public Tool
 		std::vector<std::string> Lcard;
 		std::vector<int> Ncard;
 
-		unsigned int TOutN, AOutN, OutN, Trigger;
-//		unsigned int TSlot[512], TChannel[512];
-//		unsigned int ASlot[512], AChannel[512];
-//		unsigned int TDC[512], ADC[512];
-//		unsigned int Value[512], Slot[512], Channel[512];
+		unsigned int OutN, Trigger;
 		std::vector<unsigned int> Value, Slot, Channel;
 		std::vector<std::string> Type;
 		ULong64_t TimeStamp;
@@ -87,7 +54,6 @@ class TreeRecorder: public Tool
 
 		boost::posix_time::ptime *Epoch;
 		std::string StartTime;
-
 };
 
 #endif

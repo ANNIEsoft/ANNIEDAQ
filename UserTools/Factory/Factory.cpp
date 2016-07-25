@@ -22,6 +22,7 @@ if (tool=="Logger") ret=new Logger;
 
 if (tool=="CCDAQ") ret=new CCDAQ;
 if (tool=="TreeRecorder") ret=new TreeRecorder;
+if (tool=="RootRecorder") ret=new RootRecorder;
 //if (tool=="CCUSB") ret=new CCUSB;
 //if (tool=="DAQInit") ret=new DAQInit;
 if (tool=="CCTrigger") ret=new CCTrigger;

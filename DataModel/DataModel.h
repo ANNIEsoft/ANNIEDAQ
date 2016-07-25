@@ -85,8 +85,7 @@ class DataModel{
 	private:
   
 		std::map<std::string,TTree*> m_trees;	//TTree map 
-  
-  
+
 };
 
 

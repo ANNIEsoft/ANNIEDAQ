@@ -11,6 +11,8 @@ Currently tools are:
 * Lecroy module;
 * ROOT file writer.
 
+The ToolChain settings are is set in `configfiles/ToolChainConfig`, while the chain itself is in `configfiles/CCToolConfig` 
+
 ###Trigger tool, CCTrigger.cpp
 Read from `configfiles/ModuleConfig` the configuration of the CAMAC crate.
 Set up the cards register and map module type to slot number.
@@ -33,12 +35,15 @@ Trigger mode is set in configfiles/TRGConfig:h
 * 2 : software trigger and test functions are called.
 
 ###Lecroy module tool, Lecroy.cpp
-This tool works for both the TDCs and ADCs cards.
+This tool works for both TDCs and ADCs cards.
 In the corresponding configfile, `configfiles/TDCConfig` or `configfiles/ADCConfig`, the Tool is set to be for TDC or ADC.
 
-###ROOT file writer, TreeRecorder.cpp
+###ROOT file writer, TreeRecorder.cpp and RootRecorder.cpp
 Fill ROOT trees and save them to file.
-Output path and output name are set by `configfiles/TreeConfig`
+Output path and output name are set by `configfiles/TreeConfig`, as long as the Tree cap.
+
+TreeRecorder uses the Tree cap limit to save the ROOT file on its own.
+RootRecorder waits for a zmq message from the main DAQ to save the ROOT file.
 
 ###DataModel
 The data retrived from the CCUSB controller are stored in a DataModel structure called `Model`, in which both the Camac classes (`CC`) pointer and data are saved (`Data`).

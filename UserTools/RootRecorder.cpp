@@ -1,8 +1,8 @@
-#include "TreeRecorder.h"
+#include "RootRecorder.h"
 
-TreeRecorder::TreeRecorder():Tool(){}
+RootRecorder::RootRecorder():Tool(){}
 
-bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
+bool RootRecorder::Initialise(std::string configfile, DataModel &data){
 
 	if(configfile!="")  m_variables.Initialise(configfile);
 	//m_variables.Print();
@@ -23,14 +23,8 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 //	file.Write();
 //	file.Close();
 	
-	Isend = new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
-	Isend->bind("inproc://RootWriter");
-	
-//	args = new card_root_thread_args(OutName, m_data->context, FileCap, FileCount);
-	args = new card_root_thread_args1(OutName, m_data->context, FileCount);
-	
-	h1 = new TThread("h1", TreeRecorder::RootWriter, args);
-	h1->Run();
+	sPort = new zmq::socket_t(*(m_data->context), ZMQ_REP);
+	sPort->connect("inproc://RootWriter");
 
 	std::string Line;
 	std::stringstream ssL;
@@ -57,15 +51,13 @@ bool TreeRecorder::Initialise(std::string configfile, DataModel &data){
 //... and ends here
 
 	Trigger = 0;
-	ThreadCount = 0;
-	Entries = TreeCap;
 
 	Epoch = new boost::posix_time::ptime(boost::gregorian::from_string(StartTime));
 
 	return true;
 }
 
-bool TreeRecorder::Execute()
+bool RootRecorder::Execute()
 {
 	if (m_data->TRG)
 	{
@@ -137,15 +129,15 @@ bool TreeRecorder::Execute()
 		++Trigger;
 		m_data->List.Data.clear();		
 
-//		if (tree->GetEntriesFast() >= TreeCap*(1+ThreadCount))
-		if (tree->GetEntriesFast() == TreeCap)
+		zmq::message_t comm;
+		if(sPort->recv(&comm, ZMQ_NOBLOCK))
 		{
 			zmq::message_t message(512);
 			std::stringstream tmptree;
 			tmptree << "TTree " << tree;
 		
 			snprintf ((char *) message.data(), 512, "%s", tmptree.str().c_str()) ;
-			Isend->send(message);
+			sPort->send(message);
 
 			tree = new TTree("CCData", "CCData");
 
@@ -168,41 +160,14 @@ bool TreeRecorder::Execute()
 	return true;
 }
 	
-bool TreeRecorder::Finalise(){
-
-	zmq::message_t message(256);
-	std::string send = "Quit 0x00";
-	snprintf ((char *) message.data(), 256, "%s", send.c_str()) ;
-	Isend->send(message);
-
-	h1->Join();
-
-	std::stringstream tmp;
-	tmp << OutName << "p" << FileCount << ".root";
-	TFile file(tmp.str().c_str(), "UPDATE", "", 1);
-	
-	tree->Write();
-	file.Write();
-	file.Close();
-
-//	for (int i = 0; i < vTDC.size(); i++)
-//		delete vTDC.at(i);
-//	for (int i = 0; i < vADC.size(); i++)
-//		delete vADC.at(i);
-
-
+bool RootRecorder::Finalise()
+{
 	tree->Delete();
 	tree = 0;
 
-	delete h1;
-	h1 = 0;
-
-	delete Isend;
-	Isend = 0;
+	delete sPort;
+	sPort = 0;
 	
-	delete args;
-	args = 0;
-
 	for (int i = 0; i < m_data->List.CC["TDC"].size(); i++)
 		delete m_data->List.CC["TDC"].at(i);
 	for (int i = 0; i < m_data->List.CC["ADC"].size(); i++)
@@ -215,61 +180,4 @@ bool TreeRecorder::Finalise(){
 	Epoch = 0;
 	
 	return true;
-}
-
-
-void* TreeRecorder::RootWriter(void* arg)
-{	
-	card_root_thread_args1* args = static_cast<card_root_thread_args1*>(arg);
- 
-	zmq::socket_t Ireceive (*(args->context), ZMQ_PULL);
-	Ireceive.connect("inproc://RootWriter");
-
-	bool running = true;
-	*(args->part) = 0;
-	int Count = 0;	 
-	std::string Opt = "RECREATE";
-	TTree *tree;
-	
-	while (running)
-	{
-		zmq::message_t comm;
-		Ireceive.recv(&comm);
-		
-		std::istringstream iss(static_cast<char*>(comm.data()));
-		std::string arg1 = "";
-		unsigned long long arg2;		
-		
-		iss >> arg1 >> std::hex >> arg2;
-
-		if (arg1 == "TTree")
-		{
-			std::stringstream tmp;
-			tmp << args->out << "p" << *(args->part) << ".root";
-			TFile file(tmp.str().c_str(), Opt.c_str(), "", 1);
-
-			tree = reinterpret_cast<TTree*>(arg2);
-			tree->Write();
-
-			file.Write();
-			file.Close();
-			++(*(args->part));	//FileCount
-
-			tree->Delete();
-			tree = 0;
-
-//			Opt = "UPDATE";
-
-//			if (++Count >= args->cap)
-//			{
-//				++(*(args->part));	//FileCount
-//				Count = 0;	
-//				Opt = "RECREATE";
-//				tree->Reset();
-//				tree = 0;
-//			}
-		}
-		else if (arg1 == "Quit")
-			running = false;
-	}
 }

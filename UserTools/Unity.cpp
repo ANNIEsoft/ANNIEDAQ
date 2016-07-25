@@ -13,6 +13,7 @@
 #include "Logger.cpp"
 #include "CCDAQ.cpp"
 #include "TreeRecorder.cpp"
+#include "RootRecorder.cpp"
 //#include "CCUSB.cpp"
 //#include "DAQInit.cpp"
 #include "CCTrigger.cpp"
