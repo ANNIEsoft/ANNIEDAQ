@@ -92,5 +92,5 @@ lib/Camac:
 	g++ -shared -fPIC camacinc/Lecroy3377/Lecroy3377.cpp -I include -L lib -o lib/libL3.so
 	g++ -shared -fPIC camacinc/Lecroy4300b/Lecroy4300b.cpp -I include -L lib -o lib/libL4.so
 
-Shifter: clean
+Shifter: 
 	g++ Shifter.cpp $(RootInclude) $(RootLib) -o Shifter

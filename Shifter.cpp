@@ -69,7 +69,6 @@ int main(int argc, char** argv)
 	//Open raw tree
 	TFile* in = new TFile(argv[1]);
 	TTree* Otree = (TTree*) in->Get("CCData");
-	std::cout << "Tree " << Otree << std::endl;
 
 	Type = 0;
 	Value = 0;
@@ -85,29 +84,21 @@ int main(int argc, char** argv)
 	Otree->SetBranchAddress("TimeStamp", &TimeStamp);
 
 
-	std::cout << "get entries " << std::endl;
 	unsigned int nent = Otree->GetEntries();
-	std::cout << nent << std::endl;
 
 	//Set wget, obtain spill information from db
 	std::string url = "wget -O webtime \"http://ifb-data.fnal.gov:8100/ifbeam/data/data?e=e%2C1d&b=BNBBPMTOR&f=csv&tz=&action=Show+device&t0=";
-	std::cout << "url " << url << std::endl;
 	std::stringstream cmd;
 	cmd << url;
-	std::cout << "n0 " << std::endl;
 	Otree->GetEntry(1);
-	std::cout << "n1 " << std::endl;
 	cmd << std::fixed << std::setprecision(3) << (TimeStamp-1)/1000.0;
-	std::cout << "n2 " << std::endl;
 	Otree->GetEntry(nent-1);
-	std::cout << "n3 " << std::endl;
 	cmd << "&t1=" << (TimeStamp+1)/1000.0 << "\"";
 
 	std::cout << cmd.str() << std::endl;
 	system(cmd.str().c_str());
 	
 	//Output file
-	std::cout << "new file" << std::endl;
 	std::string root_name = std::string(in->GetName());
 	std::size_t pos = root_name.find(".root");
 	root_name.erase(root_name.begin()+pos, root_name.end());
@@ -117,7 +108,6 @@ int main(int argc, char** argv)
 	//Load tree vector and fill
 	//
 	//Set postprocessed tree
-	std::cout << "new tree" << std::endl;
 	TTree* Ntree = new TTree("CCData", "CCData");
 
 	Ntree->Branch("Trigger", &Trigger, "Trigger/i");
@@ -133,7 +123,6 @@ int main(int argc, char** argv)
 	Ntree->Branch("PMTz", &PMTz);			//int
 	Ntree->Branch("TimeStamp", &TimeStamp, "TimeStamp/l" );
 
-	std::cout << "filling tree" << std::endl;
 	int x, y, z;
 	std::string Device;
 	for (unsigned int i = 0; i < nent; ++i)
@@ -164,7 +153,6 @@ int main(int argc, char** argv)
 		Ntree->Fill();			//Time to fill
 	}
 
-	std::cout << "load" << std::endl;
 	//Load db vector
 	std::fstream fin("webtime", std::fstream::in);
 	std::string Line;
@@ -186,31 +174,28 @@ int main(int argc, char** argv)
 		std::cout << "Database is empty, no synchronisation available\n" << std::endl;
 
 	//Algorithm starts here, synchronise daq times with dtb times
-	std::cout << "alg" << std::endl;
-	int i = 0, k = 0, jA = 0, jB = 0;
 
 	long offset;
-	std::cout << "daq size " << vDAQ.size() << std::endl;
-	std::cout << "spilsize " << vDTB.size() << std::endl;
 
 	Pattern WalkDAQ, WalkDTB;
 	unsigned int iD = 0, iS = 0;
 
-	while ((vDTB.size() != 0) && (iD < vDAQ.size()))	//Starts only if dtb is not empty
+	while ((vDTB.size() != 0) && (iD+1 < vDAQ.size()))	//Starts only if dtb is not empty
 	{
-
 		vDAQ_C.clear();		//Clear clusters -> the loop is super cluster per super cluster
 		vDTB_C.clear();
 
-		while (iD < vDAQ.size())	//Loop over DAQ data looking for clusters
+		while (iD+1 < vDAQ.size())	//Loop over DAQ data looking for clusters
 		{
 			WalkDAQ.s = 1;
 			WalkDAQ.n = iD++;
-			std::cout << "daq index " << WalkDAQ.n << std::endl;
 			while (vDAQ.at(iD)-vDAQ.at(iD-1) < 100) 	//Size of cluster
 			{
 				++WalkDAQ.s;
-				++iD;
+				if (iD+1 < vDAQ.size())
+					++iD;
+				else break;
+				
 			}
 
 			vDAQ_C.push_back(WalkDAQ);
@@ -218,17 +203,17 @@ int main(int argc, char** argv)
 //			Stops every super Cluster
 			if (vDAQ.at(iD)-vDAQ.at(iD-1) > 2000) break;
 		}
-		std::cout << "DAQ_C " << vDAQ_C.size() << std::endl;
 
-		while (iS < vDTB.size())	//Same for DTB
+		while (iS+1 < vDTB.size())	//Same for DTB
 		{
 			WalkDTB.s = 1;
 			WalkDTB.n = iS++;
-			std::cout << "dtb index " << WalkDTB.n << std::endl;
 			while (vDTB.at(iS)-vDTB.at(iS-1) < 100)
 			{
 				++WalkDTB.s;
-				++iS;
+				if (iS+1 < vDTB.size())
+					++iS;
+				else break;
 			}
 
 			vDTB_C.push_back(WalkDTB);
@@ -236,55 +221,38 @@ int main(int argc, char** argv)
 //			Stops every super Cluster
 			if (vDTB.at(iS)-vDTB.at(iS-1) > 2000) break;
 		}
-		std::cout << "DTB_C " << vDTB_C.size() << std::endl;
 
 //		Loop in reverse on DAQ clusters, trying to align them from the end
-		for (int k = 1; k <= vDAQ_C.size(); ++k)
+		for (int k = 0; k < vDAQ_C.size(); ++k)
 		{
-			WalkDAQ = vDAQ_C.at(vDAQ_C.size()-k);
-			WalkDTB = vDTB_C.at(vDTB_C.size()-k);
-
-			offset = vDTB.at(WalkDTB.n) - vDAQ.at(WalkDAQ.n);
+			if (iD+1 < vDAQ.size())
+			{
+				WalkDAQ = vDAQ_C.at(vDAQ_C.size()-1-k);
+				if (k < vDTB_C.size())
+				{
+					WalkDTB = vDTB_C.at(vDTB_C.size()-1-k);
+			
+					offset = vDTB.at(WalkDTB.n) - vDAQ.at(WalkDAQ.n);
+				}
+			}
+			else
+			{
+				WalkDAQ = vDAQ_C.at(k);
+				if (k < vDTB_C.size())
+				{
+					WalkDTB = vDTB_C.at(k);
+			
+					offset = vDTB.at(WalkDTB.n) - vDAQ.at(WalkDAQ.n);
+				}
+			}
 
 			for (int l = 0; l < WalkDAQ.s; ++l)
 				vDAQ.at(WalkDAQ.n+l) += offset;
 		}
 	}
-
-/*
-		std::cout << "w0" << std::endl;
-		while (++jB < vDAQ.size())
-			if (fabs(vDAQ.at(jB)-vDAQ.at(jB-1)) > 100)	//Not part of the pulse train
-				break;
-
-		std::cout << "w1 A " << jA << "\tB " << jB << std::endl;
-		while (++i < vSpill.size())
-		{
-			if (vSpill.at(i) > vDAQ.at(jA))
-				break;
-		}
-
-		std::cout << "w2 i " << i << std::endl;
-		if (i < vSpill.size())
-			offset = vSpill.at(i) - vDAQ.at(jA);	//Compute the offset
-
-		std::cout << "w4" << std::endl;
-		//Move by offset
-		for (int k = jA; k < jB; ++k)
-		{
-			vDAQ.at(k) += offset;
-			//vBase.at(k) = vSpill.at(i);
-		}
-
-		std::cout << "w5" << std::endl;
-		//Move indices
-		jA = jB;
-	}
-*/
 	//End of algorithm
 
 	//Filling TimeSync Branch
-	std::cout << "branch" << std::endl;
 	TBranch* SyncBranch = Ntree->Branch("TimeSync", &TimeSync, "TimeSync/l");
 	for (unsigned int j = 0; j < nent; j++)
 	{
@@ -296,7 +264,6 @@ int main(int argc, char** argv)
 	DataTree->Branch("TimeBase", &vDTB);
 	DataTree->Fill();
 
-	std::cout << "s&c" << std::endl;
 	out->cd();
 	Ntree->Write();
 	DataTree->Write();
