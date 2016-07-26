@@ -24,7 +24,8 @@ bool RootRecorder::Initialise(std::string configfile, DataModel &data){
 //	file.Close();
 	
 	sPort = new zmq::socket_t(*(m_data->context), ZMQ_REP);
-	sPort->connect("inproc://RootWriter");
+//	sPort->connect("inproc://RootWriter");		//final use
+	sPort->connect("ipc:///tmp/0");			//test only
 
 	std::string Line;
 	std::stringstream ssL;
@@ -135,6 +136,7 @@ bool RootRecorder::Execute()
 			zmq::message_t message(512);
 			std::stringstream tmptree;
 			tmptree << "TTree " << tree;
+			std::cout << "Root : " << std::hex << tree << std::endl;
 		
 			snprintf ((char *) message.data(), 512, "%s", tmptree.str().c_str()) ;
 			sPort->send(message);

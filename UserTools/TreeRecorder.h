@@ -72,7 +72,7 @@ class TreeRecorder: public Tool
 		std::vector<std::string> Lcard;
 		std::vector<int> Ncard;
 
-		unsigned int TOutN, AOutN, OutN, Trigger;
+		unsigned int OutN, Trigger;
 //		unsigned int TSlot[512], TChannel[512];
 //		unsigned int ASlot[512], AChannel[512];
 //		unsigned int TDC[512], ADC[512];

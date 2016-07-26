@@ -45,6 +45,7 @@ clean:
 	rm -f RemoteControl
 	rm -f NodeDaemon
 	rm -f log
+	rm -f Shifter 
 
 lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
@@ -91,5 +92,5 @@ lib/Camac:
 	g++ -shared -fPIC camacinc/Lecroy3377/Lecroy3377.cpp -I include -L lib -o lib/libL3.so
 	g++ -shared -fPIC camacinc/Lecroy4300b/Lecroy4300b.cpp -I include -L lib -o lib/libL4.so
 
-Shifter:
+Shifter: clean
 	g++ Shifter.cpp $(RootInclude) $(RootLib) -o Shifter

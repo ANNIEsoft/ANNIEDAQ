@@ -18,3 +18,4 @@
 //#include "DAQInit.cpp"
 #include "CCTrigger.cpp"
 #include "Lecroy.cpp"
+#include "TestDAQ.cpp"

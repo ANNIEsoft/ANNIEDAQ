@@ -26,7 +26,8 @@ if (tool=="RootRecorder") ret=new RootRecorder;
 //if (tool=="CCUSB") ret=new CCUSB;
 //if (tool=="DAQInit") ret=new DAQInit;
 if (tool=="CCTrigger") ret=new CCTrigger;
-  if (tool=="Lecroy") ret=new Lecroy;
+if (tool=="Lecroy") ret=new Lecroy;
+  if (tool=="TestDAQ") ret=new TestDAQ;
 return ret;
 }
 
