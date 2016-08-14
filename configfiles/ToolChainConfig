@@ -7,7 +7,7 @@ attempt_recover 1
 remote_port 24002
 
 ###### Logging #####
-log_mode Local # Interactive=cout , Remote= remote logging system "serservice_name Remote_Logging" , Local = local file log;
+log_mode Interactive # Interactive=cout , Remote= remote logging system "serservice_name Remote_Logging" , Local = local file log;
 log_local_path /home/nfs/annie/work/ANNIEDAQ/log
 log_service LogStore 
 log_port 24010
@@ -23,6 +23,6 @@ service_kick_sec 60
 Tools_File configfiles/CCToolsConfig
 
 ##### Run Type #####
-Inline 0
+Inline 100000
 Interactive 0
-Remote 1
+Remote 0

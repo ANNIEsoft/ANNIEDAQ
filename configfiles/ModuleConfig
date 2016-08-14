@@ -6,21 +6,16 @@
 #If TRG is not specified, the first TDC found is used
 #
 #Type	Slot	#Register file
-TDC	18	configfiles/TDCreg
-TDC	17	configfiles/TDCreg
-TDC	14	configfiles/TDCreg
-#TDC	18	configfiles/TDCreg
-#TDC	17	configfiles/TDCreg
-#TDC	14	configfiles/TDCreg
-#TDC	18	configfiles/TDCreg
-#TDC	17	configfiles/TDCreg
-#TDC	14	configfiles/TDCreg
+#TDC	18	configfiles/TDCtest
+#TDC	17	configfiles/TDCtest
+#TDC	14	configfiles/TDCtest
+#TDC	18	configfiles/TDCtest
+#TDC	17	configfiles/TDCtest
+#TDC	14	configfiles/TDCtest
+#TDC	18	configfiles/TDCtest
+#TDC	17	configfiles/TDCtest
 
-#TDC	18  	configfiles/TDCreg
-#TDC	19  	configfiles/TDCreg
-#TRG	18  	configfiles/TDCreg
-
-#ADC	11  	configfiles/ADCreg
+ADC	11  	configfiles/ADCreg
 #ADC	12  	configfiles/ADCreg
 #ADC	13  	configfiles/ADCreg
 #ADC	14  	configfiles/ADCreg

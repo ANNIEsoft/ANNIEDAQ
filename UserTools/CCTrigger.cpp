@@ -103,7 +103,7 @@ bool CCTrigger::Execute()
 			break;
 		
 		case 2:
-			m_data->TRG = rand() % (100/perc) == 0;
+			m_data->TRG = rand() % int(100/perc) == 0;
 			break;
 		
 		default:

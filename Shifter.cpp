@@ -34,6 +34,7 @@ int main(int argc, char** argv)
 	float TDCres, ADCres = 0.488281;		//Resolution of CAMAC modules, ADC is 11bit
 
 	unsigned long long TimeStamp, TimeSync, TimeBase;
+	unsigned long long t0, t1;
 	std::vector<unsigned int> PMTx, PMTy, PMTz;
 	std::vector<float> Phys;
 	std::vector<std::string> Detector;
@@ -89,11 +90,17 @@ int main(int argc, char** argv)
 	//Set wget, obtain spill information from db
 	std::string url = "wget -O webtime \"http://ifb-data.fnal.gov:8100/ifbeam/data/data?e=e%2C1d&b=BNBBPMTOR&f=csv&tz=&action=Show+device&t0=";
 	std::stringstream cmd;
-	cmd << url;
-	Otree->GetEntry(1);
-	cmd << std::fixed << std::setprecision(3) << (TimeStamp-1)/1000.0;
+	Otree->GetEntry(0);
+	t0 = TimeStamp;
 	Otree->GetEntry(nent-1);
-	cmd << "&t1=" << (TimeStamp+1)/1000.0 << "\"";
+	while (t0 < TimeStamp)
+	{
+		cmd.clear();
+		cmd.str("");
+		cmd << url;
+		cmd << std::fixed << std::setprecision(3) << (t0-1)/1000.0;
+		t0 += 
+		cmd << "&t1=" << (TimeStamp+1)/1000.0 << "\"";
 
 	std::cout << cmd.str() << std::endl;
 	system(cmd.str().c_str());

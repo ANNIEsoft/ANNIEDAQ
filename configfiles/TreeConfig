@@ -1,5 +1,5 @@
 TreeCap 1000000
 FileCap 1
 OutPath test/ 
-OutName R200
+OutName freq
 StartTime 1970/1/1	#Use the format yyyy/mm/dd
