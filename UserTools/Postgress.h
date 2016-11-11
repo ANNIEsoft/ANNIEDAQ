@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <pqxx/pqxx>
+#include <sys/time.h>
 
 #include "Tool.h"
 

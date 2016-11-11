@@ -1,0 +1,3 @@
+# InputVariavles config file
+
+RunType 1 #0=testing , 1=LED, 2=Soft, 3=Beam

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # rpms prerequisits needs root
-#yum install make gcc-c++ gcc binutils libX11-devel libXpm-devel libXft-devel libXext-devel postgresql-devel.x86_64 emacs screennc firefox git screen
+#yum install make gcc-c++ gcc binutils libX11-devel libXpm-devel libXft-devel libXext-devel postgresql-devel.x86_64 emacs screennc firefox git screen libcurl-devel libusb-devel.x86_64
 
 
 mkdir ToolDAQ

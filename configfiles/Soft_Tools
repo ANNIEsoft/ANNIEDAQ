@@ -1,0 +1,8 @@
+InputVariables InputVariables configfiles/Soft_InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+Trigger Trigger configfiles/Soft_TriggerConfig
+NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
+#BoardReader BoardReader configfiles/BoardReaderConfig
+#DataRecorder DataRecorder configfiles/DataRecorderConfig
+CardDataRecorder CardDataRecorder configfiles/Soft_CardDataRecorderConfig
+Monitoring Monitoring configfiles/Soft_MonitoringConfig

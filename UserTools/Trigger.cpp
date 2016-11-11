@@ -9,7 +9,7 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   //m_variables.Print();
   
   m_data= &data;
-
+  
   m_variables.Get("verbose",m_verbose);  
   m_variables.Get("VME_service_name",VME_service_name);
   m_variables.Get("numVME",numVME);
@@ -25,8 +25,8 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   
   for(int i=0;i<11;i++){
   
-  zmq::message_t send(256);
-  snprintf ((char *) send.data(), 256 , "%s" ,"All NULL") ;
+  zmq::message_t send(8);
+  snprintf ((char *) send.data(), 8 , "%s" ,"All NULL") ;
   
   Ireceive.send(send);
   
@@ -143,39 +143,46 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
       zmq::message_t message2(setup.length()+1);
       snprintf ((char *) message2.data(), setup.length()+1 , "%s" ,setup.c_str() ) ;
       //std::cout<<"debug 4 "<<setup<<std::endl;
-      VMESockets.at(i)->send(message2);
-      // std::cout<<"debug 5"<<std::endl;
-      
-      zmq::message_t re;
-      if(VMESockets.at(i)->recv(&re)){
-	std::istringstream iss2(static_cast<char*>(re.data()));
-	//	std::cout<<"debug 6 "<<iss2.str()<<std::endl;
+      if(VMESockets.at(i)->send(message2)){
+	// std::cout<<"debug 5"<<std::endl;
+	
+	zmq::message_t re;
+	if(VMESockets.at(i)->recv(&re)){
+	  std::istringstream iss2(static_cast<char*>(re.data()));
+	  //	std::cout<<"debug 6 "<<iss2.str()<<std::endl;
+	}
+	else{
+	  Log("Error receiving trigger query from VME",0,m_verbose);
+        return false;
+	
+	}
+	//std::cout<<"debug 7"<<std::endl;
       }
       else{
-        Log("Error receiving trigger query from VME",0,m_verbose);
-        return false;
 
+	Log("Error sending trigger setup to VME",0,m_verbose);
       }
-      //std::cout<<"debug 7"<<std::endl;
-    }
-
+    } 
     else{
-
+      
       Log("Error sending trigger query to VME",0,m_verbose);
-
+      
       return false;
-
+      
     }
     // std::cout<<"debug 8"<<std::endl;
   }
   // std::cout<<"debug 9"<<std::endl;
-
-
-
-
-
-
-
+  
+  
+  m_data->InfoTitle="TriggerVariables";
+  m_variables>>m_data->InfoMessage;
+  m_data->GetTTree("RunInformation")->Fill();
+  
+  
+  
+  
+  
   return true;
 }
 

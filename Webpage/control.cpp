@@ -56,7 +56,7 @@ std::vector<Store*> RemoteServices;
   zmq::socket_t Ireceive (*context, ZMQ_DEALER);
   Ireceive.connect("inproc://ServiceDiscovery");
 
-  sleep(5);
+  sleep(7);
 
   zmq::message_t send(256);
   snprintf ((char *) send.data(), 256 , "%s" ,"All NULL") ;
@@ -123,7 +123,7 @@ std::vector<Store*> RemoteServices;
   
   //  Cgicc formData;
 
-  cout << "Content-type:text/html\r\n\r\n";
+  //  cout << "Content-type:text/html\r\n\r\n";
   cout<<"<html>";  
 
   cout<<" <head> <meta http-equiv=\"refresh\" content=\"60\"><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> <title>Remote ToolChain Control</title></head>"; 

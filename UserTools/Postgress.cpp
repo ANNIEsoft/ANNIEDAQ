@@ -125,6 +125,18 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     C.clear();
     //delete C;
     // C=0;
+
+    m_data->InfoTitle="PostgresVariables";
+    m_variables.Set("RunNumber",m_data->RunNumber);
+    m_variables.Set("SubRunNumber",m_data->SubRunNumber);
+    m_variables.Set("RunType",m_data->RunType);
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+    m_variables.Set("StarTime",ms); 
+    m_variables>>m_data->InfoMessage;
+    m_data->GetTTree("RunInformation")->Fill();
+    
   return true;
 }
 

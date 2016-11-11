@@ -22,6 +22,9 @@ bool Monitoring::Initialise(std::string configfile, DataModel &data){
   h1->Run();
   //  int i=system("rm /data/monitoringplots/* &");
   
+  m_data->InfoTitle="MonitoringVariables";
+  m_variables>>m_data->InfoMessage;
+  m_data->GetTTree("RunInformation")->Fill();
 
   return true;
 

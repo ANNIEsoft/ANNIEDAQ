@@ -1,0 +1,6 @@
+#DummyTool DummyTool configfiles/MRDConfig
+CCTrigger CCTrigger configfiles/TRGConfig
+Lecroy[TDC] Lecroy configfiles/TDCConfig
+#Lecroy[ADC] Lecroy configfiles/ADCConfig
+#treer MRDTreeRecorder configfiles/MRDTreeConfig
+MRDRootRecorder MRDRootRecorder configfiles/MRDTreeConfig

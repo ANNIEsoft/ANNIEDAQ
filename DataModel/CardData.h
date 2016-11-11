@@ -34,7 +34,7 @@ struct CardData{
   ~CardData();  
 
   void  Send(zmq::socket_t *socket);
-  void Receive(zmq::socket_t *socket);
+  bool Receive(zmq::socket_t *socket);
   
  
   

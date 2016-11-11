@@ -1,0 +1,13 @@
+#MRD config file
+
+log_mode 
+log_path ./MRDlog
+log_service test
+log_port 4567
+verbose 1
+errorlevel 0
+kick_time -1
+toolsfile configfiles/MRD_tools
+remote_port 24020
+multicastaddress hh
+multicastport test

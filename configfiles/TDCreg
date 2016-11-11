@@ -1,0 +1,45 @@
+#Main mode
+Common		1	#0 for Common Stop, 1 for Common Start
+
+#Register 0
+#Both
+ModID		255	#0-7		user definable module ID code, in header data word. 0 (def)
+TDCRes		3	#8-9		Resolution: 0 = 0.5 nsec (def), 1 = 1.0 nsec, 2 = 2.0 nsec, 3 = 4.0 nsec
+RecEdges	0	#10		0 (def) Leading edge recorded, 1 both edges recorded
+ReadoutMode	0 	#11		0 (def) CAMAC readout, 1 ECL PORT
+BuffMode	1	#12		0 (def) Single Buffer, 1 Multievent Buffer
+HeaderMode	1 	#13		0 (def) Header on, 1 skip header
+
+#Register 1
+#Both
+MPI		0	#1, 10-11	0 (def) = no MPI, 1 = 800 ns MPI, 2 = 1600 ns MPI, 3 = 3200 ns MP
+FFERAmode	0	#1, 12		Selects FAST FERA mode: 1 = fast, 0 (def) = normal
+EvSerNum	0	#1, 13-15	Event serial number. This 3 bit number is in the header
+#Common Stop
+TrgWidth	0	#1, 0-3		Selects the trigger output pulse width, in clock units. 0 (def).
+TrgDelay	0	#1, 4-7		Selects the trigger pulse delay, in clock units. 0 (def)
+TrgClock	0	#1, 8-9		0 (def) = 25 ns, 1 = 50 ns, 2 = 100 ns, 3 = selects external trg clock
+
+#Register 2
+#Both
+MaxHITS		0	#2, 0-3		Maximum number of hits allowed per TDC channel. From 0 = 1 to 15 (def)= 16
+#Common stop
+FullScale	4095 	#2, 4-15	Maximum full scale time allowed for the TDC data, in units of 8 ns, from 0 to 32767.5 ns
+
+#Register 3
+#Both
+ReqDelay	0	#3, 0-3		Request delay setting, from 0 to 30 microseconds, in 2 microsecond steps. 0 (def)
+#Common Stop
+OffSet		0 	#3, 4-15	The Offset to be subtracted from the data before shifting and readout
+#Common start
+MaxTimeRange	511	#3, 4-15	Maximum time range for data, tested before shifting and readout, in 8 ns
+
+#Register 4
+#Common start
+StartTO		85	#4, 0-9		Common start time out, in 50 ns, up to 32 us. Must be a value LESS THAN full scale
+
+#Register 5
+#Common start (test function only)
+TestPulse	0	#5, 0-4		Number of pulses generated in test mode. 0-31 pulses, each 1/2 clock period long.
+TestClock	0	#5, 5-6		Test mode clock: 0 = 100 ns, 1 = 200 ns, 2 = 400 ns, 3 = 800 ns
+TestFlag	0	#5, 8		Test enable. This must be 1 for test mode.

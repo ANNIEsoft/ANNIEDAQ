@@ -3,7 +3,7 @@ ToolDAQFrameworkPath=ToolDAQ/ToolDAQFramework
 ZMQLib= -L ToolDAQ/zeromq-4.0.7/lib -lzmq 
 ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/ 
 
-BoostLib= -L ToolDAQ/boost_1_60_0/install/lib -lboost_date_time -lboost_serialization
+BoostLib= -L ToolDAQ/boost_1_60_0/install/lib -lboost_date_time -lboost_serialization -lboost_system
 BoostInclude= -I ToolDAQ/boost_1_60_0/install/include
 
 RootInclude=  -I ToolDAQ/root/include
@@ -13,7 +13,7 @@ DataModelInclude = $(RootInclude)
 DataModelLib = $(RootLib)
 
 MyToolsInclude = $(RootInclude) -I ToolDAQ/libpqxx-4.0.1/install/include
-MyToolsLib = $(RootLib)  -L ToolDAQ/libpqxx-4.0.1/install/lib/ -lpqxx 
+MyToolsLib = $(RootLib)  -L ToolDAQ/libpqxx-4.0.1/install/lib/ -lpqxx  -L /usr/lib64/ -lcurl
 
 all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/libServiceDiscovery.so lib/libDataModel.so lib/libLogging.so RemoteControl  NodeDaemon
  
@@ -44,17 +44,20 @@ clean:
 	rm -f RemoteControl
 	rm -f NodeDaemon
 
-lib/libDataModel.so: lib/libStore.so lib/libLogging.so
+lib/libDataModel.so: lib/libStore.so lib/libLogging.so include/Camac lib/Camac
 
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
-	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
+	cp DataModel/MRDData.h include/
+	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp DataModel/MRDData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	cp $(ToolDAQFrameworkPath)/src/ToolChain/*.h include/
+	cp $(ToolDAQFrameworkPath)/src/ServiceDiscovery/ServiceDiscovery.h include/
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp -I include -L lib -lStore -lDataModel -lLogging -lCC -lL3 -lL4 -lm -lxx_usb -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./
@@ -64,14 +67,28 @@ NodeDaemon:
 
 lib/libServiceDiscovery.so: lib/libStore.so
 	cp $(ToolDAQFrameworkPath)/src/ServiceDiscovery/ServiceDiscovery.h include/
-	g++ -shared -fPIC -I include $(ToolDAQFrameworkPath)/src/ServiceDiscovery/ServiceDiscovery.cpp -o lib/libServiceDiscovery.so -L lib/ -lStore  $(ZMQInclude) $(ZMQLib) $(BoostLib) $(BoostInclude)
+	g++ -g -shared -fPIC -I include $(ToolDAQFrameworkPath)/src/ServiceDiscovery/ServiceDiscovery.cpp -o lib/libServiceDiscovery.so -L lib/ -lStore  $(ZMQInclude) $(ZMQLib) $(BoostLib) $(BoostInclude)
 
 lib/libLogging.so: lib/libStore.so
 	cp $(ToolDAQFrameworkPath)/src/Logging/Logging.h include/
-	g++ -shared -fPIC -I include $(ToolDAQFrameworkPath)/src/Logging/Logging.cpp -o lib/libLogging.so -L lib/ -lStore $(ZMQInclude) $(ZMQLib) $(BoostLib) $(BoostInclude)
+	g++ -g -shared -fPIC -I include $(ToolDAQFrameworkPath)/src/Logging/Logging.cpp -o lib/libLogging.so -L lib/ -lStore $(ZMQInclude) $(ZMQLib) $(BoostLib) $(BoostInclude)
 
 update:
 	cd $(ToolDAQFrameworkPath)
 	git pull
 	cd ../..
 	git pull
+
+
+include/Camac:
+	cp UserTools/camacinc/CamacCrate/CamacCrate.h include/
+	cp UserTools/camacinc/Lecroy3377/Lecroy3377.h include/
+	cp UserTools/camacinc/Lecroy4300b/Lecroy4300b.h include/
+	cp UserTools/camacinc/XXUSB/libxxusb.h include/
+	cp UserTools/camacinc/XXUSB/usb.h include/
+
+lib/Camac:
+	cp UserTools/camacinc/makelib/libxx_usb.so lib/
+	g++ -g -shared -fPIC UserTools/camacinc/CamacCrate/CamacCrate.cpp -I include -L lib -o lib/libCC.so
+	g++ -g -shared -fPIC UserTools/camacinc/Lecroy3377/Lecroy3377.cpp -I include -L lib -o lib/libL3.so
+	g++ -g -shared -fPIC UserTools/camacinc/Lecroy4300b/Lecroy4300b.cpp -I include -L lib -o lib/libL4.so

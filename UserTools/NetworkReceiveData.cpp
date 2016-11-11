@@ -28,7 +28,7 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
   m_variables.Get("cards",cards);
   m_variables.Get("channels",channels);
   m_variables.Get("buffersize",buffersize);
-
+  m_variables.Get("verbose",m_verbose);
 
   m_data->LastSync.resize(cards);
   m_data->SequenceID.resize(cards);
@@ -47,6 +47,9 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
     m_data->Data.push_back(new double[(channels*buffersize)]);
   }
 
+  m_data->InfoTitle="NetworkReceiveDataVariables";
+  m_variables>>m_data->InfoMessage;
+  m_data->GetTTree("RunInformation")->Fill();
 
 
   return true;
@@ -72,31 +75,41 @@ bool NetworkReceiveData::Execute(){
 
                                                                                 
     zmq::message_t message;
-    
-    Receive->recv(&message);
+
+    //    std::cout<<"adout to receive"<<std::endl;    
+    if(Receive->recv(&message)){
+      //std::cout<<"received"<<std::endl;
     std::istringstream iss(static_cast<char*>(message.data()));
     int cards;
     iss>>cards;
    
-    //std::cout<<" d1"<<std::endl;
+    //    std::cout<<" d1 "<<cards<<std::endl;
 
     for(int i=0;i<cards;i++){
       //std::cout<<" d2"<<std::endl;
 
       CardData *tmp=new CardData;
-      //std::cout<<" d3"<<std::endl;
+      //std::cout<<" d3 "<<i<<std::endl;
 
-      tmp->Receive(Receive);
-      //std::cout<<" d4"<<std::endl;
+      if(tmp->Receive(Receive)){
+	//std::cout<<" d4 "<<i<<std::endl;
 
       m_data->carddata.push_back(tmp);
       //std::cout<<" d5"<<std::endl;
-
+      }
+      else{
+	Log("ERROR!! CardData Receive fail",0,m_verbose);
+	return false;
+      }
     }
     //std::cout<<" d6"<<std::endl;
 
-
-                                 
+    }
+    else{
+      Log("ERROR!! Network data receive connection fail/timeout",0,m_verbose);
+      return false;                              
+      
+    }
     /*
     zmq::message_t message;
     Receive->recv(&message);
@@ -232,7 +245,7 @@ bool NetworkReceiveData::Execute(){
 
 
 
-}
+  }
 
   return true;
 }

@@ -1,0 +1,7 @@
+B# Dummy config file
+
+OutputPath /data/output/
+#OutputPath /data/converstiontmp/
+TTreeEventCap 6120
+TFileTTreeCap 1
+MRDEnable 0

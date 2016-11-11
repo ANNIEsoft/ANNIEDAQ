@@ -1,0 +1,8 @@
+InputVariables InputVariables configfiles/Beam_InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+Trigger Trigger configfiles/Beam_TriggerConfig
+NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
+#BoardReader BoardReader configfiles/BoardReaderConfig
+#DataRecorder DataRecorder configfiles/DataRecorderConfig
+CardDataRecorder CardDataRecorder configfiles/Beam_CardDataRecorderConfig
+Monitoring Monitoring configfiles/Beam_MonitoringConfig

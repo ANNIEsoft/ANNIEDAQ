@@ -1,0 +1,5 @@
+#HVComs Config file
+
+verbose 1
+HVIP 192.168.163.61
+HVPort 5555

@@ -31,7 +31,7 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
   Isend = new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
   Isend->bind("inproc://RootWriter");
   
-  args=new card_root_thread_args(OutFile, filename, m_data->context,m_TFileTTreeCap, m_filepart);
+  args=new card_root_thread_args(OutFile, filename, m_data->context,m_TFileTTreeCap, m_filepart,m_data->GetTTree("RunInformation"));
   //  //pthread_create (&thread[0], NULL, CardDataRecorder::FlowManager, args);
   // pthread_create (&thread[0], NULL, CardDataRecorder::RootWriter, args);
   
@@ -72,6 +72,12 @@ bool CardDataRecorder::Initialise(std::string configfile, DataModel &data){
  //std::cout<<"i d5"<<std::endl;
   m_data->AddTTree("PMTData",tree);
   //std::cout<<"i d6"<<std::endl;
+
+  m_data->InfoTitle="CardDataRecorderVariables";
+  m_variables>>m_data->InfoMessage;
+  m_data->GetTTree("RunInformation")->Fill();
+
+
   return true;
 }
 
@@ -96,13 +102,13 @@ bool CardDataRecorder::Execute(){
     //std::cout<<"Debug 4 "<<tree<<std::endl;
     
     
-    zmq::message_t message(512);
+    zmq::message_t message(50);
     std::stringstream TTreepointer;
     TTreepointer<<"TTree "<<tree;
     
     //std::cout<<"sending "<<TTreepointer.str()<<std::endl;
     
-    snprintf ((char *) message.data(), 512 , "%s" ,TTreepointer.str().c_str()) ;
+    snprintf ((char *) message.data(), 50 , "%s" ,TTreepointer.str().c_str()) ;
     Isend->send(message);
     
     //std::cout<<"sent "<<std::endl;
@@ -206,12 +212,12 @@ bool CardDataRecorder::Finalise(){
 
   m_data->vars.Set("Status", "");
 
-  zmq::message_t message(256);
+  zmq::message_t message(10);
   std::string send="Quit 0x00";
 
   //std::cout<<"sending "<<send<<std::endl;
 
-  snprintf ((char *) message.data(), 256 , "%s" ,send.c_str()) ;
+  snprintf ((char *) message.data(), 10 , "%s" ,send.c_str()) ;
   Isend->send(message);
 
   //TThread::Ps();
@@ -224,6 +230,8 @@ bool CardDataRecorder::Finalise(){
   
   TTree *tree=m_data->GetTTree("PMTData");
   tree->Write();
+  tree=m_data->GetTTree("RunInformation");
+  tree->Write();
   file.Write();
   file.Close();
   // std::stringstream compcommand;
@@ -234,6 +242,7 @@ bool CardDataRecorder::Finalise(){
    // sleep(5);
 
   m_data->DeleteTTree("PMTData");
+  m_data->DeleteTTree("RunInformation");
   tree=0;
 
   //  Isend->close();
@@ -335,6 +344,8 @@ void* CardDataRecorder::RootWriter(void* arg){
       TFile file(tmp.str().c_str(),"UPDATE","",1);
       //std::cout<<"tree = "<<tree<<std::endl;
       tree->Write();
+      TTree *ri=args->runinformation->CloneTree();
+      ri->Write();
       //std::cout<<"T  Debug 5"<<std::endl;
       file.Write();
       //std::cout<<"T Debug 6"<<std::endl;
@@ -350,6 +361,7 @@ void* CardDataRecorder::RootWriter(void* arg){
       //sleep(5);
       //std::cout<<"T  Debug 8"<<std::endl;
       delete tree;
+      // ri->~TTree();
       //std::cout<<"T  Debug 9"<<std::endl;
       tree=0;
       //std::cout<<"T  Debug 10"<<std::endl;

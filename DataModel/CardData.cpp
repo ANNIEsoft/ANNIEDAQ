@@ -86,7 +86,7 @@ void  CardData::Send(zmq::socket_t *socket){
 
 }
 
-void CardData::Receive(zmq::socket_t *socket){
+bool CardData::Receive(zmq::socket_t *socket){
   /*
   int more;                                                                   
   size_t more_size = sizeof (more);                                           
@@ -100,62 +100,114 @@ void CardData::Receive(zmq::socket_t *socket){
   */  
 
   zmq::message_t message;
+  //  std::cout<<"d1"<<std::endl;
+  if(socket->recv(&message)){
+    // std::cout<<"d2"<<std::endl;
+    LastSync=*(reinterpret_cast<uint64_t*>(message.data()));
+    if(socket->recv(&message)){
+      //std::cout<<"d3"<<std::endl;
 
-  socket->recv(&message);
-  LastSync=*(reinterpret_cast<uint64_t*>(message.data()));
-  socket->recv(&message);
-  SequenceID=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  StartTimeSec=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  StartTimeNSec=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  StartCount=*(reinterpret_cast<uint64_t*>(message.data()));
-  socket->recv(&message);
-  //std::cout<<"triggercounts rec size check = "<<message.size()/(sizeof(long))<<std::endl;
-  triggerCounts=new uint64_t[message.size()/(sizeof(long))];
-//triggerCounts.resize(message.size()/(sizeof(long)));
-  triggerNumber=message.size()/(sizeof(long));
-  std::memcpy(&triggerCounts[0], message.data(), message.size());
-  socket->recv(&message);
-  Rates=new uint32_t[message.size()/(sizeof(uint32_t))];
-  // Rates.resize(message.size()/(sizeof(int)));
-  std::memcpy(&Rates[0], message.data(), message.size());
-  socket->recv(&message);
-  CardID=*(reinterpret_cast<int*>(message.data()));
-  
-  //std::cout<<"CardID = "<<CardID<<std::endl;
-socket->recv(&message);
-  channels=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  buffersize=*(reinterpret_cast<int*>(message.data()));
-  buffersize*=4; 
- //std::cout<<"buffersize = "<<buffersize<<std::endl;
-  socket->recv(&message);
-  eventsize=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  Data=new uint16_t[message.size()/(sizeof(uint16_t))];
-  //std::cout<<"data.size = "<<message.size()<<std::endl;
-  //std::cout<<"data.size2fb = "<<message.size()/(sizeof(uint16_t))<<std::endl;
-  //  Data.resize(message.size()/(sizeof(short)));
-  fullbuffsize=message.size()/(sizeof(uint16_t));
-  //std::cout<<"fb = "<<fullbuffsize<<std::endl;
-  std::memcpy(&Data[0], message.data(), message.size());
-  
-  /*
-  for(int i=0;i<fullbuffsize;i++){
+      SequenceID=*(reinterpret_cast<int*>(message.data()));
+      if(socket->recv(&message)){
+	//std::cout<<"d4"<<std::endl;
 
-    if(Data[i]==0)std::cout<<" data.at("<<i<<")="<<Data[i];
+	StartTimeSec=*(reinterpret_cast<int*>(message.data()));
+	if(socket->recv(&message)){ 
+	  //std::cout<<"d5"<<std::endl;
+
+	  StartTimeNSec=*(reinterpret_cast<int*>(message.data()));
+	  if(socket->recv(&message)){
+	    //std::cout<<"d6"<<std::endl;
+
+	    StartCount=*(reinterpret_cast<uint64_t*>(message.data()));
+
+	    if(socket->recv(&message)){
+	      //std::cout<<"d7"<<std::endl;
+
+	      //std::cout<<"triggercounts rec size check = "<<message.size()/(sizeof(long))<<std::endl;
+	      triggerCounts=new uint64_t[message.size()/(sizeof(long))];
+	      //triggerCounts.resize(message.size()/(sizeof(long)));
+	      triggerNumber=message.size()/(sizeof(long));
+	      std::memcpy(&triggerCounts[0], message.data(), message.size());
+	      
+	      if(socket->recv(&message)){
+		//std::cout<<"d8"<<std::endl;
+
+		Rates=new uint32_t[message.size()/(sizeof(uint32_t))];
+		// Rates.resize(message.size()/(sizeof(int)));
+		std::memcpy(&Rates[0], message.data(), message.size());
+		
+		if(socket->recv(&message)){
+		  //std::cout<<"d9"<<std::endl;
+
+		  CardID=*(reinterpret_cast<int*>(message.data()));
+		  
+		  //std::cout<<"CardID = "<<CardID<<std::endl;
+		  if(socket->recv(&message)){
+		    //std::cout<<"d10"<<std::endl;
+
+		    channels=*(reinterpret_cast<int*>(message.data()));
+		    if(socket->recv(&message)){
+		      //std::cout<<"d11"<<std::endl;
+
+		      buffersize=*(reinterpret_cast<int*>(message.data()));
+		      buffersize*=4; 
+		      //std::cout<<"buffersize = "<<buffersize<<std::endl;
+		      if(socket->recv(&message)){
+			//std::cout<<"d12"<<std::endl;
+
+			eventsize=*(reinterpret_cast<int*>(message.data()));
+			if(socket->recv(&message)){
+			  //std::cout<<"d13"<<std::endl;
+
+			  Data=new uint16_t[message.size()/(sizeof(uint16_t))];
+			  //std::cout<<"data.size = "<<message.size()<<std::endl;
+			  //std::cout<<"data.size2fb = "<<message.size()/(sizeof(uint16_t))<<std::endl;
+			  //  Data.resize(message.size()/(sizeof(short)));
+			  fullbuffsize=message.size()/(sizeof(uint16_t));
+			  //std::cout<<"fb = "<<fullbuffsize<<std::endl;
+			  std::memcpy(&Data[0], message.data(), message.size());
+			  
+			  /*
+			    for(int i=0;i<fullbuffsize;i++){
+			    
+			    if(Data[i]==0)std::cout<<" data.at("<<i<<")="<<Data[i];
+			    }
+			    std::cout<<" data.at("<<85098<<")="<<Data[85098]<<std::endl;
+			  */    
+			  /*
+			    Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);                    
+			    
+			    }
+			    
+			    if(more==0) break;
+			  */
+			  // std::cout<<"d14"<<std::endl;
+
+			}
+			else return false;			    
+		      }
+		      else return false;
+		    }
+		    else return false;
+		  }
+		  else return false;
+		}
+		else return false;
+	      }
+	      else return false;
+	    }
+	    else return false;
+	  }
+	  else return false;
+	}
+	else return false;
+      }
+      else return false;
+    }
+    else return false;
   }
-  std::cout<<" data.at("<<85098<<")="<<Data[85098]<<std::endl;
-  */    
-  /*
-      Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);                    
-          
-}
-                                                        
-    if(more==0) break;
-      */
-
-
+  else return false;
+ 
+  return true; 
 }

@@ -37,6 +37,7 @@ class NetworkReceiveData: public Tool {
   int channels;
   int buffersize;
 
+  int m_verbose;
 
 };
 

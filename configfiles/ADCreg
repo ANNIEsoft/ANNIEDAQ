@@ -1,0 +1,30 @@
+#Control register
+VSN	0	#0-7	Virtual Station Number
+EPS	0	#8	ECL Pedestal Subtraction EPS = 1 subtracts from each ADC pedestal, EPS = 0 no subtraction
+ECE	0	#9	ECL Compression Enable ECE = 1 data compression cycle, ECE = 0 blocks the suppression of data
+EEN	0	#10	ECL ENable EEN = 1 ECL enabled then CAMAC, EEN = 0 ECL disabled CAMAC enabled after a conversation
+CPS	0	#11	CAMAC Pedestal Subtraction CPS = 1 subtracts from each ADC pedestal, CPS = 0 no subtraction
+CCE	0	#12	CAMAC Compression Enable CCE = 1 data compression cycle, CCE = 0 blocks the suppression of data
+CSR	1	#13	CAMAC Sequential Readout CSR = 1 Valid data read sequentially, CSR = 0 Random access readout
+CLE	1	#14	CAMAC Look-at-me Enable CLE = 1 LAM set as data ready, CLE = 0 LAM output inhibited
+OFS	0	#15	Overflow Suppress OFS = 1 suppress overflows in ECE or CCE, OFS = 0 disabled
+
+#StartPed
+#Chan 	Ped
+0	0 #
+1	0 #
+2	0 #
+3	0 #
+4	0 #
+5	0 #
+6	0 #
+7	0 #
+8	0 #
+9	0 #
+10	0 #
+11	0 #
+12	0 #
+13	0 #
+14	0 #
+15	0 #
+#EndPed

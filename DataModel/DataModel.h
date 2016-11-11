@@ -10,6 +10,7 @@
 #include "Store.h"
 #include "Logging.h"
 #include "CardData.h"
+#include "MRDData.h"
 
 #include <zmq.hpp>
 
@@ -47,6 +48,11 @@ class DataModel{
   std::vector<double*> Data;
 
   std::vector<CardData*> carddata; 
+
+  std::string InfoTitle;
+  std::string InfoMessage;
+
+  MRDData MRDdata;
 
  private:
   

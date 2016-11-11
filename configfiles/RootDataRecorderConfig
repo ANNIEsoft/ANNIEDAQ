@@ -1,0 +1,7 @@
+# Dummy config file
+
+#OutputPath /data/output/
+OutputPath ./
+TTreeEventCap 6120
+TFileTTreeCap 1
+MRDEnable 0

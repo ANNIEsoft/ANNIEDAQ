@@ -1,0 +1,17 @@
+#  Trigger config file
+
+verbose 1
+VME_service_name VME_service
+numVME 1
+VME_port 24020
+
+#trigger board variables
+
+TriggerSamples 10000
+TotalSamples 10000
+SyncReadWithBeam 0
+TriggerBeamDelay 0x31D8
+BeamTriggerEnable 0
+ExternalTriggerEnable 0
+DISABLE_TRIGGER_CARD 0
+Soft_Trigger 1
