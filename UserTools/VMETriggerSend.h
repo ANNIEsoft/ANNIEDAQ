@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include <unistd.h>
 
 #include "Tool.h"
 #include "UC500ADCInterface.h"
@@ -28,7 +29,6 @@ class VMETriggerSend: public Tool {
   int Trigger_port;
   int m_crate_num;
   bool m_soft;
-
 
 };
 
