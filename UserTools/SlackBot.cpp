@@ -73,6 +73,8 @@ bool SlackBot::Initialise(std::string configfile, DataModel &data){
 
 
 bool SlackBot::Execute(){
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
 
   return true;
 }

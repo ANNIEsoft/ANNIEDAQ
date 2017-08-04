@@ -8,17 +8,17 @@ VME_port 24020
 
 #trigger board variables
 
-MRDDelay 12360
-TriggerSamples 2500
+MRDDelay 12720
+TriggerSamples 10000
 TotalSamples 10000
-SyncReadWithBeam 0
-#BeamDelay 0x31D8
+#SyncReadWithBeam 0
+#TriggerBeamDelay 0x31D8
 BeamDelay 12360
 BeamTriggerEnable 1
 ExternalTriggerEnable 0
 DISABLE_TRIGGER_CARD 0
 Soft_Trigger 0
-DownsampleMode 2
+DownsampleMode 0
 DownsampleOffset 0
 AdvancedTriggerMode 0
 

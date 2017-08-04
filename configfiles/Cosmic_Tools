@@ -1,0 +1,10 @@
+InputVariables InputVariables configfiles/Cosmic_InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+SlackBot SlackBot NULL
+HVComs HVComs configfiles/HVComsConfig
+Trigger Trigger configfiles/Cosmic_TriggerConfig
+NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
+Logger Logger configfiles/LoggerConfig
+RootDataRecorder RootDataRecorder configfiles/LED_RootDataRecorderConfig
+Monitoring Monitoring configfiles/LED_MonitoringConfig
+MRD MRD configfiles/MRDConfig

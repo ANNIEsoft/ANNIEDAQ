@@ -53,7 +53,8 @@ bool Logger::Initialise(std::string configfile, DataModel &data){
 }
 
 bool Logger::Execute(){
-
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
   return true;
 
 }

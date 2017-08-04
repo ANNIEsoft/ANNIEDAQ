@@ -1,0 +1,3 @@
+# InputVariavles config file
+
+RunType 7 #0=testing 1=LED, 2=Soft, 3=Beam, 4=Cosmic, 5=Calibration, 6=Hefty 7=HeftySource

@@ -7,3 +7,4 @@ NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
 Logger Logger configfiles/LoggerConfig
 RootDataRecorder RootDataRecorder configfiles/LED_RootDataRecorderConfig
 Monitoring Monitoring configfiles/LED_MonitoringConfig
+MRD MRD configfiles/MRDConfig

@@ -93,12 +93,12 @@ bool HVComs::Initialise(std::string configfile, DataModel &data){
     }
     else {
       std::cout<<"akn reply from HV time out"<<std::endl;
-      return false;
+      //return false;
     }
   }
   else {
     std::cout<<"HV time out for sending message"<<std::endl;
-    return false;
+    //    return false;
   }
   
   return true;
@@ -106,6 +106,8 @@ bool HVComs::Initialise(std::string configfile, DataModel &data){
 
 
 bool HVComs::Execute(){
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
 
   return true;
 }

@@ -23,7 +23,7 @@ all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/l
 lib/libStore.so:
 
 	cp $(ToolDAQFrameworkPath)/src/Store/Store.h include/
-	g++ -g -fPIC -shared  -I inlcude $(ToolDAQFrameworkPath)/src/Store/Store.cpp -o lib/libStore.so
+	g++ -g -fPIC -shared  -I include $(ToolDAQFrameworkPath)/src/Store/Store.cpp -o lib/libStore.so
 
 
 include/Tool.h:
@@ -49,15 +49,20 @@ lib/libDataModel.so: lib/libStore.so lib/libLogging.so include/Camac lib/Camac
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
 	cp DataModel/MRDData.h include/
-	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp DataModel/MRDData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
+	cp DataModel/TriggerData.h include/
+	cp DataModel/timestamp.h include/
+	cp DataModel/eventlog.h include/
+	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp DataModel/MRDData.cpp DataModel/TriggerData.cpp DataModel/timestamp.cc DataModel/eventlog.cc -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
+	cp UserTools/Plots/*.h include/
+	cp UserTools/Plots/OriginalPlots.h include/
 	cp $(ToolDAQFrameworkPath)/src/ToolChain/*.h include/
 	cp $(ToolDAQFrameworkPath)/src/ServiceDiscovery/ServiceDiscovery.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp -I include -L lib -lStore -lDataModel -lLogging -lCC -lL3 -lL4 -lm -lxx_usb -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp UserTools/Plots/OriginalPlots.cpp -I include -L lib -lStore -lDataModel -lLogging -lCC -lL3 -lL4 -lm -lxx_usb -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./

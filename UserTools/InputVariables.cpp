@@ -28,12 +28,28 @@ bool InputVariables::Initialise(std::string configfile, DataModel &data){
   m_data->InfoTitle="InputVariables";
   m_variables>>m_data->InfoMessage;
   m_data->GetTTree("RunInformation")->Fill();
-  
+
+  if(configfile!="")m_data->Restart=0;
+
   return true;
 }
 
 
 bool InputVariables::Execute(){
+
+  if(m_data->NumEvents==10000){
+    m_data->NumEvents=10001;
+    m_data->Restart=1;
+    Finalise();
+  }
+
+  else if(m_data->Restart==1){
+    m_data->Restart=2;
+    Initialise("",*m_data);
+  }
+
+  else if(m_data->Restart==2)m_data->Restart=0;
+  
 
   return true;
 }

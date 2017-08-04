@@ -23,9 +23,11 @@ bool MRDRootRecorder::Initialise(std::string configfile, DataModel &data){
 //	file.Write();
 //	file.Close();
 	
+	//std::cout<<"MRD: attempting connect"<<std::endl;
 	sPort = new zmq::socket_t(*(m_data->context), ZMQ_REP);
 	//sPort->connect("inproc://MRDTree");		//final use
 	sPort->connect("ipc:///tmp/0");			//test only
+	//std::cout<<"MRD: connected"<<std::endl;
 
 	std::string Line;
 	std::stringstream ssL;
@@ -145,8 +147,10 @@ bool MRDRootRecorder::Execute()
 	    //	std::cout << "Root : " << std::hex << tree << std::endl;
 	    zmq::message_t message(tmptree.str().length()+1);
 	    snprintf ((char *) message.data(), tmptree.str().length()+1, "%s", tmptree.str().c_str()) ;
+	    //std::cout<<"MRD: sending reply"<<std::endl;
 	    sPort->send(message);
-	    
+	    //std::cout<<"MRD: sent"<<std::endl;
+
 	    tree = new TTree("CCData", "CCData");
 	    
 	    tree->Branch("Trigger", &Trigger, "Trigger/i");

@@ -47,6 +47,8 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
     m_data->Data.push_back(new double[(channels*buffersize)]);
   }
 
+  m_data->trigdata= new TriggerData();
+
   m_data->InfoTitle="NetworkReceiveDataVariables";
   m_variables>>m_data->InfoMessage;
   m_data->GetTTree("RunInformation")->Fill();
@@ -57,64 +59,85 @@ bool NetworkReceiveData::Initialise(std::string configfile, DataModel &data){
 
 
 bool NetworkReceiveData::Execute(){
+  //std::cout<< "in in execute"<<std::endl;
 
- 
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
+  else{ 
 
+    //std::cout<<"before trigger"<<std::endl;
   if(m_data->triggered){
-
+    //std::cout<<"triggered"<<std::endl;
     //boost::progress_timer t;
-
+    
     for (int i=0;i< m_data->carddata.size();i++){
       delete m_data->carddata.at(i);
     }
     m_data->carddata.clear();
     
-
-
+    
+    
     //new
-
-                                                                                
+    
+    
     zmq::message_t message;
-
-    //    std::cout<<"adout to receive"<<std::endl;    
+    
+    //std::cout<<"adout to receive"<<std::endl;    
     if(Receive->recv(&message)){
       //std::cout<<"received"<<std::endl;
-    std::istringstream iss(static_cast<char*>(message.data()));
-    int cards;
-    iss>>cards;
-   
-    //    std::cout<<" d1 "<<cards<<std::endl;
-
-    for(int i=0;i<cards;i++){
-      //std::cout<<" d2"<<std::endl;
-
-      CardData *tmp=new CardData;
-      //std::cout<<" d3 "<<i<<std::endl;
-
-      if(tmp->Receive(Receive)){
-	//std::cout<<" d4 "<<i<<std::endl;
-
-      m_data->carddata.push_back(tmp);
-      //std::cout<<" d5"<<std::endl;
+      std::istringstream iss(static_cast<char*>(message.data()));
+      int cards;
+      iss>>cards;
+      
+      //std::cout<<" d1 "<<cards<<std::endl;
+      
+      for(int i=0;i<cards;i++){
+	//std::cout<<" d2"<<std::endl;
+	
+	CardData *tmp=new CardData;
+	//std::cout<<" d3 "<<i<<std::endl;
+	
+	if(tmp->Receive(Receive)){
+	  //std::cout<<" d4 "<<i<<std::endl;
+	  
+	  m_data->carddata.push_back(tmp);
+	  //std::cout<<" d5"<<std::endl;
+	}
+	else{
+	  Log("ERROR!! CardData Receive fail",0,m_verbose);
+	  return false;
+	}
       }
-      else{
-	Log("ERROR!! CardData Receive fail",0,m_verbose);
-	return false;
-      }
-    }
-    //std::cout<<" d6"<<std::endl;
-
+      //std::cout<<" d6"<<std::endl;
+      
     }
     else{
       Log("ERROR!! Network data receive connection fail/timeout",0,m_verbose);
       return false;                              
       
     }
+    
+    //std::cout<<"making trigdata"<<std::endl;
+    //TriggerData * tmp2= new TriggerData(false);
+    //std::cout<<"attempting to receive trig data"<<std::endl;
+    if(m_data->trigdata->Receive(Receive)){
+      //std::cout<<"event times print out"<<std::endl;
+      for (int i=0;i<m_data->trigdata->EventSize;i++){
+	//std::cout<<m_data->trigdata->EventTimes[i]<<std::endl;
+      }
+      //std::cout<<"received trig data"<<std::endl;
+      //     m_data->trigdata=tmp2;
+      //std::cout<<"trig data coppied to datamodel"<<std::endl;
+    }
+    else{
+      Log("ERROR!! Network trig data receive connection fail/timeout",0,m_verbose);
+    }
+    //std::cout<<"alldone with execute"<<std::endl;
     /*
-    zmq::message_t message;
-    Receive->recv(&message);
-    std::cout<<*reinterpret_cast<int*>(message.data())<<std::endl;
-    m_data->carddata.at(0)->LastSync=*(reinterpret_cast<int*>(message.data()));
+      zmq::message_t message;
+      Receive->recv(&message);
+      std::cout<<*reinterpret_cast<int*>(message.data())<<std::endl;
+      m_data->carddata.at(0)->LastSync=*(reinterpret_cast<int*>(message.data()));
     //std::istringstream iss(static_cast<char*>(message.data()));
     //std::cout<<"memcopy"<<std::endl;
     //std::memcpy( (void*) &(m_data->carddata.at(0)->LastSync), message.data(), sizeof  m_data->carddata.at(0)->LastSync);
@@ -246,7 +269,7 @@ bool NetworkReceiveData::Execute(){
 
 
   }
-
+  }
   return true;
 }
 
@@ -273,6 +296,9 @@ bool NetworkReceiveData::Finalise(){
   }
 
   m_data->Data.clear();
+
+  //  delete m_data->trigdata;
+  // m_data->trigdata=0;
 
   return true;
 }

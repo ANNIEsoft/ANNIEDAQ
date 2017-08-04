@@ -1,0 +1,10 @@
+InputVariables InputVariables configfiles/HeftySource_InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+SlackBot SlackBot NULL
+HVComs HVComs configfiles/HVComsConfig
+Trigger Trigger configfiles/HeftySource_TriggerConfig
+NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
+Logger Logger configfiles/LoggerConfig
+RootDataRecorder RootDataRecorder configfiles/HeftySource_RootDataRecorderConfig
+Monitoring Monitoring configfiles/HeftySource_MonitoringConfig
+MRD MRD configfiles/MRDConfig

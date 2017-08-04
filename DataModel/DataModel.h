@@ -11,6 +11,7 @@
 #include "Logging.h"
 #include "CardData.h"
 #include "MRDData.h"
+#include "TriggerData.h"
 
 #include <zmq.hpp>
 
@@ -35,6 +36,7 @@ class DataModel{
   int RunType;
   long NumEvents;
   bool triggered;
+  int Restart;
 
   //Board Data
   std::vector<int> LastSync;
@@ -48,8 +50,9 @@ class DataModel{
   std::vector<double*> Data;
 
   std::vector<CardData*> carddata; 
-
-  std::string InfoTitle;
+  TriggerData *trigdata;
+  
+std::string InfoTitle;
   std::string InfoMessage;
 
   MRDData MRDdata;

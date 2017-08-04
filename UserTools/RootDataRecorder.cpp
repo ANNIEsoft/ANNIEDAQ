@@ -30,7 +30,9 @@ bool RootDataRecorder::Initialise(std::string configfile, DataModel &data){
   //std::cout<< "outfile = "<<OutFile<<std::endl;
   
   Isend = new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
+  //std::cout<<"attempting bind"<<std::endl;
   Isend->bind("inproc://RootWriter");
+  //std::cout<<"bound"<<std::endl;
   
   args=new rootw_thread_args(OutFile, filename, m_data->context,m_TFileTTreeCap, m_filepart,m_data->GetTTree("RunInformation"),MRDEnable);
   //  //pthread_create (&thread[0], NULL, RootDataRecorder::FlowManager, args);
@@ -99,6 +101,9 @@ bool RootDataRecorder::Initialise(std::string configfile, DataModel &data){
 
 
 bool RootDataRecorder::Execute(){
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
+  else{
   //std::cout<<"Debug 1 i="<<m_data->NumEvents<<std::endl;
   if(m_data->triggered){
 
@@ -126,7 +131,22 @@ bool RootDataRecorder::Execute(){
     zmq::message_t message(TTreepointer.str().length()+1);
     snprintf ((char *) message.data(), TTreepointer.str().length()+1 , "%s" ,TTreepointer.str().c_str()) ;
     Isend->send(message);
-    
+
+    //m_data->trigdata->tree->GetEntry(0);
+    //std::cout<<"testing event size = "<<m_data->trigdata->EventSize<<std::endl;
+
+    std::stringstream TTreepointer2;
+    TTreepointer2<<"TTree "<<m_data->trigdata->tree;
+
+    //std::cout<<"sending trig tree pointer "<<TTreepointer2.str()<<std::endl;
+    zmq::message_t message2(TTreepointer2.str().length()+1);
+    snprintf ((char *) message2.data(), TTreepointer2.str().length()+1 , "%s" ,TTreepointer2.str().c_str()) ;
+    Isend->send(message2);
+
+    //delete m_data->trigdata;
+    //m_data->trigdata=0; 
+    m_data->trigdata->Init();    
+
     //std::cout<<"sent "<<std::endl;
     //    pthread_create (&thread[0], NULL, RootDataRecorder::WriteOut, args
     //std::cout<<"Debug 5"<<std::endl;
@@ -230,10 +250,13 @@ bool RootDataRecorder::Execute(){
   
   //std::cout<<"Debug 20"<<std::endl;
   
+  ///////////////////////trigger data////////////////
   
-  
-  }
+  //std::cout<<"Filling tree event size = "<<m_data->trigdata->EventSize<<std::endl;
+  m_data->trigdata->Fill();
 
+  }
+  }
   return true;
 }
 
@@ -244,7 +267,7 @@ bool RootDataRecorder::Finalise(){
 
   std::string send="Quit 0x00";
   zmq::message_t message(send.length()+1);
-  //   std::cout<<"sending "<<send<<std::endl;
+  //std::cout<<"sending "<<send<<std::endl;
 
   snprintf ((char *) message.data(), send.length()+1 , "%s" ,send.c_str()) ;
   Isend->send(message);
@@ -267,6 +290,9 @@ bool RootDataRecorder::Finalise(){
   tree=m_data->GetTTree("RunInformation");
   tree->Write();
 
+  //std::cout<<"starting write of trigtree"<<std::endl;
+  m_data->trigdata->Write();
+
   //std::cout<<"written main trees "<<send<<std::endl;
   //////////////////////////////////MRD Tree/////////////////////////////////
   if (MRDEnable){
@@ -283,11 +309,11 @@ bool RootDataRecorder::Finalise(){
     zmq::message_t msg(tmp.str().length()+1);
     TTree *mrdtree;
     //TTree *mrdtreeorig;
-    //std::cout<<"sending mrd"<<send<<std::endl;
+    //std::cout<<"sending mrd "<<tmp.str()<<std::endl;
     snprintf ((char *) msg.data(), tmp.str().length()+1, "%s", tmp.str().c_str());
     if (MRD.send(msg)){
       zmq::message_t txt;
-      //std::cout<<"sent mrd "<<send<<std::endl;
+     //std::cout<<"sent mrd "<<send<<std::endl;
       if (MRD.recv(&txt)){
 	//std::cout<<"received mrd "<<send<<std::endl;
 	std::istringstream iss(static_cast<char*>(txt.data()));
@@ -298,7 +324,7 @@ bool RootDataRecorder::Finalise(){
 	
 	
 	if (arg1 == "TTree"){
-	  //std::cout<<"in tree assignement "<<std::endl;
+	 //std::cout<<"in tree assignement "<<std::endl;
 	  //	  mrdtreeorig=reinterpret_cast<TTree *>(arg2);
 	  //	std::cout<<"cloning "<<std::endl;
 	  // mrdtree=mrdtreeorig->CloneTree();
@@ -320,7 +346,7 @@ bool RootDataRecorder::Finalise(){
   file.Close();
   // std::stringstream compcommand;
   //compcommand<<"sleep 5 && tar -cf "<<tmp.str()<<".tar -C /data/output/ "<<"DataR"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber<<"p"<<m_filepart<<".root &";//" && rm "<<tmp.str()<<" &"; 
-  //std::cout<<compcommand.str()<<std::endl;
+  ////std::cout<<compcommand.str()<<std::endl;
    
   //  system("sleep 10  &");
    // sleep(5);
@@ -329,6 +355,9 @@ bool RootDataRecorder::Finalise(){
   m_data->DeleteTTree("PMTData");
   m_data->DeleteTTree("RunInformation");
   tree=0;
+
+  delete m_data->trigdata;
+  m_data->trigdata=0;
 
   //test remove //delete mrdtree;
   // test removemrdtree=0;
@@ -394,7 +423,9 @@ void* RootDataRecorder::RootWriter(void* arg){
   rootw_thread_args* args= static_cast<rootw_thread_args*>(arg);
  
   zmq::socket_t Ireceive (*(args->context), ZMQ_PULL);
-  Ireceive.connect("inproc://RootWriter");
+  //std::cout<<"attempting connect"<<std::endl; 
+ Ireceive.connect("inproc://RootWriter");
+ //std::cout<<"connected"<<std::endl;
 
   bool running=true;
   *(args->filepart)=0;
@@ -404,10 +435,12 @@ void* RootDataRecorder::RootWriter(void* arg){
   zmq::socket_t MRD(*(args->context), ZMQ_REQ);
 
   if (args->MRDEnable){
-    // zmq::socket_t MRD(*(args->context), ZMQ_REQ);
+    //std::cout<< "attempting mrd bind"<<std::endl;
+    //zmq::socket_t MRD(*(args->context), ZMQ_REQ);
     //MRD.bind("inproc://MRDTree");  
-    MRD.bind("ipc:///tmp/0");
+       MRD.bind("ipc:///tmp/0");
     //Test->bind("ipc:///tmp/0");
+       //std::cout<<"bound"<<std::endl;
      }
 
   ////////////////////////////////////////////////////
@@ -450,10 +483,36 @@ void* RootDataRecorder::RootWriter(void* arg){
       TTree *ri=args->runinformation->CloneTree();
       //TTree *ri=args->runinformation;
       ri->Write();
+      //std::cout<<"saved waterpmt tree"<<std::endl;
+      ////////////////////////////////// trigrddata tree////////////////////
+
+      //std::cout<<"about to receive trig tree"<<std::endl;
+      zmq::message_t comm2;
+      //std::cout<<"T  Debug 2"<<std::endl;
+      Ireceive.recv(&comm2);
+      //std::cout<<"got trigtree message"<<std::endl;
+
+      std::istringstream iss2(static_cast<char*>(comm2.data()));
+      std::string arg12="";
+      void* arg22;
+      //lon arg2="";
      
+      //    TTree *treeorig;
+      iss2>>arg12>>std::hex>>arg22;
+      TTree *test;
+      test=static_cast<TTree *>(arg22);
+      int es;
+      //test->SetBranchAddress("EventSize",&es);
+      //test->GetEntry(0);
+      //std::cout<<"EventSize = "<<es;
+      //std::cout<<"about to thread write trig tree "<<test<<std::endl;   
+      test->Write();
+      //std::cout<<"tread wrote"<<std::endl;
+      //////////////////////////////////////
+    
       ///////////////////////////////MRD TTree Receive/////////////////////////////
       if(args->MRDEnable){
-	///	std::cout<<"debug mrd in"<<std::endl;	
+	//std::cout<<"debug mrd in"<<std::endl;	
 	tmp.str("");
 	tmp << "Gimme";
 	zmq::message_t msg(tmp.str().length()+1);
@@ -493,7 +552,10 @@ void* RootDataRecorder::RootWriter(void* arg){
       file.Write();
       //std::cout<<"T Debug 6"<<std::endl;
       file.Close();
-      
+      //std::cout<<"T  Debug 7"<<std::endl;
+      //delete test;
+      // test=0;
+      //std::cout<<"T  Debug 8"<<std::endl;
       //delete treeorig;
 
       // std::stringstream compcommand;

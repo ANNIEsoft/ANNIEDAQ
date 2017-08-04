@@ -112,10 +112,13 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     if(C.size()==2){
       PSQLSync();
       C.at(1)->disconnect ();
+      delete C.at(1);
+      C.at(1)=0;
     }
 
     C.at(0)->disconnect ();
-
+    delete C.at(0);
+    C.at(0)=0;
     
   }catch (const std::exception &e){
     std::cerr << e.what() << std::endl;
@@ -143,7 +146,8 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
 
 bool Postgress::Execute(){
 
-  
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
 
   return true;
 }
@@ -231,12 +235,14 @@ bool Postgress::Finalise(){
 	N2.commit();
    
 	C.at(1)->disconnect ();
-   
+	delete C.at(1);
+	C.at(1)=0;   
    }
 
 
       C.at(0)->disconnect ();
-      
+      delete C.at(0);
+      C.at(0)=0;
       //}
     
   }catch (const std::exception &e){

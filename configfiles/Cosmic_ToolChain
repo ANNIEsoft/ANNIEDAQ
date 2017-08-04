@@ -1,4 +1,4 @@
-x#ToolChain dynamic setup file 
+#ToolChain dynamic setup file
 
 ##### Runtime Paramiters #####
 verbose 1
@@ -15,12 +15,12 @@ log_port 24010
 ###### Service discovery #####
 service_discovery_address 239.192.1.1
 service_discovery_port 5000
-service_name ANNIE_DAQ_Beam
+service_name ANNIE_DAQ_COSMIC
 service_publish_sec 5
 service_kick_sec 60
 
 ##### Tools To Add #####
-Tools_File configfiles/Beam_Tools
+Tools_File configfiles/Cosmic_Tools
 
 ##### Run Type #####
 Inline 0

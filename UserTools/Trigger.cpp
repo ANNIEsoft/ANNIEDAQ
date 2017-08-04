@@ -188,7 +188,9 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
 
 
 bool Trigger::Execute(){
-
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
+  else {
   //  std::cout<<"d1"<<std::endl;
   //boost::progress_timer t;
 
@@ -232,6 +234,8 @@ bool Trigger::Execute(){
   m_data->triggered=trigger;
   //  std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
   //std::cout<<"d11"<<std::endl;  
+  }
+
 return true;
   
 }

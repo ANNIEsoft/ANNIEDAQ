@@ -5,6 +5,6 @@ HVComs HVComs configfiles/HVComsConfig
 Trigger Trigger configfiles/Beam_TriggerConfig
 NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
 Logger Logger configfiles/LoggerConfig
-RootDaraRecorder RootDataRecorder configfiles/Beam_RootDataRecorderConfig
+RootDataRecorder RootDataRecorder configfiles/Beam_RootDataRecorderConfig
 Monitoring Monitoring configfiles/Beam_MonitoringConfig
 MRD MRD configfiles/MRDConfig

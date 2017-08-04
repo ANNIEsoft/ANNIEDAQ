@@ -32,7 +32,9 @@ bool Monitoring::Initialise(std::string configfile, DataModel &data){
 
 
 bool Monitoring::Execute(){
-
+  if(m_data->Restart==1)Finalise();
+  else if(m_data->Restart==2)Initialise("",*m_data);
+  else{
   if( m_data->triggered){
 
    //std::cout<<"m_data->NumEvents "<<m_data->NumEvents<<std::endl;
@@ -57,7 +59,7 @@ bool Monitoring::Execute(){
     }
     
   }
-  
+  }
   return true;
 }
 
@@ -232,34 +234,43 @@ void* Monitoring::MonitorThread(void* arg){
 	  TH1I freq(tmp.str().c_str(),tmp.str().c_str(),200,200,399);
 
 	
-	  //  std::cout<<"d2"<<std::endl;
+	  std::cout<<"d2 "<<tmp.str()<<std::endl;
 
-	  //std::cout<<"d9"<<std::endl;
+	  printf("\nd9 cardID=%d channel=%d\n",carddata->CardID,j);
 
 	
 	  ///// Calculate sum for event dispkay and fill freq plots /////////
-
+	  printf("\ni=%d j=%d carddata->buffersize=%d\n",i,j,carddata->buffersize);
 
 	for(int k=0;k<carddata->buffersize;k++){
-	  //std::cout<<"d10"<<std::endl;
+	  //	  std::cout<<"d10"<<std::endl;
 
-	  //	  std::cout<<"i="<<i<<" j="<<j<<std::endl;
+	  //  std::cout<<"i="<<i<<" j="<<j<<std::endl;
 	  //std::cout<<"d2.5 "<<(i*4)+j<<" feqplot.size = "<<freqplots.size()<<std::endl;
 	  if(carddata->Data[(j*carddata->buffersize)+k]>pedpars[carddata->CardID].at(j).at(0)+(pedpars[carddata->CardID].at(j).at(1)*5))sum+=carddata->Data[(j*carddata->buffersize)+k];  
 	  freq.Fill(carddata->Data[(j*carddata->buffersize)+k]);
-
+	  if (carddata->CardID==21 && j==2) printf("k=%d value=%f \n",k,carddata->Data[(j*carddata->buffersize)+k]);
 	  //temporal.SetBinContent(k,carddata->Data[(j*carddata->buffersize)+k]);	      
 	}
+	/*
+	if (carddata->CardID==21 && j==2){
+	  for(int ee=0;ee<100;ee++){ 
+	    printf("ee=%d value=%f \n",ee,freq.GetBinContent(ee));
+	  }
+	}
+	*/
 
+	printf("\n d10b entries=%f \n",freq.GetEntries());
 	freqplots.push_back(freq);
 	//////// find pedistall fill ped temporals//////////
 	freq.Fit("gaus");
 	TF1 *gaus = freq.GetFunction("gaus");
+	printf("\n p1=%f p2=%f \n",gaus->GetParameter(1),gaus->GetParameter(1));
         pedpars[carddata->CardID].at(j).at(0)=(gaus->GetParameter(1));
         pedpars[carddata->CardID].at(j).at(1)=(gaus->GetParameter(2));
 	gaus->SetLineColor(j+1);
        
-	//std::cout<<"d11"<<std::endl;
+	printf("\nd11\n");
 
 	for(int bin=99;bin>0;bin--){
 	  PedTime[carddata->CardID].at(j).SetBinContent(bin,PedTime[carddata->CardID].at(j).GetBinContent(bin-1));
