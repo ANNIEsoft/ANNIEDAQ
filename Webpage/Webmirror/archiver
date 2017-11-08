@@ -1,0 +1,14 @@
+#!/bin/sh
+
+LOG=/data/logs/archiver/archiver.log
+PAPR=/annie/data/web/daq/
+TARG=annieraw@anniegpvm02
+
+
+PRINC=`cat  /home/annie/.kerberos/annieraw.principal`
+KEYTAB=/home/annie/.kerberos/annieraw.keytab
+#export KRB5CCNAME=/home/annie/.kerberos/krb5cc_archiver
+
+kinit -k -t ${KEYTAB} ${PRINC}
+scp -r -c blowfish -q /home/annie/ANNIEDAQ/Webpage/Webmirror/*  ${TARG}:${PAPR}/ 
+

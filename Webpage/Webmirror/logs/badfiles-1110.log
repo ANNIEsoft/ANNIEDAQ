@@ -1,0 +1,336 @@
+
+
+Thu Nov 10 12:57:47 CST 2016
+RAWDataR105S3p4.root
+RAWDataR105S3p4.root
+-rw-r--r-- 1 annie annie 1962240405 Jun 22 14:47 /data/archive/RAWDataR105S3p4.root
+-rw-rw-r-- 1 annie annie 0 Jun 22 14:47 /data/archiver/done/RAWDataR105S3p4.root
+-rw-r--r-- 1 annie annie 33 Jul 21 04:27 /data/archiver/stored/RAWDataR105S3p4.root
+archived Thu Jul 21 00:36:02 CDT 2016 RAWDataR105S3p4.root 
+/data/archive   md5 594300a770c8c72172751850414ef612
+daq arch  log   md5 594300a770c8c72172751850414ef612
+fts-dd    log   md5 4314eb74b1d529e1b7cf96e89170380b
+pnfs pers file  md5 4314eb74b1d529e1b7cf96e89170380b
+pnfs raw  file  md5 4314eb74b1d529e1b7cf96e89170380b
+-rw-r--r-- 1 annieraw annie 1962240405 Jul 21 00:39 /pnfs/annie/persistent/raw/RAWDataR105S3p4.root
+-rw-r--r-- 1 annieraw annie 1962240405 Jul 21 04:26 /pnfs/annie/raw/RAWDataR105S3p4.root
+fts-dd log     ecrc 1841531683
+pnfs pers file ecrc 1841531683
+pnfs raw  file ecrc 1841531683
+pnfs raw  tape ecrc 1841531683
+
+
+Thu Nov 10 12:58:20 CST 2016
+RAWDataR106S0p13.root
+RAWDataR106S0p13.root
+-rw-r--r-- 1 annie annie 1962240468 Jun 22 20:49 /data/archive/RAWDataR106S0p13.root
+-rw-rw-r-- 1 annie annie 0 Jun 22 20:49 /data/archiver/done/RAWDataR106S0p13.root
+-rw-r--r-- 1 annie annie 33 Jul 21 04:34 /data/archiver/stored/RAWDataR106S0p13.root
+archived Thu Jul 21 00:44:39 CDT 2016 RAWDataR106S0p13.root 
+/data/archive   md5 f9dbd7fba123c0f2f8de606fc5609a48
+daq arch  log   md5 f9dbd7fba123c0f2f8de606fc5609a48
+fts-dd    log   md5 23a7f861c0639d1078e06a897dcea54d
+pnfs pers file  md5 23a7f861c0639d1078e06a897dcea54d
+pnfs raw  file  md5 23a7f861c0639d1078e06a897dcea54d
+-rw-r--r-- 1 annieraw annie 1962240468 Jul 21 00:48 /pnfs/annie/persistent/raw/RAWDataR106S0p13.root
+-rw-r--r-- 1 annieraw annie 1962240468 Jul 21 04:34 /pnfs/annie/raw/RAWDataR106S0p13.root
+fts-dd log     ecrc 10518166
+pnfs pers file ecrc 10518166
+pnfs raw  file ecrc 10518166
+pnfs raw  tape ecrc 10518166
+
+
+Thu Nov 10 13:01:12 CST 2016
+RAWDataR106S1p17.root
+RAWDataR106S1p17.root
+-rw-r--r-- 1 annie annie 1962240468 Jun 23 08:13 /data/archive/RAWDataR106S1p17.root
+-rw-rw-r-- 1 annie annie 0 Jun 23 08:13 /data/archiver/done/RAWDataR106S1p17.root
+-rw-r--r-- 1 annie annie 33 Jul 22 01:30 /data/archiver/stored/RAWDataR106S1p17.root
+archived Thu Jul 21 03:27:07 CDT 2016 RAWDataR106S1p17.root 
+/data/archive   md5 c444020586a4789ab383e0351d485ea1
+daq arch  log   md5 c444020586a4789ab383e0351d485ea1
+fts-dd    log   md5 2bdaf2533edddec63e978b914f6478e6
+pnfs pers file  md5 2bdaf2533edddec63e978b914f6478e6
+pnfs raw  file  md5 2bdaf2533edddec63e978b914f6478e6
+-rw-r--r-- 1 annieraw annie 1962240468 Jul 21 03:29 /pnfs/annie/persistent/raw/RAWDataR106S1p17.root
+-rw-r--r-- 1 annieraw annie 1962240468 Jul 22 01:30 /pnfs/annie/raw/RAWDataR106S1p17.root
+fts-dd log     ecrc 1138912490
+pnfs pers file ecrc 1138912490
+pnfs raw  file ecrc 1138912490
+pnfs raw  tape ecrc 1138912490
+
+
+Thu Nov 10 13:02:11 CST 2016
+RAWDataR161S3p9.root
+RAWDataR161S3p9.root
+-rw-r--r-- 1 annie annie 1962191196 Jul 16 22:12 /data/archive/RAWDataR161S3p9.root
+-rw-rw-r-- 1 annie annie 0 Jul 16 22:12 /data/archiver/done/RAWDataR161S3p9.root
+-rw-r--r-- 1 annie annie 33 Aug 11 19:08 /data/archiver/stored/RAWDataR161S3p9.root
+archived Tue Jul 26 21:58:38 CDT 2016 RAWDataR161S3p9.root 
+/data/archive   md5 45c39bbe8df77f0afbff82c8713205d4
+daq arch  log   md5 45c39bbe8df77f0afbff82c8713205d4
+fts-dd    log   md5 c20781921938a491082dbcd6a0f6223e
+pnfs pers file  md5 c20781921938a491082dbcd6a0f6223e
+pnfs raw  file  md5 c20781921938a491082dbcd6a0f6223e
+-rw-r--r-- 1 annieraw annie 1962191196 Jul 26 22:01 /pnfs/annie/persistent/raw/RAWDataR161S3p9.root
+-rw-r--r-- 1 annieraw annie 1962191196 Jul 27 09:16 /pnfs/annie/raw/RAWDataR161S3p9.root
+fts-dd log     ecrc 2431317716
+pnfs pers file ecrc 2431317716
+pnfs raw  file ecrc 2431317716
+pnfs raw  tape ecrc 2431317716
+
+
+Thu Nov 10 13:04:13 CST 2016
+V2DataR100S0p10T1Jun_14_15:17.root
+V2DataR100S0p10T1Jun_14_1517.root
+-rw-r--r-- 1 annie annie 782779358 Jul 19 08:20 /data/archive/V2DataR100S0p10T1Jun_14_15:17.root
+-rw-rw-r-- 1 annie annie 0 Jul 19 07:20 /data/archiver/done/V2DataR100S0p10T1Jun_14_15:17.root
+archived Tue Jul 19 07:43:10 CDT 2016 V2DataR100S0p10T1Jun_14_1517.root 
+/data/archive   md5 4e6ed2a4ebb390c1c7475c3ec2290c54
+daq arch  log   md5 97ec9c935c427d922bf1c45e4f4a8880
+fts-dd    log   md5 97ec9c935c427d922bf1c45e4f4a8880
+pnfs pers file  md5 97ec9c935c427d922bf1c45e4f4a8880
+pnfs raw  file  md5 97ec9c935c427d922bf1c45e4f4a8880
+-rw-r--r-- 1 annieraw annie 782779358 Jul 19 07:43 /pnfs/annie/persistent/raw/V2DataR100S0p10T1Jun_14_1517.root
+-rw-r--r-- 1 annieraw annie 782779358 Jul 20 03:06 /pnfs/annie/raw/V2DataR100S0p10T1Jun_14_1517.root
+fts-dd log     ecrc 3247127590
+pnfs pers file ecrc 3247127590
+pnfs raw  file ecrc 3247127590
+pnfs raw  tape ecrc 3247127590
+
+
+Thu Nov 10 13:05:12 CST 2016
+V2DataR100S0p11T1Jun_14_15:19.root
+V2DataR100S0p11T1Jun_14_1519.root
+-rw-r--r-- 1 annie annie 364844153 Jul 19 08:22 /data/archive/V2DataR100S0p11T1Jun_14_15:19.root
+-rw-rw-r-- 1 annie annie 0 Jul 19 07:22 /data/archiver/done/V2DataR100S0p11T1Jun_14_15:19.root
+archived Tue Jul 19 07:43:33 CDT 2016 V2DataR100S0p11T1Jun_14_1519.root 
+/data/archive   md5 5ca047da134e8fc2549302d0eca450b9
+daq arch  log   md5 324a93ecd320c5c9c9f8f50639eb7d6d
+fts-dd    log   md5 324a93ecd320c5c9c9f8f50639eb7d6d
+pnfs pers file  md5 324a93ecd320c5c9c9f8f50639eb7d6d
+pnfs raw  file  md5 324a93ecd320c5c9c9f8f50639eb7d6d
+-rw-r--r-- 1 annieraw annie 364844153 Jul 19 07:43 /pnfs/annie/persistent/raw/V2DataR100S0p11T1Jun_14_1519.root
+-rw-r--r-- 1 annieraw annie 364844153 Jul 20 03:06 /pnfs/annie/raw/V2DataR100S0p11T1Jun_14_1519.root
+fts-dd log     ecrc 2076919725
+pnfs pers file ecrc 2076919725
+pnfs raw  file ecrc 2076919725
+pnfs raw  tape ecrc 2076919725
+
+
+Thu Nov 10 13:05:42 CST 2016
+V2DataR100S0p1T1Jun_14_14:22.root
+V2DataR100S0p1T1Jun_14_1422.root
+-rw-r--r-- 1 annie annie 781404766 Jul 19 08:27 /data/archive/V2DataR100S0p1T1Jun_14_14:22.root
+-rw-rw-r-- 1 annie annie 0 Jul 19 07:27 /data/archiver/done/V2DataR100S0p1T1Jun_14_14:22.root
+archived Tue Jul 19 07:43:44 CDT 2016 V2DataR100S0p1T1Jun_14_1422.root 
+/data/archive   md5 15daf455c98bcd29e0d75ef04da23177
+daq arch  log   md5 2ccc71e8534cd04c2724aa179922dc6c
+fts-dd    log   md5 2ccc71e8534cd04c2724aa179922dc6c
+pnfs pers file  md5 2ccc71e8534cd04c2724aa179922dc6c
+pnfs raw  file  md5 2ccc71e8534cd04c2724aa179922dc6c
+-rw-r--r-- 1 annieraw annie 781404766 Jul 19 07:44 /pnfs/annie/persistent/raw/V2DataR100S0p1T1Jun_14_1422.root
+-rw-r--r-- 1 annieraw annie 781404766 Jul 20 03:06 /pnfs/annie/raw/V2DataR100S0p1T1Jun_14_1422.root
+fts-dd log     ecrc 1477778330
+pnfs pers file ecrc 1477778330
+pnfs raw  file ecrc 1477778330
+pnfs raw  tape ecrc 1477778330
+
+
+Thu Nov 10 13:07:30 CST 2016
+V2DataR100S0p2T1Jun_14_14:27.root
+V2DataR100S0p2T1Jun_14_1427.root
+-rw-r--r-- 1 annie annie 781378819 Jul 19 08:32 /data/archive/V2DataR100S0p2T1Jun_14_14:27.root
+-rw-rw-r-- 1 annie annie 0 Jul 19 07:32 /data/archiver/done/V2DataR100S0p2T1Jun_14_14:27.root
+archived Tue Jul 19 07:44:06 CDT 2016 V2DataR100S0p2T1Jun_14_1427.root 
+/data/archive   md5 bae9d3148550fe2a1d430257427f123e
+daq arch  log   md5 ff5e716190f2bf757a58adeac5a1a2dc
+fts-dd    log   md5 ff5e716190f2bf757a58adeac5a1a2dc
+pnfs pers file  md5 ff5e716190f2bf757a58adeac5a1a2dc
+pnfs raw  file  md5 ff5e716190f2bf757a58adeac5a1a2dc
+-rw-r--r-- 1 annieraw annie 781378819 Jul 19 07:44 /pnfs/annie/persistent/raw/V2DataR100S0p2T1Jun_14_1427.root
+-rw-r--r-- 1 annieraw annie 781378819 Jul 20 03:06 /pnfs/annie/raw/V2DataR100S0p2T1Jun_14_1427.root
+fts-dd log     ecrc 923802818
+pnfs pers file ecrc 923802818
+pnfs raw  file ecrc 923802818
+pnfs raw  tape ecrc 923802818
+
+
+Thu Nov 10 13:08:37 CST 2016
+RAWDataR197S0p11.root
+RAWDataR197S0p11.root
+-rw-r--r-- 1 annie annie 1962194199 Jul 25 03:49 /data/archive/RAWDataR197S0p11.root
+-rw-rw-r-- 1 annie annie 0 Jul 25 03:49 /data/archiver/done/RAWDataR197S0p11.root
+-rw-r--r-- 1 annie annie 33 Aug 12 02:10 /data/archiver/stored/RAWDataR197S0p11.root
+archived Thu Jul 28 16:32:23 CDT 2016 RAWDataR197S0p11.root 
+/data/archive   md5 dd7a47cf8f311d1bf19d645c86edfe4a
+daq arch  log   md5 dd7a47cf8f311d1bf19d645c86edfe4a
+fts-dd    log   md5 b57d39f45d5e790056ccd652bfcc5a08
+pnfs pers file  md5 b57d39f45d5e790056ccd652bfcc5a08
+pnfs raw  file  md5 b57d39f45d5e790056ccd652bfcc5a08
+-rw-r--r-- 1 annieraw annie 1228673024 Jul 28 16:35 /pnfs/annie/persistent/raw/RAWDataR197S0p11.root
+-rw-r--r-- 1 annieraw annie 1228673024 Jul 29 03:02 /pnfs/annie/raw/RAWDataR197S0p11.root
+fts-dd log     ecrc 768022854
+pnfs pers file ecrc 768022854
+pnfs raw  file ecrc 768022854
+pnfs raw  tape ecrc 768022854
+
+
+Thu Nov 10 13:10:46 CST 2016
+RAWDataR197S0p13.root
+RAWDataR197S0p13.root
+-rw-r--r-- 1 annie annie 1962194199 Jul 25 04:25 /data/archive/RAWDataR197S0p13.root
+-rw-rw-r-- 1 annie annie 0 Jul 25 04:25 /data/archiver/done/RAWDataR197S0p13.root
+-rw-r--r-- 1 annie annie 33 Aug 12 02:11 /data/archiver/stored/RAWDataR197S0p13.root
+archived Thu Jul 28 16:36:56 CDT 2016 RAWDataR197S0p13.root 
+/data/archive   md5 215462b77b686e1b554d46c8ca9744ac
+daq arch  log   md5 215462b77b686e1b554d46c8ca9744ac
+fts-dd    log   md5 7838a164269042bf56a82f90ac75e50a
+pnfs pers file  md5 7838a164269042bf56a82f90ac75e50a
+pnfs raw  file  md5 7838a164269042bf56a82f90ac75e50a
+-rw-r--r-- 1 annieraw annie 1962194199 Jul 28 16:39 /pnfs/annie/persistent/raw/RAWDataR197S0p13.root
+-rw-r--r-- 1 annieraw annie 1962194199 Jul 29 03:03 /pnfs/annie/raw/RAWDataR197S0p13.root
+fts-dd log     ecrc 1336842273
+pnfs pers file ecrc 1336842273
+pnfs raw  file ecrc 1336842273
+pnfs raw  tape ecrc 1336842273
+
+
+Thu Nov 10 13:15:19 CST 2016
+RAWDataR204S1p1.root
+RAWDataR204S1p1.root
+-rw-r--r-- 1 annie annie 1962194164 Jul 28 08:45 /data/archive/RAWDataR204S1p1.root
+-rw-rw-r-- 1 annie annie 0 Jul 28 08:45 /data/archiver/done/RAWDataR204S1p1.root
+-rw-r--r-- 1 annie annie 33 Jul 30 02:37 /data/archiver/stored/RAWDataR204S1p1.root
+archived Fri Jul 29 12:56:49 CDT 2016 RAWDataR204S1p1.root 
+/data/archive   md5 f054986d2cbef9fdf7bab3cf68e8d7bd
+daq arch  log   md5 f054986d2cbef9fdf7bab3cf68e8d7bd
+fts-dd    log   md5 b0240025fdaecb96b6d9d40ce22b0503
+pnfs pers file  md5 b0240025fdaecb96b6d9d40ce22b0503
+pnfs raw  file  md5 b0240025fdaecb96b6d9d40ce22b0503
+-rw-r--r-- 1 annieraw annie 1962194164 Jul 29 12:59 /pnfs/annie/persistent/raw/RAWDataR204S1p1.root
+-rw-r--r-- 1 annieraw annie 1962194164 Jul 30 02:37 /pnfs/annie/raw/RAWDataR204S1p1.root
+fts-dd log     ecrc 3078306984
+pnfs pers file ecrc 3078306984
+pnfs raw  file ecrc 3078306984
+pnfs raw  tape ecrc 3078306984
+
+
+Thu Nov 10 13:21:45 CST 2016
+RAWDataR58S140330367786056p0.root
+RAWDataR58S140330367786056p0.root
+-rw-r--r-- 1 annie annie 450 Aug  8 05:40 /data/archive/RAWDataR58S140330367786056p0.root
+-rw-r--r-- 1 annie annie 0 Aug  8 05:39 /data/archiver/done/RAWDataR58S140330367786056p0.root
+-rw-r--r-- 1 annie annie 33 Aug  9 01:38 /data/archiver/stored/RAWDataR58S140330367786056p0.root
+archived Mon Aug  8 06:08:25 CDT 2016 RAWDataR58S140330367786056p0.root 
+/data/archive   md5 4a18ba205bdf968695a3fece0ade1587
+daq arch  log   md5 486583f5d5cec02c96a1f414a8d0e12f
+fts-dd    log   md5 486583f5d5cec02c96a1f414a8d0e12f
+pnfs pers file  md5 486583f5d5cec02c96a1f414a8d0e12f
+pnfs raw  file  md5 486583f5d5cec02c96a1f414a8d0e12f
+-rw-r--r-- 1 annieraw annie 450 Aug  8 06:08 /pnfs/annie/persistent/raw/RAWDataR58S140330367786056p0.root
+-rw-r--r-- 1 annieraw annie 450 Aug  9 01:38 /pnfs/annie/raw/RAWDataR58S140330367786056p0.root
+fts-dd log     ecrc 2049532688
+pnfs pers file ecrc 2049532688
+pnfs raw  file ecrc 2049532688
+pnfs raw  tape ecrc 2049532688
+
+
+Thu Nov 10 13:21:46 CST 2016
+RAWDataR58S140330367786056p1.root
+RAWDataR58S140330367786056p1.root
+-rw-r--r-- 1 annie annie 554114866 Aug  8 05:40 /data/archive/RAWDataR58S140330367786056p1.root
+-rw-r--r-- 1 annie annie 0 Aug  8 05:15 /data/archiver/done/RAWDataR58S140330367786056p1.root
+-rw-r--r-- 1 annie annie 33 Aug  9 01:39 /data/archiver/stored/RAWDataR58S140330367786056p1.root
+archived Mon Aug  8 06:08:25 CDT 2016 RAWDataR58S140330367786056p1.root 
+/data/archive   md5 c388233f9cbcd845eda07e872a6c7a9b
+daq arch  log   md5 9029f659259da65bf65f84de58175a49
+fts-dd    log   md5 9029f659259da65bf65f84de58175a49
+pnfs pers file  md5 9029f659259da65bf65f84de58175a49
+pnfs raw  file  md5 9029f659259da65bf65f84de58175a49
+-rw-r--r-- 1 annieraw annie 1965032315 Aug  8 06:09 /pnfs/annie/persistent/raw/RAWDataR58S140330367786056p1.root
+-rw-r--r-- 1 annieraw annie 1965032315 Aug  9 01:38 /pnfs/annie/raw/RAWDataR58S140330367786056p1.root
+fts-dd log     ecrc 922483001
+pnfs pers file ecrc 922483001
+pnfs raw  file ecrc 922483001
+pnfs raw  tape ecrc 922483001
+
+
+Thu Nov 10 13:22:36 CST 2016
+V2DataR58S140330367786056p0T3Aug__8.root
+V2DataR58S140330367786056p0T3Aug__8.root
+-rw-r--r-- 1 annie annie 466 Aug  8 06:24 /data/archive/V2DataR58S140330367786056p0T3Aug__8.root
+-rw-r--r-- 1 annie annie 0 Aug  8 05:40 /data/archiver/done/V2DataR58S140330367786056p0T3Aug__8.root
+-rw-r--r-- 1 annie annie 33 Aug  9 01:53 /data/archiver/stored/V2DataR58S140330367786056p0T3Aug__8.root
+archived Mon Aug  8 06:17:17 CDT 2016 V2DataR58S140330367786056p0T3Aug__8.root 
+/data/archive   md5 58b42aca52c83158ee187d2d48da67d6
+daq arch  log   md5 15a7ffa783851e9fbaa9b0d6d0d4c11a
+fts-dd    log   md5 15a7ffa783851e9fbaa9b0d6d0d4c11a
+pnfs pers file  md5 15a7ffa783851e9fbaa9b0d6d0d4c11a
+pnfs raw  file  md5 15a7ffa783851e9fbaa9b0d6d0d4c11a
+-rw-r--r-- 1 annieraw annie 466 Aug  8 06:17 /pnfs/annie/persistent/raw/V2DataR58S140330367786056p0T3Aug__8.root
+-rw-r--r-- 1 annieraw annie 466 Aug  9 01:53 /pnfs/annie/raw/V2DataR58S140330367786056p0T3Aug__8.root
+fts-dd log     ecrc 911172939
+pnfs pers file ecrc 911172939
+pnfs raw  file ecrc 911172939
+pnfs raw  tape ecrc 911172939
+
+
+Thu Nov 10 13:22:38 CST 2016
+V2DataR58S140330367786056p1T3Aug__8.root
+V2DataR58S140330367786056p1T3Aug__8.root
+-rw-r--r-- 1 annie annie 7759537 Aug  8 06:24 /data/archive/V2DataR58S140330367786056p1T3Aug__8.root
+-rw-r--r-- 1 annie annie 0 Aug  8 05:29 /data/archiver/done/V2DataR58S140330367786056p1T3Aug__8.root
+-rw-r--r-- 1 annie annie 33 Aug  9 01:53 /data/archiver/stored/V2DataR58S140330367786056p1T3Aug__8.root
+archived Mon Aug  8 06:17:18 CDT 2016 V2DataR58S140330367786056p1T3Aug__8.root 
+/data/archive   md5 d4ae090e7756a96d04bafa77d26efb5e
+daq arch  log   md5 c6fa995ffa192347fd5ac9ed7110f1a7
+fts-dd    log   md5 c6fa995ffa192347fd5ac9ed7110f1a7
+pnfs pers file  md5 c6fa995ffa192347fd5ac9ed7110f1a7
+pnfs raw  file  md5 c6fa995ffa192347fd5ac9ed7110f1a7
+-rw-r--r-- 1 annieraw annie 485355654 Aug  8 06:17 /pnfs/annie/persistent/raw/V2DataR58S140330367786056p1T3Aug__8.root
+-rw-r--r-- 1 annieraw annie 485355654 Aug  9 01:53 /pnfs/annie/raw/V2DataR58S140330367786056p1T3Aug__8.root
+fts-dd log     ecrc 2934966510
+pnfs pers file ecrc 2934966510
+pnfs raw  file ecrc 2934966510
+pnfs raw  tape ecrc 2934966510
+
+
+Thu Nov 10 13:24:26 CST 2016
+RAWDataR236S6p87.root
+RAWDataR236S6p87.root
+-rw-r--r-- 1 annie annie 1965002504 Aug 26 02:25 /data/archive/RAWDataR236S6p87.root
+-rw-r--r-- 1 annie annie 0 Aug 26 02:25 /data/archiver/done/RAWDataR236S6p87.root
+-rw-r--r-- 1 annie annie 33 Sep  2 01:25 /data/archiver/stored/RAWDataR236S6p87.root
+archived Fri Aug 26 18:36:53 CDT 2016 RAWDataR236S6p87.root 
+/data/archive   md5 87f6fffa005ef22ee19c468c09d7f15f
+daq arch  log   md5 87f6fffa005ef22ee19c468c09d7f15f
+fts-dd    log   md5 da6c961a326ce611c35a33f9dbd018ec
+pnfs pers file  md5 da6c961a326ce611c35a33f9dbd018ec
+pnfs raw  file  md5 da6c961a326ce611c35a33f9dbd018ec
+-rw-r--r-- 1 annieraw annie 1965002504 Aug 26 18:38 /pnfs/annie/persistent/raw/RAWDataR236S6p87.root
+-rw-r--r-- 1 annieraw annie 1965002504 Sep  2 01:25 /pnfs/annie/raw/RAWDataR236S6p87.root
+fts-dd log     ecrc 1651410375
+pnfs pers file ecrc 1651410375
+pnfs raw  file ecrc 1651410375
+pnfs raw  tape ecrc 1651410375
+
+
+Thu Nov 10 13:27:27 CST 2016
+V2DataR243S33p96T1Sep__7.root
+V2DataR243S33p96T1Sep__7.root
+-rw-r--r-- 1 annie annie 777982719 Sep  8 22:12 /data/archive/V2DataR243S33p96T1Sep__7.root
+-rw-r--r-- 1 annie annie 0 Sep  8 22:12 /data/archiver/done/V2DataR243S33p96T1Sep__7.root
+-rw-r--r-- 1 annie annie 33 Sep  9 05:46 /data/archiver/stored/V2DataR243S33p96T1Sep__7.root
+archived Fri Sep  9 00:17:13 CDT 2016 V2DataR243S33p96T1Sep__7.root 
+/data/archive   md5 526b1a29e6fb30f24e0c092feb111092
+daq arch  log   md5 526b1a29e6fb30f24e0c092feb111092
+fts-dd    log   md5 ef2fa481fe99b48bb46a794d1e014deb
+pnfs pers file  md5 ef2fa481fe99b48bb46a794d1e014deb
+pnfs raw  file  md5 ef2fa481fe99b48bb46a794d1e014deb
+-rw-r--r-- 1 annieraw annie 777982719 Sep  9 00:17 /pnfs/annie/persistent/raw/V2DataR243S33p96T1Sep__7.root
+-rw-r--r-- 1 annieraw annie 777982719 Sep  9 05:47 /pnfs/annie/raw/V2DataR243S33p96T1Sep__7.root
+fts-dd log     ecrc 2398361736
+pnfs pers file ecrc 2398361736
+pnfs raw  file ecrc 2398361736
+pnfs raw  tape ecrc 2398361736

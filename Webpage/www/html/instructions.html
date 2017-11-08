@@ -1,0 +1,142 @@
+
+
+<head>
+ <title>ANNIE DAQ</title>
+
+</head>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+ <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-deep_purple.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="styles.css"> 
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">
+ANNIE DAQ</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+<a class="mdl-navigation__link" href="index.html">Home</a>
+       <a class="mdl-navigation__link" href="/cgi-bin/control.cgi">Control</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/logs.cgi">Logs</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/monitoring.cgi">Monitoring</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/SQL.cgi">SQL</a>
+        <a class="mdl-navigation__link" href="output/">Data</a>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+ <img src="ANNIE-logo.png"  width="90%" height="10%"> 
+    <span class="mdl-layout-title"></span>
+<div class="android-drawer-separator"></div>
+    <nav class="mdl-navigation">
+<span class="mdl-navigation__link" href="index.html">Home</span>
+      <a class="mdl-navigation__link" href="/cgi-bin/control.cgi">Control</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/logs.cgi">Logs</a>
+	<a class="mdl-navigation__link" href="/cgi-bin/monitoring.cgi">Monitoring</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/SQL.cgi">SQL</a>
+	<a class="mdl-navigation__link" href="output/">Data</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+<!-- Your content goes here -->
+
+
+
+
+          <div>
+
+<h1 align=\"center\">Instructions</h1>
+<h3>1. Quick start </h3>
+
+In order to get started with controlling the DAQ you must first understand the topology.
+
+<p><img src="basic diagram.png"  width="80%" height="90%"></p>
+
+<p>
+Each computer or "Node" in the DAQ system has a process called a "Node Daemon" that runs automatically on startup and can be used to control the computer.
+</p><p>
+The Node Daemon can be used to create and destroy programs/processes on each computer needed for the DAQ, as well as other tasks like uploading or changing files, compiling new code and rebooting the node (for a full list send the command "?" to query the available commands).
+</p><p>
+In order to run the DAQ system 3 programs/processes need to be created. One of these programs (called VME_service) is on the VME computer and is responsible for sending trigger infromation, reading out the ADC cards and transmitting that data to the DAQ computer. The other two (ANNIE_DAQ_Main and Logger) exist on the DAQ computer. ANNIE_DAQ_Main is responsible for Receiving the VME trigger signals, ADC data and writing it to disk. Whilst Logger receives output log and error messges from the VME_service and saving them to the webpage.
+</p> <p>
+Therefor in order to run the DAQ each of these processes need to be created on theire respected computer and then started.
+</p><p>
+To do this first we must create the three processes to do this you need to send the command "Create" to the node daemons on each node see below.
+</p><p>
+<b>To the DAQ computer's node Daemon:</b></br>
+1) Send <b>"Create XXX"</b> to create the ANNIE_DAQ_Main process where <b>XXX</b> can be replaced by <b>"Testing" / "LED" / "Soft" / "Beam"</b> for which ever triggering is required</br>
+2) Send <b>"Create Logger"</b> to creat the Logger Process</br>
+</p><p>
+<b>To the VME computer's node Daemon:</b></br>
+1) Send <b>"Create VME"</b> to create the VME_service process</br>
+</p><p>
+Now the processes are created on each computer you should be able to see them in the service list like the node daemon processes.
+These processes can be sent commands too just like the node daemons. These commands can start and stop each program as well as check its status and quit it (send the command "?" to each service to query the available commands).
+</p><p>
+Next we need to start the Logger and VME services. Generally these can be left running all the time and dont need to be stopped or reastarted for eacch run and sub run as they are passive. To Do that we send the following commands.
+</p><p>
+<b>To the Logger service:</b></br>
+1) Send <b>"Start"</b> to start logging</br>
+</p><p>
+<b>To the VME_service:</b></br>
+1) Send <b>"Start"</b> to start the VME_service </br>
+</p><p>
+Data taking can now be stoped, started, paused or unpaused by sending the commands <b>"Start"</b>, <b>"Stop"</b>, <b>"Pause"</b>, <b>"Unpause"</b> respectively to the ANNIE_DAQ_Main service.
+</p><p>
+Note: Each stop and start of the ANNIE_DAQ_Main service will result in a new sub run being started. To start a new run the ANNIE_DAQ_Main process must be stopped, then quit (by sending <b>"Quit"</b>) and then restarted from the DAQ node daemon as before.
+</p><p>
+Fully shutting down the DAQ system can be done by stopping and quitting all three processes using the <b>"Stop"</b> and <b>"Quit"</b> commands.
+</p><p>
+Note: you cannot Quit the Node Daemon processes as they are needed to restart the DAQ processes. They can however be killed in exceptional curcumstances.
+</P> 
+
+ 
+
+
+
+
+
+        </div>
+
+
+
+
+     <footer class="mdl-mega-footer">                                                                                                     
+                                                                                                                                                            
+          <div class="mdl-mega-footer--top-section">                                                                                                        
+            <div class="mdl-mega-footer--right-section">                                                                                                    
+              <a class="mdl-typography--font-light" href="#top">                                                                                            
+                Back to Top                                                                                                                                 
+                <i class="material-icons">expand_less</i>                                                                                                   
+              </a>                                                                                                                                          
+            </div>                                                                                                                                          
+          </div>                                                                                                                                            
+                                                                                                                                                            
+                                                                                                                                                            
+                                                                                                                                                            
+                                                                                                                                                            
+          <div class="mdl-mega-footer--middle-section">                                                                                                     
+            <p class="mdl-typography--font-light">ANNIE Collaboration © 2016 </p>                                                                           
+            <p class="mdl-typography--font-light">Created by Dr. B.Richards (b.richards@qmul.ac.uk)</p>                                                     
+          </div>                                                                                                                                            
+                                                                                                                                                            
+                                                                                                                                                            
+          </footer>   
+
+
+
+</div>
+  </main>
+</div>
+
+</body>

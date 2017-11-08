@@ -1,0 +1,819 @@
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: UUID = da629b9f-9edf-4867-b989-f51e2d66115e
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='InputVariables' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='InputVariables' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='Postgress' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='Postgress' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='SlackBot' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='SlackBot' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='HVComs' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='HVComs' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='Trigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='Trigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='NetworkReceiveData' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='NetworkReceiveData' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='Logger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='Logger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='RootDataRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='RootDataRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='Monitoring' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='Monitoring' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Adding Tool='MRD' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:52:35} [1]: Tool='MRD' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:53:49} [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:53:49} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:00} [1]: [1]: UUID = 10868d07-5132-434d-ad42-650ab9d872dc
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:01} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:03} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Clearing modules and printing the registers
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-03T15:54:01.973169Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"10868d07-5132-434d-ad42-650ab9d872dc"}
+{ANNIE_DAQ_HeftySource:03-10-2017 10:54:04} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:38:39} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:00} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:00} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:00} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:01} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: UUID = 7aff99e4-dcd6-4a05-bdd4-a4e48b9e1f9f
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:13} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:14} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:15} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Clearing modules and printing the registers
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 01:39:16} [1]: [1]: {ANNIE_DAQ_HeftySource:03-10-2017 04:32:55} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:12} [1]: [1]: HV reply timeout
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:16} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:16} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:16} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:17} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: UUID = a92c17eb-9432-4032-80bd-fe93819b900a
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:35} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:36} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:37} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:43} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Clearing modules and printing the registers
+
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 04:33:44} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:23:48} [1]: [3]: {ANNIE_DAQ_HeftySource:03-10-2017 07:24:08} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:08} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:08} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:09} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: UUID = 84a4cd57-e8cc-4a7c-af9d-5dd7dc7ac067
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:26} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:27} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:28} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:34} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:35} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 07:24:36} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-04T00:24:27.608702Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"84a4cd57-e8cc-4a7c-af9d-5dd7dc7ac067"}
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:26} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:44} [1]: [1]: HV reply timeout
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:48} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:48} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:48} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:13:49} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: UUID = 5bc31b67-d6be-4b79-a6a6-d7d30784d501
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:07} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:08} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:09} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:15} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Clearing modules and printing the registers
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:03-10-2017 10:14:16} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-04T03:14:08.049038Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"5bc31b67-d6be-4b79-a6a6-d7d30784d501"}
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:08} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:29} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:29} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:29} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:30} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: UUID = 06721c49-fe3b-4d9b-8d19-e8b50db89e0b
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:41} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:42} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:43} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:49} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:50} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:02:51} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-04T06:02:42.860230Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"06721c49-fe3b-4d9b-8d19-e8b50db89e0b"}
+{ANNIE_DAQ_HeftySource:04-10-2017 03:50:22} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 03:50:44} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:50:44} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:50:44} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:50:45} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: UUID = 484313be-a8f6-4a21-ac03-91ae78b22b79
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:12} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:13} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:14} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Clearing modules and printing the registers
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 03:51:15} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-04T08:51:13.217603Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"484313be-a8f6-4a21-ac03-91ae78b22b79"}
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:02} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:27} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:27} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:27} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:28} [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: UUID = ec9192ef-c853-43c5-b99a-6d24cc216614
+********************************************************
+**** Tool chain created ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Adding Tool='CCTrigger' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Tool='CCTrigger' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Adding Tool='Lecroy[TDC]' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Tool='Lecroy[TDC]' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Adding Tool='MRDRootRecorder' tool chain
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:45} [1]: [1]: Tool='MRDRootRecorder' added successfully
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: ********************************************************
+**** Initialising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: Number of cards: 3
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: d1 configfiles/TDCreg 18
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: c1 open 0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:46} [1]: [1]: 0 device is CC0321
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: 
+
+CC-USB opened. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: c init run
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: d1 configfiles/TDCreg 17
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:47} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: for begin TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: d1 configfiles/TDCreg 14
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: TDC
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: c1 open 1
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+Warning: USB device has already been opened
+
+Common Start programming complete 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: d2 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: for over 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Trigger is in slot 18
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Lecroy 3377 in Common Start
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 0:	73ff
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 1:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 2:	fff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 3:	1ff0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 4:	55
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: Reg 5:	0
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: 
+**** Tool chain initialised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 06:38:48} [1]: [1]: {"msg_id":"1","msg_time":"2017-10-04T11:38:46.127906Z","msg_type":"Command Reply","msg_value":"Starting ToolChain","uuid":"ec9192ef-c853-43c5-b99a-6d24cc216614"}
+{ANNIE_DAQ_HeftySource:04-10-2017 01:19:11} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:19:11} [1]: [1]: Opened database successfully: annie
+{ANNIE_DAQ_HeftySource:04-10-2017 01:20:05} [1]: [1]: ********************************************************
+**** Finalising tools in toolchain ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:20:05} [1]: [1]: 
+
+CC-USB closed. 
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:20:05} [1]: [1]: **** Toolchain Finalised ****
+********************************************************
+
+{ANNIE_DAQ_HeftySource:04-10-2017 01:20:06} [1]: **** Toolchain Finalised ****
+********************************************************
+

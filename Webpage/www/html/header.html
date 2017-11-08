@@ -1,0 +1,52 @@
+
+
+<head>
+ <title>ANNIE DAQ</title>
+
+</head>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.1.2/material.min.js"></script>
+ <link rel="stylesheet" href="https://code.getmdl.io/1.1.2/material.indigo-teal.min.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="styles.css"> 
+<body>
+
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">
+ANNIE DAQ</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+       <a class="mdl-navigation__link" href="/cgi-bin/control.cgi">Control</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/logs.cgi">Logs</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/monitoring.cgi">Monitoring</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/SQL.cgi">SQL</a>
+        <a class="mdl-navigation__link" href="output/">Data</a>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+ <img src="ANNIE-logo.png"  width="90%" height="10%"> 
+    <span class="mdl-layout-title"></span>
+<div class="android-drawer-separator"></div>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/cgi-bin/control.cgi">Control</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/logs.cgi">Logs</a>
+	<a class="mdl-navigation__link" href="/cgi-bin/monitoring.cgi">Monitoring</a>
+        <a class="mdl-navigation__link" href="/cgi-bin/SQL.cgi">SQL</a>
+	<a class="mdl-navigation__link" href="output/">Data</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+<!-- Your content goes here -->
+
+
