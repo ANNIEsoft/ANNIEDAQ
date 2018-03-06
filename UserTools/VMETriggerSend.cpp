@@ -15,20 +15,25 @@ bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
   m_variables.Get("Trigger_port",Trigger_port);
   m_variables.Get("verbose",m_verbose);
   m_variables.Get("Crate_Num",m_crate_num);
+  m_soft=false;
 
   TriggerCom = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
-  int a=12000;
-  TriggerCom->setsockopt(ZMQ_SNDTIMEO, a);
-  TriggerCom->setsockopt(ZMQ_RCVTIMEO, a);
+  //  int a=12000;
+  //TriggerCom->setsockopt(ZMQ_SNDTIMEO, a);
+  //TriggerCom->setsockopt(ZMQ_RCVTIMEO, a);
 
   std::stringstream tmp;
   tmp<<"tcp://*:"<<Trigger_port;  
   TriggerCom->bind(tmp.str().c_str());
 
   m_data->Crate= new UC500ADCInterface(m_crate_num);
-  m_data->Crate->Initialise();
+  m_data->Crate->Initialise(m_variables);
 
-  m_data->Crate->EnableTrigger();
+  m_data->Trigger= new ANNIETriggerInterface(m_crate_num);
+  m_data->Trigger->Initialise(m_variables);
+
+  m_data->Trigger->EnableTrigger();
+
 
   return true;
 }
@@ -38,6 +43,15 @@ bool VMETriggerSend::Execute(){
 
   m_data->triggered=false;
   
+  zmq::pollitem_t in[] = {
+    { *TriggerCom, 0, ZMQ_POLLIN, 0 }
+  };
+
+  zmq::pollitem_t out[] = {
+    { *TriggerCom, 0, ZMQ_POLLOUT, 0 }
+  };
+
+
   zmq::message_t receive;
   if(TriggerCom->recv(&receive,ZMQ_NOBLOCK)){
     std::istringstream iss(static_cast<char*>(receive.data()));
@@ -53,6 +67,16 @@ bool VMETriggerSend::Execute(){
       }
       else {
 	m_data->triggered=false;
+	if(m_soft){
+	  while(!m_data->Crate->Triggered()){  
+	  m_data->Trigger->ForceTriggerNow();
+	  usleep(1000);
+	  }
+	  ret="1";
+	  m_data->triggered=true;	
+	
+	}
+	
 	//usleep(10000);
       }
       
@@ -62,19 +86,78 @@ bool VMETriggerSend::Execute(){
       
       
     }
+    else if(iss.str()=="Initialise"){
+      //  std::cout<<"got initialise"<<std::endl;
+      zmq::poll (&in[0], 1, 5000);
+      
+      if (in[0].revents & ZMQ_POLLIN) {
+	TriggerCom->recv(&receive);
+	//std::cout<<"d1"<<std::endl;
+	std::istringstream iss2(static_cast<char*>(receive.data()));
+	//std::cout<<"d2"<<std::endl;
+	m_variables.JsonPaser(iss2.str());
+	//std::cout<<"d3"<<std::endl;
+	//m_data->Crate->Finalise();
+	//std::cout<<"d4"<<std::endl;
+	//  delete m_data->Crate;
+	// sleep(2);
+	//std::cout<<"d5"<<std::endl;
+	// m_data->Crate= new UC500ADCInterface(m_crate_num);
+	// std::cout<<"d6"<<std::endl;
+	//	std::cout<<"new trigger data"<<std::endl<<std::endl;
+	//std::cout<<"vars before"<<std::endl;
+	//	m_variables.Print();
+	//std::cout<<std::endl;
+	//std::cout<<" crate initialise = "<<
+	bool check=false;
+	int counter=0;
+	while(!check && counter<20){
+	  check=true;
+	  check*=m_data->Crate->Initialise(m_variables);
+//<<std::endl;
+	//std::cout<<"trigger initialise = "<<
+	  check*=m_data->Trigger->Initialise(m_variables);
+	  counter++;
+	}
 
-    else ret="ERROR unknown message";
-   
-    zmq::message_t message(ret.length()+1);
-    snprintf ((char *) message.data(), ret.length()+1 , "%s" ,ret.c_str() ) ;
-    if(!( TriggerCom->send(message))){
-      
-      Log("Error could not return trigger status",0,m_verbose);
-      return false;
-      
+	if(!check){
+	  std::cout<<"failed to initialise trigger or adc"<<std::endl;
+	  return false;
+	}
+//<<std::endl;
+	//std::cout<<"d7"<<std::endl;
+	//std::cout<<"vars after"<<std::endl;
+	//m_variables.Print();
+	//	std::cout<<std::endl;
+	m_data->Trigger->EnableTrigger();
+	//std::cout<<"d8"<<std::endl;
+	ret="Initialised";
+	//std::cout<<"d9"<<std::endl;
+	m_variables.Get("Soft_Trigger",m_soft);
+	if(m_soft){
+	  while(!m_data->Crate->Triggered()){
+	    m_data->Trigger->ForceTriggerNow();
+	    usleep(1000);
+          }
+	}
+      }
     }
     
-  } 
+    
+    else ret="ERROR unknown message";
+    
+    zmq::poll (&out[0], 1, 5000);
+    
+    if (out[0].revents & ZMQ_POLLOUT) {
+      
+      zmq::message_t message(ret.length()+1);
+      snprintf ((char *) message.data(), ret.length()+1 , "%s" ,ret.c_str() ) ;
+      TriggerCom->send(message);
+    }
+    
+    
+  }
+  
   return true;
 }
 

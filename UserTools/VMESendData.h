@@ -16,6 +16,7 @@
 //#include <boost/serialization/split_member.hpp>
 #include <boost/serialization/split_free.hpp>
 
+/*
 BOOST_SERIALIZATION_SPLIT_FREE(CardData);
 
 namespace boost {
@@ -34,6 +35,7 @@ namespace boost {
   split_free(ar, d,  file_version); 
  }
     */
+/*
 template<class Archive>
   void save(Archive & ar,const  CardData & d,const  unsigned int version)
   {
@@ -58,8 +60,8 @@ template<class Archive>
     int fullbuffsize; // buffersize * num channels
     uint16_t *Data; //1D 
     */
-    //Board Data
-   ar & d.LastSync;
+    //Board Data/*
+/*   ar & d.LastSync;
    ar & d.SequenceID;
    ar & d.StartTime;
    ar & d.CardID;
@@ -111,7 +113,7 @@ template<class Archive>
 
 
    //Board Data
-   ar & d.LastSync;
+/*   ar & d.LastSync;
    ar & d.SequenceID;
    ar & d.StartTime;
    ar & d.CardID;
@@ -160,7 +162,7 @@ template<class Archive>
  } // namespace serialization
   } // namespace boost
 
-
+*/
 
 
 class VMESendData: public Tool {

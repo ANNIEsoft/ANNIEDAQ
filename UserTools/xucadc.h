@@ -62,7 +62,7 @@ class CardControl
 	private:
 		MasterWindow control_window;
 		vme_master_handle_t* window_handle;
-		volatile uint32_t *control_ptr;
+		uint32_t *control_ptr;
 		int current_card;
 };
 
@@ -77,7 +77,7 @@ class CardTime
 		int current_card;
 		MasterWindow time_window;
 		vme_master_handle_t* window_handle;
-		volatile uint32_t *cardtime_ptr;
+		uint32_t *cardtime_ptr;
 		struct timespec before, after;
 };
 

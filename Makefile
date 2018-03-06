@@ -14,8 +14,9 @@ MyToolsLib =   -lvme -lrt  -L /usr/local/lib/ -lboost_serialization
 
 all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/libServiceDiscovery.so lib/libDataModel.so lib/libLogging.so RemoteControl  NodeDaemon
  
-	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
-
+	g++ -g src/main.cpp -o main -I include -L lib -lStore -lMyTools -lToolChain -lDataModel -lLogging -lServiceDiscovery -lpthread $(DataModelInclude) $(MyToolsInclude)  $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude) -I annietrigger/include -L annietrigger/lib -lANNIETriggerInterface -I uc500adc/include -L uc500adc/lib -lucadc -lUC500ADCInterface
+	cp uc500adc/lib/* ./lib/
+	cp annietrigger/lib/* ./lib
 
 lib/libStore.so:
 
@@ -31,7 +32,7 @@ include/Tool.h:
 lib/libToolChain.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libMyTools.so lib/libServiceDiscovery.so lib/libLogging.so
 
 	cp $(ToolDAQFrameworkPath)/src/ToolChain/*.h include/
-	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)   $(BoostLib) $(BoostInclude)
+	g++ -g -fPIC -shared $(ToolDAQFrameworkPath)/src/ToolChain/ToolChain.cpp -I include -lpthread -L lib -lStore -lDataModel -lMyTools -lServiceDiscovery -lLogging -o lib/libToolChain.so $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(MyToolsInclude)   $(BoostLib) $(BoostInclude) -I annietrigger/include -L annietrigger/lib -lANNIETriggerInterface -I uc500adc/include -L uc500adc/lib -lucadc -lUC500ADCInterface
 
 
 clean: 
@@ -45,14 +46,15 @@ lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
-	cp UserTools/HardwareInterface.h include/
-	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
+	cp DataModel/TriggerData.h include/
+	cp uc500adc/include/HardwareInterface.h include/
+	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp DataModel/TriggerData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude) -I annietrigger/include -L annietrigger/lib -lANNIETriggerInterface -I uc500adc/include -L uc500adc/lib -lucadc -lUC500ADCInterface
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp UserTools/UC500ADCInterface.cpp UserTools/ucadc.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude) -I annietrigger/include -L annietrigger/lib -lANNIETriggerInterface -I uc500adc/include -L uc500adc/lib -lucadc -lUC500ADCInterface
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./

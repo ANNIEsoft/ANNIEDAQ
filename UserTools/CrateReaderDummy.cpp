@@ -1,9 +1,9 @@
-#include "CrateReader.h"
+#include "CrateReaderDummy.h"
 
-CrateReader::CrateReader():Tool(){}
+CrateReaderDummy::CrateReaderDummy():Tool(){}
 
 
-bool CrateReader::Initialise(std::string configfile, DataModel &data){
+bool CrateReaderDummy::Initialise(std::string configfile, DataModel &data){
 
   if(configfile!="")  m_variables.Initialise(configfile);
   //m_variables.Print();
@@ -15,21 +15,21 @@ bool CrateReader::Initialise(std::string configfile, DataModel &data){
   //std::time_t begin, end;
   //CardData data;
   
-  // Crate= new UC500ADCInterface(m_crate_num);
-  // Crate->Initialise();
+   m_data->Crate= new UC500ADCInterface(0);
+   m_data->Crate->Initialise(m_variables);
   
   //  m_num_cards=Crate->NumberOfCards();
 
-  //  Crate->EnableTrigger();
-  m_data->trigdata=0;
+    m_data->Crate->EnableTrigger();
+
 
   return true;
 
 }
 
 
-bool CrateReader::Execute(){
-  
+bool CrateReaderDummy::Execute(){
+  m_data->Crate->ForceTriggerNow();  
   //  std::cout<<" debug 0 "<<m_data->Crate->NumberOfCards()<<std::endl;
   // m_data->triggered=m_data->Crate->Triggered();
 
@@ -39,22 +39,12 @@ bool CrateReader::Execute(){
   
   //std::cout<<" debug 2 "<<std::endl;
 
-  m_data->Trigger->HasData();
-
-  if (m_data->triggered){
-
-    m_data->Trigger->DisableADCTriggers();
+  //  if (m_data->triggered){
     
     for (int i=0;i< m_data->carddata.size();i++){
       delete m_data->carddata.at(i);
-    }
+       }
     m_data->carddata.clear();
-
-
-        if(m_data->trigdata!=0){
-      delete m_data->trigdata;
-      m_data->trigdata=0;
-    }
     
     //std::cout<<" debug 3 "<<std::endl;
     
@@ -66,34 +56,24 @@ bool CrateReader::Execute(){
       //m_data->carddata.push_back(data);
       //std::cout<<" debug 6 "<<std::endl;
     }
-    m_data->trigdata=m_data->Trigger->GetTriggerData();
-    m_data->Trigger->EnableTrigger();
-  }
+    m_data->Crate->EnableTrigger();
+    //}
   
   //std::cout<<" debug 7 "<<std::endl;
   return true;
 }
 
 
-bool CrateReader::Finalise(){
+bool CrateReaderDummy::Finalise(){
   
   for (int i=0;i< m_data->carddata.size();i++){
     delete m_data->carddata.at(i);
   } 
   m_data->carddata.clear();
   
-  if(m_data->trigdata!=0){
-    delete m_data->trigdata;
-    m_data->trigdata=0;
-  }
-
   m_data->Crate->Finalise();
   delete m_data->Crate;
   m_data->Crate=0;
 
-  m_data->Trigger->Finalise();
-  delete m_data->Trigger;
-  m_data->Trigger=0;
-  
   return true;
 }

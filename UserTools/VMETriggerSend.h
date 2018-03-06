@@ -4,9 +4,11 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
+#include <unistd.h>
 
 #include "Tool.h"
 #include "UC500ADCInterface.h"
+#include "ANNIETriggerInterface.h"
 
 class VMETriggerSend: public Tool {
 
@@ -27,8 +29,7 @@ class VMETriggerSend: public Tool {
   int m_verbose;
   int Trigger_port;
   int m_crate_num;
-
-
+  bool m_soft;
 
 };
 

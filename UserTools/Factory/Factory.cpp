@@ -11,11 +11,12 @@ if (tool=="NetworkSendData") ret=new NetworkSendData;
 if (tool=="VMETriggerSend")ret=new VMETriggerSend;
 
 if (tool=="CrateReader") ret=new CrateReader;
-  if (tool=="VMESendData") ret=new VMESendData;
-  if (tool=="DummyVMETriggerSend")ret=new DummyVMETriggerSend;
+if (tool=="VMESendData") ret=new VMESendData;
+if (tool=="DummyVMETriggerSend")ret=new DummyVMETriggerSend;
 
 
 
+//  if (tool=="CrateReaderDummy") ret=new CrateReaderDummy;
 return ret;
 }
 

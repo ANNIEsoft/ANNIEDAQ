@@ -10,7 +10,9 @@
 #include "Store.h"
 #include "Logging.h"
 #include "CardData.h"
+#include "TriggerData.h"
 #include "HardwareInterface.h"
+#include "ANNIETriggerInterface.h"
 
 #include <zmq.hpp>
 
@@ -38,9 +40,10 @@ class DataModel{
 
   //Board Data
   HardwareInterface* Crate;
+  ANNIETriggerInterface* Trigger;
 
   std::vector<CardData*> carddata;
-
+  TriggerData* trigdata;
 
   std::vector<int> LastSync;
   std::vector<int> SequenceID;
