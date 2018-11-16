@@ -1,4 +1,6 @@
-# DAQFramework
+# ANNIEDAQ
+
+ANNIEDAQ is a DAQ implimentation built using the modular ToolDAQ Framework core[1] to give separation between core and implementation code.
 
 ****************************
 #Concept
@@ -38,3 +40,7 @@ To adapt for your own uses you need to:
  Modify data model : see README in DataModel/
  Modify main : see README in src/ 
  Modify Makefile : For simple applications the only modification needed is to populate the variables for your data model and user tool dependancies.  	
+
+Copyright (c) 2018 ANNIE Collaboration
+
+[1] Benajmin Richards. (2018, November 11). ToolDAQ Framework v2.1.1 (Version V2.1.1). Zenodo. http://doi.org/10.5281/zenodo.1482767
