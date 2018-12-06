@@ -8,6 +8,7 @@
 #include "TTree.h"
 
 #include "Store.h"
+#include "BoostStore.h"
 #include "Logging.h"
 #include "CardData.h"
 #include "MRDData.h"
@@ -28,6 +29,8 @@ class DataModel{
   void DeleteTTree(std::string name);
   
   Store vars;
+  BoostStore CStore;
+  std::map<std::string,BoostStore*> Stores;
   Logging *Log;
 
   //Run info
@@ -52,7 +55,7 @@ class DataModel{
   std::vector<CardData*> carddata; 
   TriggerData *trigdata;
   
-std::string InfoTitle;
+  std::string InfoTitle;
   std::string InfoMessage;
 
   MRDData MRDdata;

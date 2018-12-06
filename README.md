@@ -12,6 +12,7 @@ The ToolChain also holds a uesr defined DataModel which each tool has access too
 
 User Tools can be generated for use in the tool chain by incuding a Tool header. This can be done manually or by use of the newTool.sh script.
 
+<<<<<<< HEAD
 For more information consult the README files in the relavent directories
 
 ****************************
