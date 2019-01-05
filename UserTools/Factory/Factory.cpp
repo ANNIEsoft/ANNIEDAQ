@@ -31,8 +31,10 @@ if (tool=="Lecroy") ret=new Lecroy;
 if (tool=="MRDTreeRecorder") ret=new MRDTreeRecorder;
 if (tool=="MRDRootRecorder") ret=new MRDRootRecorder;
 
-//  if (tool=="Monitoring2") ret=new Monitoring2;
+// if (tool=="Monitoring2") ret=new Monitoring2;
 
+if (tool=="MRD") ret=new MRD;
+  if (tool=="MRDStoreSave") ret=new MRDStoreSave;
 return ret;
 }
 

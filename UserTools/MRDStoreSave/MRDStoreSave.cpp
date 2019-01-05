@@ -8,12 +8,12 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	//m_variables.Print();
 
 	m_data= &data;
-
-	m_variables.Get("TreeCap", TreeCap); 
+ 
 	m_variables.Get("FileCap", FileCap);
 	m_variables.Get("OutPath", OutPath);
 	m_variables.Get("OutName", OutName);
 	m_variables.Get("StartTime", StartTime);
+	m_variables.Get("MonitorFrequency",MonitorFrequency);
 
 	FileCount = 0;	
 	std::stringstream Tmp;
@@ -74,12 +74,13 @@ bool MRDStoreSave::Execute()
       MRDout.Channel.clear();
       MRDout.OutN = 0;
       //std::cout<<"E4"<<std::endl;
+      MRDout.Trigger=Trigger;
       
       if (m_data->MRDdata.List.Data.size() > 0)	//There is something to be saved
 	{
 	  //std::cout<<"E5"<<std::endl;
 	  in = m_data->MRDdata.List.Data.begin();		//iterates over Module.Data map<type, Cards>
-	  
+        
 	  //loop on Module.Data types, either TDC or ADC
 	  for (; in != m_data->MRDdata.List.Data.end(); ++in)
 	    {
@@ -120,9 +121,9 @@ bool MRDStoreSave::Execute()
 	  //					*(Slot+j) = m_data->List.Data["ADC"].Slot.at(i);
 	  //				}
 	  //			}
-	}
+	
       //		std::cout<<"E7"<<std::endl;
-      
+	}
       //		OutN = (TOutN >= AOutN) ? TOutN : AOutN;
       //		OutN = TOutN + AOutN;
       //std::cout<<"ben before fill: tree="<<tree<<std::endl;
@@ -144,10 +145,14 @@ bool MRDStoreSave::Execute()
       //std::cout<<"ben after fi;;"<<std::endl;
 
 
-      }
-      ++Trigger;
+    
+      Trigger++;
       //std::cout<<"E8"<<std::endl;
       m_data->MRDdata.List.Data.clear();		
+
+
+      //      if(!(Trigger % MonitorFrequency)) MRDout->Send(m_data->MonitorSocket);
+
     }
 /* //std::cout<<"looking for message ben"<<std::endl;
   zmq::message_t comm;

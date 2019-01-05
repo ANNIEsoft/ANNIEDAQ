@@ -75,6 +75,9 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	std::cout << m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetSlot() << std::endl;
 
 	srand(time(0));
+
+	m_data->MRDData.triggernum=0;
+
 	return true;
 }
 
@@ -118,6 +121,7 @@ bool CCTrigger::Execute()
 		default:
 			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
+	if(m_data->MRDdata.TRG) m_data->triggernum++;
 
 	return true;
 }

@@ -55,6 +55,7 @@ class MRDStoreSave: public Tool{
   
   boost::posix_time::ptime *Epoch;
   std::string StartTime;
+  int MonitorFrequency;
 };
 
 #endif

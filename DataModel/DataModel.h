@@ -13,6 +13,7 @@
 #include "CardData.h"
 #include "MRDData.h"
 #include "TriggerData.h"
+#include "MRDOut.h"
 
 #include <zmq.hpp>
 

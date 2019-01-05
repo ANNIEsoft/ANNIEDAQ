@@ -20,3 +20,5 @@
 #include "MRD/TreeRecorder/MRDTreeRecorder.cpp"
 #include "MRDRootRecorder/MRDRootRecorder.cpp"
 //#include "Monitoring2.cpp"
+#include "MRD/MRD.cpp"
+#include "MRDStoreSave/MRDStoreSave.cpp"

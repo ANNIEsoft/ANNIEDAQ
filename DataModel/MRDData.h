@@ -43,6 +43,8 @@ class MRDData{
   
   boost::posix_time::ptime begin, end;            //Measuring time                              
   boost::posix_time::ptime LocalTime;             //Get local time      
+
+  unsigned long triggernum;
   
   
  private:
