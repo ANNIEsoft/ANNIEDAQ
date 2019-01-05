@@ -38,7 +38,7 @@ bool Lecroy::Execute()
 	bool probe = false;
 	if (m_data->MRDdata.TRG)
 	{
-	  // std::cout<<"L2"<<std::endl;
+	  // //std::cout<<"L2"<<std::endl;
 
 	  //std::cout << "TRG on!\n" << std::endl;
 		m_data->MRDdata.LocalTime = boost::posix_time::microsec_clock::local_time();
@@ -60,7 +60,7 @@ bool Lecroy::Execute()
 
 			if (Data.ch.size() != 0)
 			{
-			  //std::cout<<"L7"<<std::endl;
+			  //		  std::cout<<"L7"<<std::endl;
 
 				m_data->MRDdata.List.Data[DC].Slot.push_back(m_data->MRDdata.List.CC[DC].at(i)->GetSlot());
 				m_data->MRDdata.List.Data[DC].Num.push_back(Data);

@@ -53,13 +53,13 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	  std::cout << "for begin " <<Lcard.at(i)<< std::endl;
 		if (Lcard.at(i) == "TDC" || Lcard.at(i) == "ADC")
 		{
-		  std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<std::endl; 
+		  //std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<std::endl; 
 			m_data->MRDdata.List.CC[Lcard.at(i)].push_back(Create(Lcard.at(i), Ccard.at(i), Ncard.at(i)));	//They use CC at 0
-			std::cout << "d2 "<<std::endl;
+			//	std::cout << "d2 "<<std::endl;
 		}
 		else if (Lcard.at(i) == "TRG")
 		{
-		  std::cout << "d3 "<<std::endl;
+		  //	  std::cout << "d3 "<<std::endl;
 			trg_pos = m_data->MRDdata.List.CC["TDC"].size();
 			std::cout << "d4 "<<std::endl;			
 			m_data->MRDdata.List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i)));	//They use CC at 0
@@ -101,16 +101,19 @@ bool CCTrigger::Execute()
 	switch (m_data->MRDdata.trg_mode) //0 is real trg, 1 is soft trg, 2 is with test
 	{
 		case 0:
-			if(m_data->MRDdata.List.CC["TDC"].at(trg_pos)->TestEvent() == 1)
-				m_data->MRDdata.TRG = true;
+		  if(m_data->MRDdata.List.CC["TDC"].at(trg_pos)->TestEvent() == 1){
+		    //std::cout<<"triggered 0"<<std::endl;
+		    m_data->MRDdata.TRG = true;}
 			break;
 
 		case 1:
 			m_data->MRDdata.TRG = true;
+			//	std::cout<<"triggered 1"<<std::endl;
 			break;
 		
 		case 2:
 			m_data->MRDdata.TRG = rand() % int(100/perc) == 0;
+			//		if ( m_data->MRDdata.TRG)  std::cout<<"triggered 2"<<std::endl;
 			break;
 		
 		default:

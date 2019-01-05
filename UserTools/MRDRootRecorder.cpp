@@ -62,17 +62,17 @@ bool MRDRootRecorder::Initialise(std::string configfile, DataModel &data){
 
 bool MRDRootRecorder::Execute()
 {
-  //  std::cout<<"E1"<<std::endl;
+   //std::cout<<"E1"<<std::endl;
 	if (m_data->MRDdata.TRG)
 	{
-	  //	  std::cout<<"E2"<<std::endl;
+	  	  //std::cout<<"E2"<<std::endl;
 		boost::posix_time::time_duration Time = m_data->MRDdata.LocalTime - *Epoch;
 		TimeStamp = Time.total_milliseconds();
 //		std::cout << "TimeStamp " << TimeStamp << std::endl; 	
 //		TOutN = 0, AOutN = 0;
 //		std::fill(TDC, TDC+512, 0);
 //		std::fill(ADC, ADC+512, 0);
-		//	std::cout<<"E3"<<std::endl;
+			//std::cout<<"E3"<<std::endl;
 		Type.clear();
 		Value.clear();
 		Slot.clear();
@@ -82,7 +82,7 @@ bool MRDRootRecorder::Execute()
 
 		if (m_data->MRDdata.List.Data.size() > 0)	//There is something to be saved
 		{
-		  //std::cout<<"E5"<<std::endl;
+		 //std::cout<<"E5"<<std::endl;
 			in = m_data->MRDdata.List.Data.begin();		//iterates over Module.Data map<type, Cards>
 		       
 			//loop on Module.Data types, either TDC or ADC
@@ -107,7 +107,7 @@ bool MRDRootRecorder::Execute()
 					}
 				}
 			}
-			//	std::cout<<"E6"<<std::endl;
+				//std::cout<<"E6"<<std::endl;
 //			i = 0, j = 0;
 //			is = m_data->List.Data["ADC"].Num.begin();
 //			for (; is != m_data->List.Data["ADC"].Num.end(); ++is, ++i)
@@ -126,7 +126,7 @@ bool MRDRootRecorder::Execute()
 //				}
 //			}
 		}
-		//		std::cout<<"E7"<<std::endl;
+				//std::cout<<"E7"<<std::endl;
 
 //		OutN = (TOutN >= AOutN) ? TOutN : AOutN;
 //		OutN = TOutN + AOutN;
@@ -144,7 +144,7 @@ bool MRDRootRecorder::Execute()
 	    //std::cout<<"E9"<<std::endl;
 	    std::stringstream tmptree;
 	    tmptree << "TTree " << tree;
-	    //	std::cout << "Root : " << std::hex << tree << std::endl;
+	    	//std::cout << "Root : " << std::hex << tree << std::endl;
 	    zmq::message_t message(tmptree.str().length()+1);
 	    snprintf ((char *) message.data(), tmptree.str().length()+1, "%s", tmptree.str().c_str()) ;
 	    //std::cout<<"MRD: sending reply"<<std::endl;
