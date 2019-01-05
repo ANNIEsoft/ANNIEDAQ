@@ -37,7 +37,7 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 				Lcard.push_back(sEmp);		//Modeli L
 				ssL >> iEmp;
 				Ncard.push_back(iEmp);		//Slot N
-				ssL >> iEMP;
+				ssL >> iEmp;
 				Ncrate.push_back(iEmp);         // crate
 				ssL >> sEmp;
 				Ccard.push_back(sEmp);		//Slot register file
@@ -64,7 +64,7 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 		  std::cout << "d3 "<<std::endl;
 			trg_pos = m_data->MRDdata.List.CC["TDC"].size();
 			std::cout << "d4 "<<std::endl;			
-			m_data->MRDdata.List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i), Ncrate,at(i)));	//They use CC at 0
+			m_data->MRDdata.List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i), Ncrate.at(i)));	//They use CC at 0
 			std::cout << "d5 "<<std::endl;
 		}
 		else std::cout << "\n\nUnkown card\n" << std::endl;
@@ -76,7 +76,7 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 
 	srand(time(0));
 
-	m_data->MRDData.triggernum=0;
+	m_data->MRDdata.triggernum=0;
 
 	return true;
 }
@@ -121,7 +121,7 @@ bool CCTrigger::Execute()
 		default:
 			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
-	if(m_data->MRDdata.TRG) m_data->triggernum++;
+	if(m_data->MRDdata.TRG) m_data->MRDdata.triggernum++;
 
 	return true;
 }

@@ -6,14 +6,21 @@
 #If TRG is not specified, the first TDC found is used
 #
 #Type	Slot   Crate	#Register file
-TDC	18   	0       configfiles/MRD/TDCreg
-TDC	17   	0       configfiles/MRD/TDCreg
-TDC	14   	0       configfiles/MRD/TDCreg
-#TDC	18	0       configfiles/MRD/TDCreg
-#TDC	17	0       configfiles/MRD/TDCreg
-#TDC	14	0       configfiles/MRD/TDCreg
-#TDC	18	0       configfiles/MRD/TDCreg
-#TDC	17	0       configfiles/MRD/TDCreg
+TDC	1   	0       configfiles/MRD/TDCreg
+TDC	2   	0       configfiles/MRD/TDCreg
+TDC	4   	0       configfiles/MRD/TDCreg
+TDC	5	0       configfiles/MRD/TDCreg
+TDC	7	0       configfiles/MRD/TDCreg
+TDC	8	0       configfiles/MRD/TDCreg
+TDC	10	0       configfiles/MRD/TDCreg
+TDC	11	0       configfiles/MRD/TDCreg
+TDC	13	0       configfiles/MRD/TDCreg
+TDC	14	0       configfiles/MRD/TDCreg
+TDC	16	0       configfiles/MRD/TDCreg
+TDC	18	0       configfiles/MRD/TDCreg
+TDC	19	0       configfiles/MRD/TDCreg
+TDC	21	0       configfiles/MRD/TDCreg
+TDC	22	0       configfiles/MRD/TDCreg
 #ADC	11  	0       configfiles/ADCreg
 #ADC	12  	0       configfiles/ADCreg
 #ADC	13  	0       configfiles/ADCreg

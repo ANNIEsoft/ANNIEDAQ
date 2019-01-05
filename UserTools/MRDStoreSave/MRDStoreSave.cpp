@@ -78,7 +78,7 @@ bool MRDStoreSave::Execute()
       
       if (m_data->MRDdata.List.Data.size() > 0)	//There is something to be saved
 	{
-	  //std::cout<<"E5"<<std::endl;
+	  std::cout<<"E5"<<std::endl;
 	  in = m_data->MRDdata.List.Data.begin();		//iterates over Module.Data map<type, Cards>
         
 	  //loop on Module.Data types, either TDC or ADC
@@ -139,7 +139,7 @@ bool MRDStoreSave::Execute()
       */
 
       CCData->Set("Data",MRDout);
-      CCData->Save(OutName.str());
+      CCData->Save(OutName);
       CCData->Delete();
 	// tree->Fill();		//Fill
       //std::cout<<"ben after fi;;"<<std::endl;

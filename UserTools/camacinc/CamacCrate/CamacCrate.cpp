@@ -26,10 +26,19 @@ CamacCrate::~CamacCrate()		//Class destructor
 
 void CamacCrate::Init(int i)		//Initialize device
 {
+  std::cout<<"w1"<<std::endl;
 	Slot.push_back(25);		// Find XX_USB devices and open the first one found.
+	std::cout<<"w2"<<std::endl;
+
 	USBFind();
+	std::cout<<"w3"<<std::endl;
+
 	USBOpen(i);
+	std::cout<<"w4"<<std::endl;
+
 	Z();
+	std::cout<<"w5"<<std::endl;
+
 	C();
 		std::cout<<"c init run"<<std::endl;
 }

@@ -16,12 +16,11 @@ public:
   std::vector<std::string> Type;
   ULong64_t TimeStamp;
   
-  private;
+ private:
   
   template <class Archive> void serialize(Archive& ar,
 					  const unsigned int version)
   {
-    Hit::serialize(ar, version);
     
     ar & OutN;
     ar & Trigger;

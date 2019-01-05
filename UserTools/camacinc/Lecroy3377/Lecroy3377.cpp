@@ -3,25 +3,25 @@
 
 Lecroy3377::Lecroy3377(int NSlot, std::string config, int i) : CamacCrate(i)	//Subclass constructor, n of Slot given
 {
-  //  std::cout<<"l1"<<std::endl;
+    std::cout<<"l1"<<std::endl;
 	Slot.push_back(NSlot);
-	//	std::cout<<"l2"<<std::endl;
+		std::cout<<"l2"<<std::endl;
 	ID = Slot.size()-1;
-	//std::cout<<"l3"<<std::endl;
+	std::cout<<"l3"<<std::endl;
 	ClearAll();
-	//std::cout<<"l4 "<<config<<std::endl; 
+	std::cout<<"l4 "<<config<<std::endl; 
 	SetConfig(config);
-	//std::cout<<"l5"<<std::endl;
+	std::cout<<"l5"<<std::endl;
 	EncRegister();
-	//std::cout<<"l6"<<std::endl; 
+	std::cout<<"l6"<<std::endl; 
 
 	if (Common) CommonStart();
 	else CommonStop();
 	
-	//std::cout << "l slot size " << Slot.size() << std::endl;
-	//	for (int i = 0; i < Slot.size(); ++i)
-	  //	std::cout << "ll " << Slot.at(i) << std::endl;
-	  //std::cout<<"l7"<<std::endl; 
+	std::cout << "l slot size " << Slot.size() << std::endl;
+		for (int i = 0; i < Slot.size(); ++i)
+	  	std::cout << "ll " << Slot.at(i) << std::endl;
+	  std::cout<<"l7"<<std::endl; 
 }
 
 int Lecroy3377::GetData(std::map<int, int> &mData)
@@ -258,20 +258,31 @@ int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Commo
 
 int Lecroy3377::CommonStart()	//F(30): Begin the reprogramming sequence for Common Start
 {
+  std::cout << "Common Start programming begining " << std::endl;
 	int Data = 0;
 	int Q = 0, X = 0;
 	int ret = 0;
 
+	std::cout << "b1 " << std::endl;
 	ret = READ(0, 9, Data, Q, X);
+	std::cout << "b2 " << std::endl;
 	ret = READ(0, 30, Data, Q, X);
+	std::cout << "b3 " << std::endl;
 	Data = 0;
+	std::cout << "b4 " << std::endl;
 	ret = WRITE(0, 21, Data, Q, X);
+	std::cout << "b5 " << std::endl;
 	ret = READ(0, 25, Data, Q, X);
+	std::cout << "b6 " << std::endl;
 
 	usleep(500000);
+	std::cout << "b7 " << std::endl;
+
 	do
 		ret = READ(0, 13, Data, Q, X);
 	while (Q != 1);
+	std::cout << "b9 " << std::endl;
+
 	ret = ClearAll();
 
 	std::cout << "Common Start programming complete " << std::endl;

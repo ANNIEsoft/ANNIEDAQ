@@ -11,8 +11,10 @@ RootLib=   -L ToolDAQ/root/lib  -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d
 DataModelInclude = $(RootInclude)
 DataModelLib = $(RootLib)
 
-MyToolsInclude = $(RootInclude) -I ToolDAQ/libpqxx-4.0.1/install/include
-MyToolsLib = $(RootLib)  -L ToolDAQ/libpqxx-4.0.1/install/lib/ -lpqxx  -L /usr/lib64/ -lcurl
+MyToolsInclude = -L lib -lCC -lL3 -lL4 -lm -lxx_usb
+#$(RootInclude) -I ToolDAQ/libpqxx-4.0.1/install/include
+MyToolsLib = 
+#$(RootLib)  -L ToolDAQ/libpqxx-4.0.1/install/lib/ -lpqxx  -L /usr/lib64/ -lcurl -L lib -lCC -lL3 -lL4 -lm -lxx_usb
 
 
 all: lib/libStore.so lib/libLogging.so lib/libDataModel.so include/Tool.h lib/libMyTools.so lib/libServiceDiscovery.so lib/libToolChain.so main RemoteControl  NodeDaemon

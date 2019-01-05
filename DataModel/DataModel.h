@@ -41,7 +41,7 @@ class DataModel{
   long NumEvents;
   bool triggered;
   int Restart;
-
+  long triggernum;
   //Board Data
   std::vector<int> LastSync;
   std::vector<int> SequenceID;
