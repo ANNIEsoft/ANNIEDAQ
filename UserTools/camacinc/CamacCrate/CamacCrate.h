@@ -41,6 +41,7 @@ class CamacCrate
 		int ReadFIFO(std::vector<int> &vData);		//Read USB fifo
 		int ClearFIFO();
 		int GetSlot(int ID);
+		int GetCrate(int ID);
 		void ListSlot();
 
 		int Z();		//Z
@@ -100,12 +101,14 @@ class CamacCrate
 		virtual int READ(int F, int A, int &Data, int &Q, int &X) { return 0; }//F(x)·A(y) 
 		virtual int WRITE(int F, int A, int &Data, int &Q, int &X) { return 0; }//F(x)·A(y)
 		virtual int GetSlot() { return 0; }
+		virtual int GetCrate() { return 0; }
 		virtual int GetID() { return 0; }
 
 	protected:
 
 		int BittoInt(std::bitset<16> &bitref, int a, int b);
 		static std::vector<int> Slot;
+		static std::vector<int> Crate;
 
 	private:
 
@@ -118,8 +121,10 @@ class CamacCrate
 		static bool IsOpen;
 		static int ndev;
 		static xxusb_device_type devices[100];
-		static struct usb_device *Mdev;
-		static usb_dev_handle *Mudev;
+		static std::vector<struct usb_device*> Mdev;
+		static std::map<int, usb_dev_handle*> Mudev;
+		std::map<std::string,int> devicemap;
+		int cratenum;
 
 };
 

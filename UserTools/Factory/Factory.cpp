@@ -35,6 +35,7 @@ if (tool=="Lecroy") ret=new Lecroy;
 
 //if (tool=="MRD") ret=new MRD;
 if (tool=="MRDStoreSave") ret=new MRDStoreSave;
+  if (tool=="MRDMonitoring") ret=new MRDMonitoring;
 return ret;
 }
 

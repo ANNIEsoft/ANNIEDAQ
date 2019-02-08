@@ -60,25 +60,28 @@ bool MRDStoreSave::Execute()
   //  std::cout<<"E1"<<std::endl;
   if (m_data->MRDdata.TRG)
     {
+      //      std::cout<<"positive trigger"<<std::endl;
       //	  std::cout<<"E2"<<std::endl;
       boost::posix_time::time_duration Time = m_data->MRDdata.LocalTime - *Epoch;
-      MRDout.TimeStamp = Time.total_milliseconds();
+      m_data->MRDout.TimeStamp = Time.total_milliseconds();
       //		std::cout << "TimeStamp " << TimeStamp << std::endl; 	
       //		TOutN = 0, AOutN = 0;
       //		std::fill(TDC, TDC+512, 0);
       //		std::fill(ADC, ADC+512, 0);
       //	std::cout<<"E3"<<std::endl;
-      MRDout.Type.clear();
-      MRDout.Value.clear();
-      MRDout.Slot.clear();
-      MRDout.Channel.clear();
-      MRDout.OutN = 0;
+      m_data->MRDout.Type.clear();
+      m_data->MRDout.Value.clear();
+      m_data->MRDout.Slot.clear();
+      m_data->MRDout.Crate.clear();
+      m_data->MRDout.Channel.clear();
+      m_data->MRDout.OutN = 0;
       //std::cout<<"E4"<<std::endl;
-      MRDout.Trigger=Trigger;
-      
+      m_data->MRDout.Trigger=Trigger;
+      // std::cout<<"E5 size="<<m_data->MRDdata.List.Data.size()<<std::endl;
+            
       if (m_data->MRDdata.List.Data.size() > 0)	//There is something to be saved
 	{
-	  std::cout<<"E5"<<std::endl;
+	  //  std::cout<<"E6 "<<std::endl;
 	  in = m_data->MRDdata.List.Data.begin();		//iterates over Module.Data map<type, Cards>
         
 	  //loop on Module.Data types, either TDC or ADC
@@ -90,16 +93,17 @@ bool MRDStoreSave::Execute()
 	      //loop on active Module.Card.Num vector
 	      for (int i = 0; is != in->second.Num.end(); ++is, ++i)
 		{
-		  MRDout.OutN += is->ch.size();	//number of channels on
+		  m_data->MRDout.OutN += is->ch.size();	//number of channels on
 		  it = is->ch.begin();
 		  
 		  //loop on active channels
 		  for (; it != is->ch.end(); ++it)
 		    {
-		      MRDout.Type.push_back(in->first);
-		      MRDout.Value.push_back(it->second);
-		      MRDout.Channel.push_back(it->first);
-		      MRDout.Slot.push_back(in->second.Slot.at(i));
+		      m_data->MRDout.Type.push_back(in->first);
+		      m_data->MRDout.Value.push_back(it->second);
+		      m_data->MRDout.Channel.push_back(it->first);
+		      m_data->MRDout.Slot.push_back(in->second.Slot.at(i));
+		      m_data->MRDout.Crate.push_back(in->second.Crate.at(i));
 		    }
 		}
 	    }
@@ -138,7 +142,7 @@ bool MRDStoreSave::Execute()
 	tree->Branch("TimeStamp", &TimeStamp, "TimeStamp/l" );
       */
 
-      CCData->Set("Data",MRDout);
+      CCData->Set("Data",m_data->MRDout);
       CCData->Save(OutName);
       CCData->Delete();
 	// tree->Fill();		//Fill
@@ -151,7 +155,7 @@ bool MRDStoreSave::Execute()
       m_data->MRDdata.List.Data.clear();		
 
 
-      //      if(!(Trigger % MonitorFrequency)) MRDout->Send(m_data->MonitorSocket);
+      //      if(!(Trigger % MonitorFrequency)) m_data->MRDout->Send(m_data->MonitorSocket);
 
     }
 /* //std::cout<<"looking for message ben"<<std::endl;
@@ -188,6 +192,7 @@ bool MRDStoreSave::Execute()
   
   //std::cout<<"E11"<<std::endl;
   */
+
   return true;
 }
 
@@ -201,26 +206,32 @@ bool MRDStoreSave::Finalise()
   delete sPort;
   //std::cout<<"f4"<<std::endl;
   sPort = 0;
-*/
-  //std::cout<<"f5"<<std::endl;
+  */
+  /*  
+  std::cout<<"f5"<<std::endl;
   for (int i = 0; i < m_data->MRDdata.List.CC["TDC"].size(); i++)
     delete m_data->MRDdata.List.CC["TDC"].at(i);
-  //std::cout<<"f6"<<std::endl;
+  std::cout<<"f6"<<std::endl;
   for (int i = 0; i < m_data->MRDdata.List.CC["ADC"].size(); i++)
     delete m_data->MRDdata.List.CC["ADC"].at(i);
-  // std::cout<<"f7"<<std::endl;
+  std::cout<<"f7"<<std::endl;
   
   m_data->MRDdata.List.CC.clear();
-  ///std::cout<<"f8"<<std::endl;
+  std::cout<<"f8"<<std::endl;
   m_data->MRDdata.List.Data.clear();
-  //std::cout<<"f9"<<std::endl;
-  delete Epoch;
-  //std::cout<<"f10"<<std::endl;
+  std::cout<<"f9"<<std::endl;
+  
+ delete Epoch;
+  std::cout<<"f10"<<std::endl;
   Epoch = 0;
-  //std::cout<<"f11"<<std::endl;
+  std::cout<<"f11"<<std::endl;
+  */
   CCData->Close();
-  delete CCData;
-  CCData =0;
-
+  std::cout<<"f12"<<std::endl;
+  //  delete CCData;
+  std::cout<<"f13"<<std::endl;
+  // CCData =0;
+  std::cout<<"f14"<<std::endl;
+  
   return true;
 }

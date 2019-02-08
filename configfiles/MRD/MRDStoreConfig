@@ -1,0 +1,5 @@
+FileCap 1
+OutPath ./
+OutName /data/test
+StartTime 1970/1/1	#Use the format yyyy/mm/dd
+MonitorFrequency 10

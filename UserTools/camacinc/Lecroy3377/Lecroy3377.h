@@ -57,6 +57,7 @@ class Lecroy3377 : public CamacCrate
 
 		int GetID();				//Return ID
 		int GetSlot();				//Return Slot
+		int GetCrate();
 		void ParseCompData(int Word, int &Stat, int &Num, bool &B1);
 		void PrintRegRaw();			//Print undecoded register
 		void PrintRegister();			//Print Register vars

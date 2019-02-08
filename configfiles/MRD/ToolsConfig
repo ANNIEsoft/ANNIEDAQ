@@ -4,4 +4,5 @@ Lecroy[TDC] Lecroy configfiles/MRD/TDCConfig
 #Lecroy[ADC] Lecroy configfiles/MRD/ADCConfig
 #treer MRDTreeRecorder configfiles/MRD/MRDTreeConfig
 #MRDRootRecorder MRDRootRecorder configfiles/MRD/MRDTreeConfig
+MRDMonitoring MRDMonitoring NULL
 MRDStoreSave MRDStoreSave configfiles/MRD/MRDStoreConfig

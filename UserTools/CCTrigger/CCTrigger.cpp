@@ -55,7 +55,7 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	  std::cout << "for begin " <<Lcard.at(i)<< std::endl;
 		if (Lcard.at(i) == "TDC" || Lcard.at(i) == "ADC")
 		{
-		  std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<std::endl; 
+		  std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<" "<< Ncrate.at(i)<<std::endl; 
 		  m_data->MRDdata.List.CC[Lcard.at(i)].push_back(Create(Lcard.at(i), Ccard.at(i), Ncard.at(i), Ncrate.at(i)));	//They use CC at 0
 			std::cout << "d2 "<<std::endl;
 		}
@@ -72,7 +72,8 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	}
 
 	std::cout << "Trigger is in slot ";
-	std::cout << m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetSlot() << std::endl;
+	std::cout << m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetSlot();
+	std::cout << " and crate "<<m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetCrate() << std::endl;
 
 	srand(time(0));
 
@@ -122,7 +123,7 @@ bool CCTrigger::Execute()
 			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
 	if(m_data->MRDdata.TRG) m_data->MRDdata.triggernum++;
-
+	//	if(m_data->MRDdata.TRG) std::cout<<"yo"<<std::endl;
 	return true;
 }
 

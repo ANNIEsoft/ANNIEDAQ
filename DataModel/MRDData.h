@@ -24,6 +24,7 @@ class MRDData{
   {
     std::vector<Channel> Num;
     std::vector<int> Slot;
+    std::vector<int> Crate;
   };
   
   struct Module           //One Struct to rule them all, One Struct to find them, One Struct to	bring them all and in the darkness bind them                                                                 

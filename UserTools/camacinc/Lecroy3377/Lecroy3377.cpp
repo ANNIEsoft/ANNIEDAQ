@@ -5,7 +5,8 @@ Lecroy3377::Lecroy3377(int NSlot, std::string config, int i) : CamacCrate(i)	//S
 {
     std::cout<<"l1"<<std::endl;
 	Slot.push_back(NSlot);
-		std::cout<<"l2"<<std::endl;
+	Crate.push_back(i);
+	std::cout<<"l2"<<std::endl;
 	ID = Slot.size()-1;
 	std::cout<<"l3"<<std::endl;
 	ClearAll();
@@ -19,9 +20,9 @@ Lecroy3377::Lecroy3377(int NSlot, std::string config, int i) : CamacCrate(i)	//S
 	else CommonStop();
 	
 	std::cout << "l slot size " << Slot.size() << std::endl;
-		for (int i = 0; i < Slot.size(); ++i)
-	  	std::cout << "ll " << Slot.at(i) << std::endl;
-	  std::cout<<"l7"<<std::endl; 
+	for (int i = 0; i < Slot.size(); ++i)
+	  std::cout << "ll " << Slot.at(i) <<" crate "<< Crate.at(i)<<  std::endl;
+	std::cout<<"l7"<<std::endl; 
 }
 
 int Lecroy3377::GetData(std::map<int, int> &mData)
@@ -44,7 +45,7 @@ int Lecroy3377::ReadFIFOall(std::map<int, int> &mData) //Read FIFO data until en
 	//std::cout<<"ReadFIFO 2"<<std::endl;
 	while (Q == 1)
 	{
-	  //std::cout<<"ReadFIFO 3"<<std::endl;
+	  //	  std::cout<<"ReadFIFO 3"<<std::endl;
 		ret = READ(0, 0, Word, Q, X);
 		//	std::cout<<"ReadFIFO 4"<<std::endl;
 		if (Q == 1) 
@@ -321,6 +322,11 @@ int Lecroy3377::GetSlot()	//Return n of Slot of module
 	return Slot.at(GetID());
 }
 
+int Lecroy3377::GetCrate()	//Return n of Slot of module
+{
+	return Crate.at(GetID());
+}
+
 void Lecroy3377::ParseCompData(int Word, int &Stat, int &Num, bool &B1)
 {
 	std::bitset<16> bWord(Word);
@@ -343,8 +349,10 @@ void Lecroy3377::SetRegister()	//Common stop only
 	int ret, n_reg = 0;
 	if (Common) n_reg = 6;
 	else n_reg = 4;
-	for (int i = 0; i < n_reg; i++)
+	for (int i = 0; i < n_reg; i++){
 		ret = WriteReg(i, Control+i);
+		std::cout<<"writing "<<std::hex<<*(Control+i)<<" to "<<std::dec<<i<<std::endl; 
+	}
 }
 
 void Lecroy3377::DecRegister()

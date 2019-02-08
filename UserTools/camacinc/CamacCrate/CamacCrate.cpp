@@ -3,15 +3,18 @@
 bool CamacCrate::IsOpen = false;
 int CamacCrate::ndev = 0;
 xxusb_device_type CamacCrate::devices[100] = {};
-struct usb_device *CamacCrate::Mdev = 0;
-usb_dev_handle *CamacCrate::Mudev = 0;
+std::vector<struct usb_device*> CamacCrate::Mdev;
+std::map <int, usb_dev_handle*> CamacCrate::Mudev;
 std::vector<int> CamacCrate::Slot;
+std::vector<int> CamacCrate::Crate;
+
 
 CamacCrate::CamacCrate(int i)	//Class constructor
 {
-  	std::cout<<"c1" << " open " << CamacCrate::IsOpen <<std::endl;
-	if (!CamacCrate::IsOpen) {
-	  //	    std::cout<<"c2"<<std::endl;
+  std::cout<<"c1" << " open " << CamacCrate::IsOpen <<", crate laoded "<< CamacCrate::Mudev.count(i)<<std::endl;
+	cratenum=i;
+	if (!CamacCrate::IsOpen ||  CamacCrate::Mudev.count(i)==0) {
+	  	    std::cout<<"c2"<<std::endl;
 	    Init(i);
 	    //std::cout<<"c3"<<std::endl;
 	}
@@ -28,33 +31,40 @@ void CamacCrate::Init(int i)		//Initialize device
 {
   std::cout<<"w1"<<std::endl;
 	Slot.push_back(25);		// Find XX_USB devices and open the first one found.
+	Crate.push_back(25);
 	std::cout<<"w2"<<std::endl;
 
 	USBFind();
+	cratenum=i;
 	std::cout<<"w3"<<std::endl;
-
-	USBOpen(i);
+	int usbdevid=0;
+	if(i==7)usbdevid=devicemap["CC0318"];
+	if(i==8)usbdevid=devicemap["CC0135"];
+	
+	USBOpen(usbdevid);
 	std::cout<<"w4"<<std::endl;
 
 	Z();
 	std::cout<<"w5"<<std::endl;
 
 	C();
-		std::cout<<"c init run"<<std::endl;
+	std::cout<<"c init run"<<std::endl;
 }
 
 void CamacCrate::USBFind()		//Find usb devices
 {
 	ndev = xxusb_devices_find(devices);
-	for (int i = 0; i < ndev; i++)
-		std::cout << i << " device is " << devices[i].SerialString << std::endl;
+	for (int i = 0; i < ndev; i++){
+	  std::cout << i << " device is " << devices[i].SerialString << std::endl;
+	  devicemap[devices[i].SerialString]=i;
+	}
 }
 
 void CamacCrate::USBOpen(int i)		//Open i device and create handler
 {
-	Mdev = devices[i].usbdev;
-	Mudev = xxusb_device_open(Mdev); 
-	if(!Mudev) std::cout << "\n\nFailed to open CC-USB. \n" << std::endl;
+  Mdev.push_back(devices[i].usbdev);
+	Mudev[cratenum] = xxusb_device_open(devices[i].usbdev); 
+	if(!Mudev[cratenum]) std::cout << "\n\nFailed to open CC-USB. \n" << std::endl;
 	else 
 	{
 		CamacCrate::IsOpen = true;
@@ -64,7 +74,7 @@ void CamacCrate::USBOpen(int i)		//Open i device and create handler
 
 void CamacCrate::USBClose()		//Close USB devices
 {
-	int ret = xxusb_device_close(Mudev);
+	int ret = xxusb_device_close(Mudev[cratenum]);
 	if (ret < 0) std::cout << "\n\nFailed to close CC-USB. \n" << std::endl;
 	else std::cout << "\n\nCC-USB closed. \n" << std::endl;
 }
@@ -172,13 +182,13 @@ int CamacCrate::PushStack()
 	stack[0] = vStack.size();
 	for (int i = 1; i < vStack.size()+1; i++)
 		stack[i] = vStack.at(i);
-	return xxusb_stack_write(Mudev, 2, stack);
+	return xxusb_stack_write(Mudev[cratenum], 2, stack);
 }
 
 int CamacCrate::PullStack()
 {
 	long stack[768];
-	int ret = xxusb_stack_read(Mudev, 2, stack);
+	int ret = xxusb_stack_read(Mudev[cratenum], 2, stack);
 	vStack.clear();
 	if (ret >= 0)
 	{
@@ -202,12 +212,12 @@ void CamacCrate::PrintStack()
 			
 int CamacCrate::StartStack()
 {
-        return xxusb_register_write(Mudev, 1, 0x1); // start acquisition
+        return xxusb_register_write(Mudev[cratenum], 1, 0x1); // start acquisition
 }
 
 int CamacCrate::StopStack()
 {
-        int ret = xxusb_register_write(Mudev, 1, 0x0); // stop acquisition
+        int ret = xxusb_register_write(Mudev[cratenum], 1, 0x0); // stop acquisition
 	ClearFIFO();
 	return ret;
 }
@@ -217,7 +227,7 @@ int CamacCrate::ReadFIFO(std::vector<int> &vData)
 	short IntArray[1000];
 	std::string dt;
 	std::stringstream ssdt;
-	int ret = xxusb_bulk_read(Mudev, IntArray, 8192, 500);
+	int ret = xxusb_bulk_read(Mudev[cratenum], IntArray, 8192, 500);
 	if (ret >= 0)
 	{
 		for (int i = 0; i < ret/2; i++)
@@ -231,18 +241,18 @@ int CamacCrate::ClearFIFO()
 	short IntArray[1000];
 	int ret;
 	do
-		ret = xxusb_bulk_read(Mudev, IntArray, 8192, 1000);
+		ret = xxusb_bulk_read(Mudev[cratenum], IntArray, 8192, 1000);
 	while (ret > 0);
 }
 
 int CamacCrate::READ(int ID, int F, int A, long &Data, int &Q, int &X)	//Generic READ func, suitable for F 0-15, 24-31
 {
-	return CAMAC_read(Mudev, Slot.at(ID), F, A, &Data, &Q, &X);
+	return CAMAC_read(Mudev[cratenum], Slot.at(ID), F, A, &Data, &Q, &X);
 }
 
 int CamacCrate::WRITE(int ID, int F, int A, long &Data, int &Q, int &X)	//Generic WRITE func, suitable for F 16-23
 {
-	return CAMAC_write(Mudev, Slot.at(ID), F, A, Data, &Q, &X);
+	return CAMAC_write(Mudev[cratenum], Slot.at(ID), F, A, Data, &Q, &X);
 }
 
 void CamacCrate::ListSlot()		//List all modules in CAMAC
@@ -257,19 +267,26 @@ int CamacCrate::GetSlot(int ID)		//Return n of Slot, ID given
 	return Slot.at(ID);
 }
 
+int CamacCrate::GetCrate(int ID)         //Return n of Slot, ID given
+{
+  //  std::cout << "CC slot\n";
+  return Crate.at(ID);
+}
+
+
 int CamacCrate::Z()			//Global ZERO
 {
-	return CAMAC_Z(Mudev);
+	return CAMAC_Z(Mudev[cratenum]);
 }
 
 int CamacCrate::C()			//Global CLEAR
 {
-	return CAMAC_C(Mudev);
+	return CAMAC_C(Mudev[cratenum]);
 }
 
 int CamacCrate::I(bool inh)		//Global INHIBIT
 {
-	return CAMAC_I(Mudev, inh);
+	return CAMAC_I(Mudev[cratenum], inh);
 }
 
 int CamacCrate::BittoInt(std::bitset<16> &bitref, int a, int b)

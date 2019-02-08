@@ -29,7 +29,7 @@ class MRDStoreSave: public Tool{
  private:
   
   BoostStore* CCData;
-  MRDOut MRDout;
+  //  MRDOut MRDout;
   // static void *RootWriter(void* arg);
   
   //zmq::socket_t *sPort;

@@ -60,6 +60,9 @@ class DataModel{
   std::string InfoMessage;
 
   MRDData MRDdata;
+  MRDOut MRDout;
+
+  zmq::socket_t *MonitoringSocket;
 
  private:
   

@@ -40,7 +40,7 @@ bool Lecroy::Execute()
 	{
 	  // std::cout<<"L2"<<std::endl;
 
-	  //std::cout << "TRG on!\n" << std::endl;
+	  //	  std::cout << "TRG on!\n" << std::endl;
 		m_data->MRDdata.LocalTime = boost::posix_time::microsec_clock::local_time();
 //		++count;
 //		Log("TRG!\n", 2, verb);
@@ -48,12 +48,17 @@ bool Lecroy::Execute()
 
 		for (int i = 0; i < m_data->MRDdata.List.CC[DC].size(); i++)
 		{
-		  //std::cout<<"L4"<<std::endl;
+		  //	  std::cout<<"L4"<<std::endl;
 
 			Data.ch.clear();
-			//std::cout<<"L5"<<std::endl;
+			//	std::cout<<"L5"<<std::endl;
 
-			if (m_data->MRDdata.trg_mode == 2) m_data->MRDdata.List.CC[DC].at(i)->InitTest();
+			if (m_data->MRDdata.trg_mode == 2){
+			  //std::cout<<"L5.4"<<std::endl;
+
+			  m_data->MRDdata.List.CC[DC].at(i)->InitTest();
+			  
+			}
 			//std::cout<<"L5.5"<<std::endl;
 			m_data->MRDdata.List.CC[DC].at(i)->GetData(Data.ch);
 			//std::cout<<"L6"<<std::endl;
@@ -63,6 +68,10 @@ bool Lecroy::Execute()
 			  //std::cout<<"L7"<<std::endl;
 
 				m_data->MRDdata.List.Data[DC].Slot.push_back(m_data->MRDdata.List.CC[DC].at(i)->GetSlot());
+				//	std::cout<<"L8 slot="<<m_data->MRDdata.List.CC[DC].at(i)->GetSlot()<<std::endl;
+				//	std::cout<<"i="<<i<<" , size="<<m_data->MRDdata.List.CC[DC].size()<<std::endl;
+				//	std::cout<<"crate is="<<m_data->MRDdata.List.CC[DC].at(i)->GetCrate()<<std::endl;
+                                m_data->MRDdata.List.Data[DC].Crate.push_back(m_data->MRDdata.List.CC[DC].at(i)->GetCrate());
 				m_data->MRDdata.List.Data[DC].Num.push_back(Data);
 				m_data->MRDdata.List.CC[DC].at(i)->ClearAll();
 				//std::cout<<"L8"<<std::endl;
