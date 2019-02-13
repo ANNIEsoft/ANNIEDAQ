@@ -26,6 +26,7 @@ if (tool=="RootDataRecorder") ret=new RootDataRecorder;
 if (tool=="SlackBot") ret=new SlackBot;
 if (tool=="HVComs") ret=new HVComs;
 */
+
 if (tool=="CCTrigger") ret=new CCTrigger;
 if (tool=="Lecroy") ret=new Lecroy;
 //if (tool=="MRDTreeRecorder") ret=new MRDTreeRecorder;
@@ -35,7 +36,8 @@ if (tool=="Lecroy") ret=new Lecroy;
 
 //if (tool=="MRD") ret=new MRD;
 if (tool=="MRDStoreSave") ret=new MRDStoreSave;
-  if (tool=="MRDMonitoring") ret=new MRDMonitoring;
+if (tool=="MRDMonitoring") ret=new MRDMonitoring;
+ if (tool=="ThreadedSubToolChain") ret=new ThreadedSubToolChain;
 return ret;
 }
 

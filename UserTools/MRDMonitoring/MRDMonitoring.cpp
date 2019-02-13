@@ -46,7 +46,7 @@ bool MRDMonitoring::Execute(){
     num++;
   }
 
-  if(num % 1000 ==0){
+  if(num % 1000==0){
   zmq::message_t message(10);                  
   snprintf ((char *) message.data(), 10 , "%s" ,"MRDSingle") ;
   m_data->MonitoringSocket->send(message, ZMQ_SNDMORE);
