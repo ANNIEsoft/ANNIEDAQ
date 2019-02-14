@@ -34,7 +34,7 @@ class ThreadedSubToolChain: public Tool {
  private:
 
   pthread_t thread;
-  zmq::socket_t* Isend;
+  //  zmq::socket_t* Isend;
   ToolChain_thread_args *args;
 
   static void *SubThread(void* arg);

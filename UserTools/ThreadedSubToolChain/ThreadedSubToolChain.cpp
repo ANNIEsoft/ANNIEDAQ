@@ -23,22 +23,23 @@ bool ThreadedSubToolChain::Initialise(std::string configfile, DataModel &data){
   
   std::cout<<"d4"<<std::endl;
   printf("d4.5");
-
+  
   //  sleep(1);
   printf("d5");
   std::cout<<"d5"<<std::endl;
 
-  Isend= new zmq::socket_t(*(m_data->context),ZMQ_REQ);
+  //Isend= new zmq::socket_t(*(m_data->context),ZMQ_REQ);
+  zmq::socket_t Isend(*(m_data->context),ZMQ_REQ);  
   std::stringstream connection;
   int port;
   m_variables.Get("remote_port",port);
   connection<<"tcp://127.0.0.1:"<<port;
-  Isend->connect(connection.str());
+  Isend.connect(connection.str());
   printf("d6");
   std::cout<<"d6"<<std::endl;
 
   zmq::pollitem_t items [] = {
-    { *Isend, 0, ZMQ_POLLOUT, 0 },
+    { Isend, 0, ZMQ_POLLOUT, 0 },
   };
 
   Store rr;
@@ -59,7 +60,7 @@ bool ThreadedSubToolChain::Initialise(std::string configfile, DataModel &data){
 
   if ((items [0].revents & ZMQ_POLLOUT)) {
 
-  Isend->send(send);
+  Isend.send(send);
   printf("d8");
   std::cout<<"d8"<<std::endl;
 
@@ -67,13 +68,13 @@ bool ThreadedSubToolChain::Initialise(std::string configfile, DataModel &data){
   zmq::message_t message;
   printf("d9"); 
  std::cout<<"d9"<<std::endl;
-  Isend->recv (&message);
+  Isend.recv (&message);
   printf("d10");  
 std::cout<<"d10"<<std::endl;
   std::istringstream iss(static_cast<char*>(message.data()));
   std::cout<<iss.str()<<std::endl;
 
-  delete Isend;
+  //delete Isend;
   
   //m_data->InfoTitle="MRDVariables";
   // m_variables>>m_data->InfoMessage;
@@ -101,17 +102,18 @@ bool ThreadedSubToolChain::Finalise(){
 
   std::cout<<"s1"<<std::endl;
   
-  Isend= new zmq::socket_t(*(m_data->context),ZMQ_REQ);
+  //Isend= new zmq::socket_t(*(m_data->context),ZMQ_REQ);
+  zmq::socket_t Isend(*(m_data->context,ZMQ_REQ);
   std::stringstream connection;
   int port;
   m_variables.Get("remote_port",port);
   connection<<"tcp://127.0.0.1:"<<port;
-  Isend->connect(connection.str());
+  Isend.connect(connection.str());
   std::cout<<"s2"<<std::endl;
 
 
   zmq::pollitem_t items [] = {
-    { *Isend, 0, ZMQ_POLLOUT, 0 },
+    { Isend, 0, ZMQ_POLLOUT, 0 },
   };
 
 
@@ -137,12 +139,12 @@ bool ThreadedSubToolChain::Finalise(){
   if ((items [0].revents & ZMQ_POLLOUT)) {
     std::cout<<"s4.2"<<std::endl;
     printf("sd4.2");
-  Isend->send(send);
+  Isend.send(send);
   std::cout<<"s5"<<std::endl;
   printf("sd5");
 
   zmq::message_t message;
-  Isend->recv (&message);
+  Isend.recv (&message);
   std::istringstream iss(static_cast<char*>(message.data()));
   //std::cout<<iss.str()<<std::endl;
 
@@ -170,13 +172,13 @@ bool ThreadedSubToolChain::Finalise(){
   snprintf ((char *) send2.data(), tmp.length()+1 , "%s" ,tmp.c_str()) ;
   std::cout<<"s6"<<std::endl;
   
-Isend->send(send2);
+Isend.send(send2);
  std::cout<<"s7"<<std::endl;
 
   //std::cout<<"quit sent"<<std::endl;
 
   zmq::message_t message2;
-  Isend->recv (&message2);
+  Isend.recv (&message2);
   std::istringstream iss2(static_cast<char*>(message2.data()));
   std::cout<<iss2.str()<<std::endl;
   std::cout<<"s8"<<std::endl;
@@ -188,8 +190,8 @@ Isend->send(send2);
   std::cout<<"s9"<<std::endl;
  
   //std::cout<<"after join"<<std::endl;
-  delete Isend;
-   Isend=0;
+  //delete Isend;
+		      //Isend=0;
   std::cout<<"s10"<<std::endl;
 
   // delete h1;
