@@ -9,23 +9,54 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 
 	m_data= &data;
  
-	m_variables.Get("FileCap", FileCap);
+	//	m_variables.Get("FileCap", FileCap);
 	m_variables.Get("OutPath", OutPath);
 	m_variables.Get("OutName", OutName);
 	m_variables.Get("StartTime", StartTime);
-	m_variables.Get("MonitorFrequency",MonitorFrequency);
+	//m_variables.Get("MonitorFrequency",MonitorFrequency);
 
 	FileCount = 0;	
 	std::stringstream Tmp;
 	OutName = OutPath + OutName;
-	Tmp << OutName << "p" << FileCount << ".Store";
+	std::cout<<"here1"<<std::endl;
+	OutNameB= OutName + "B";
+	std::cout<<"here2"<<std::endl;
+
+	//Tmp << OutName << "p" << FileCount << ".Store";
 //	TFile file(Tmp.str().c_str(), "RECREATE", "", 1);
 //	file.Write();
 //	file.Close();
 	
 	//std::cout<<"MRD: attempting connect"<<std::endl;
-	//	sPort = new zmq::socket_t(*(m_data->context), ZMQ_REP);
-	//sPort->connect("inproc://MRDTree");		//final use
+	std::cout<<"here3"<<std::endl;
+
+	sPort = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
+	sPort->bind("tcp://*:9999");		//final use
+
+	std::cout<<"here4"<<std::endl;
+
+	items[0].socket=*sPort;
+	items[0].fd=0;
+	items[0].events=ZMQ_POLLIN;
+	items[0].revents=0;
+
+	std::cout<<"here5"<<std::endl;
+
+	zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
+	Ireceive.connect("inproc://ServicePublish");
+	
+	std::cout<<"here6"<<std::endl;
+
+	boost::uuids::uuid m_UUID;
+	m_UUID = boost::uuids::random_generator()();
+	std::stringstream test;
+	test<<"Add "<< "DataSend "<<m_UUID<<" 9999 "<<"0";
+	zmq::message_t send(test.str().length());
+	snprintf ((char *) send.data(), test.str().length() , "%s" ,test.str().c_str()) ;
+	Ireceive.send(send);  
+
+	std::cout<<"here7"<<std::endl;
+
 	//	sPort->connect("ipc:///tmp/0");			//test only
 	//std::cout<<"MRD: connected"<<std::endl;
 
@@ -35,6 +66,8 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	//int iEmp;
 
 	CCData=new BoostStore(false, 2);
+	std::cout<<"here8"<<std::endl;
+
 	//	tree = new TTree("CCData", "CCData");
 
 //Edit starts here ...
@@ -49,8 +82,10 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 //... and ends here
 */
 	Trigger = 0;
+	std::cout<<"here9"<<std::endl;
 
 	Epoch = new boost::posix_time::ptime(boost::gregorian::from_string(StartTime));
+	std::cout<<"here10"<<std::endl;
 
 	return true;
 }
@@ -158,6 +193,38 @@ bool MRDStoreSave::Execute()
       //      if(!(Trigger % MonitorFrequency)) m_data->MRDout->Send(m_data->MonitorSocket);
 
     }
+
+  zmq::poll(&items [0], 1, 0);
+
+  if (items [0].revents & ZMQ_POLLIN) {
+
+    zmq::message_t message;
+
+    sPort->recv(&message);
+
+    zmq::message_t name(7);
+    snprintf ((char *) name.data(), 7 , "%s" ,"CCData") ;
+    sPort->send(name);
+
+    std::stringstream tmp;
+    tmp<<CCData;
+
+    std::cout<<" SENDING "<<CCData<<std::endl;
+    std::cout<<" SENDING "<<tmp.str()<<std::endl;
+
+    zmq::message_t message2(tmp.str().length()+1);
+    snprintf ((char *) message2.data(), tmp.str().length()+1 , "%s" ,tmp.str().c_str()) ;
+    sPort->send(message2);
+    //CCData->Send(sPort);
+    //delete CCData;
+    CCData=0;
+    std::string tt;
+    tt=OutName;
+    OutName=OutNameB;
+    OutNameB=tt;
+    CCData=new BoostStore(false, 2);
+  }
+  
 /* //std::cout<<"looking for message ben"<<std::endl;
   zmq::message_t comm;
   if(sPort->recv(&comm,ZMQ_NOBLOCK))
@@ -198,15 +265,24 @@ bool MRDStoreSave::Execute()
 
 bool MRDStoreSave::Finalise()
 {
-  /* //  std::cout<<"f1: tree="<<tree<<std::endl;
-  tree->Delete();
+   //  std::cout<<"f1: tree="<<tree<<std::endl;
+  //tree->Delete();
   //`std::cout<<"f2"<<std::endl;
-  tree = 0;
+  //tree = 0;
   //std::cout<<"f3"<<std::endl;
+    zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
+    Ireceive.connect("inproc://ServicePublish");
+    std::stringstream test;
+    test<<"Delete "<< "DataSend ";
+    zmq::message_t send(test.str().length()+1);
+    snprintf ((char *) send.data(), test.str().length()+1 , "%s" ,test.str().c_str()) ;
+    Ireceive.send(send);
+
+
   delete sPort;
   //std::cout<<"f4"<<std::endl;
   sPort = 0;
-  */
+ 
   /*  
   std::cout<<"f5"<<std::endl;
   for (int i = 0; i < m_data->MRDdata.List.CC["TDC"].size(); i++)
@@ -228,9 +304,9 @@ bool MRDStoreSave::Finalise()
   */
   CCData->Close();
   std::cout<<"f12"<<std::endl;
-  //  delete CCData;
+  delete CCData;
   std::cout<<"f13"<<std::endl;
-  // CCData =0;
+  CCData =0;
   std::cout<<"f14"<<std::endl;
   
   return true;

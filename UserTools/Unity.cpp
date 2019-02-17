@@ -25,3 +25,5 @@
 #include "MRDStoreSave/MRDStoreSave.cpp"
 #include "MRDMonitoring/MRDMonitoring.cpp"
 #include "ThreadedSubToolChain/ThreadedSubToolChain.cpp"
+#include "V2Trigger/V2Trigger.cpp"
+#include "StoreSave/StoreSave.cpp"

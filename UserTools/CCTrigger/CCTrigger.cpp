@@ -14,6 +14,29 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	m_variables.Get("configcc", configcc);		//Module slots
 	m_variables.Get("percent", perc);		//firing probability
 	m_variables.Get("trg_mode", m_data->MRDdata.trg_mode);	//Trigger mode
+
+
+	TriggerSend=new zmq::socket_t(*(m_data->context),ZMQ_DEALER);
+	TriggerSend->bind("tcp://*:6666");
+
+
+	zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
+	Ireceive.connect("inproc://ServicePublish");
+
+	boost::uuids::uuid m_UUID;
+	m_UUID = boost::uuids::random_generator()();
+	std::stringstream test;
+	test<<"Add "<< "TriggerSend "<<m_UUID<<" 6666 "<<"0";
+	zmq::message_t send(test.str().length());
+	snprintf ((char *) send.data(), test.str().length() , "%s" ,test.str().c_str()) ;
+	Ireceive.send(send);
+
+
+	items[0].socket=*TriggerSend;
+	items[0].fd=0;
+	items[0].events=ZMQ_POLLIN;
+	items[0].revents=0;
+
 	m_data->MRDdata.TRG = false;
 
 	std::ifstream fin (configcc.c_str());
@@ -122,14 +145,40 @@ bool CCTrigger::Execute()
 		default:
 			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
-	if(m_data->MRDdata.TRG) m_data->MRDdata.triggernum++;
+	if(m_data->MRDdata.TRG)  m_data->MRDdata.triggernum++;
 	//	if(m_data->MRDdata.TRG) std::cout<<"yo"<<std::endl;
-	return true;
+	
+	zmq::poll(&items[0], 1, 0);
+
+	if ((items [0].revents & ZMQ_POLLIN)) {
+	  zmq::message_t command;
+	  TriggerSend->recv(&command);
+
+	  std::stringstream tmp;
+	  tmp<<"MRD "<<m_data->MRDdata.triggernum;
+	  zmq::message_t message(tmp.str().size());
+	  snprintf ((char *) message.data(), tmp.str().length() , "%s" ,tmp.str().c_str()) ;
+	  TriggerSend->send(message);
+	}
+
+	  return true;
 }
 
 
 bool CCTrigger::Finalise()
 {
+
+  zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
+  Ireceive.connect("inproc://ServicePublish");
+  std::stringstream test;
+  test<<"Delete "<< "TriggerSend ";
+  zmq::message_t send(test.str().length()+1);
+  snprintf ((char *) send.data(), test.str().length()+1 , "%s" ,test.str().c_str()) ;
+  Ireceive.send(send);
+
+  delete TriggerSend;
+  TriggerSend=0;
+
 	Lcard.clear();
 	Ncard.clear();
 

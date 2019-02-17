@@ -64,13 +64,12 @@ bool ThreadedSubToolChain::Initialise(std::string configfile, DataModel &data){
   printf("d8");
   std::cout<<"d8"<<std::endl;
 
-
   zmq::message_t message;
   printf("d9"); 
- std::cout<<"d9"<<std::endl;
+  std::cout<<"d9"<<std::endl;
   Isend.recv (&message);
   printf("d10");  
-std::cout<<"d10"<<std::endl;
+  std::cout<<"d10"<<std::endl;
   std::istringstream iss(static_cast<char*>(message.data()));
   std::cout<<iss.str()<<std::endl;
 
@@ -87,7 +86,7 @@ std::cout<<"d10"<<std::endl;
 
 
 bool ThreadedSubToolChain::Execute(){
-
+  //  std::cout<<"executing"<<std::endl;
   //  sleep(5);
   if(m_data->Restart==1)Finalise();
   else if(m_data->Restart==2)Initialise("",*m_data);
@@ -103,7 +102,7 @@ bool ThreadedSubToolChain::Finalise(){
   std::cout<<"s1"<<std::endl;
   
   //Isend= new zmq::socket_t(*(m_data->context),ZMQ_REQ);
-  zmq::socket_t Isend(*(m_data->context,ZMQ_REQ);
+  zmq::socket_t Isend(*(m_data->context),ZMQ_REQ);
   std::stringstream connection;
   int port;
   m_variables.Get("remote_port",port);

@@ -1,0 +1,6 @@
+# Store Save Config file
+
+verbose 1
+numSources 1
+OutPath /data/
+OutFile V2test

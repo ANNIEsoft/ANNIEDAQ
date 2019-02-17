@@ -8,4 +8,6 @@
 #RootDataRecorder RootDataRecorder configfiles/Hefty_RootDataRecorderConfig
 #Monitoring Monitoring configfiles/Hefty_MonitoringConfig
 #MRD MRD configfiles/MRDConfig
+V2Trigger V2Trigger configfiles/V2/V2TriggerConfig
+StoreSave StoreSave configfiles/V2/StoreSaveConfig
 ThreadedSubToolChain ThreadedSubToolChain configfiles/MRD/ToolChainConfig

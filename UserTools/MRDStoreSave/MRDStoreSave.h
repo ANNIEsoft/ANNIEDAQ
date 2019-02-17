@@ -32,11 +32,11 @@ class MRDStoreSave: public Tool{
   //  MRDOut MRDout;
   // static void *RootWriter(void* arg);
   
-  //zmq::socket_t *sPort;
+  zmq::socket_t *sPort;
   
   //TTree *tree;
   
-  std::string OutPath, OutName;
+  std::string OutPath, OutName, OutNameB;
   
   int TreeCap, FileCap, FileCount, Entries;
   //int ThreadCount;
@@ -55,7 +55,9 @@ class MRDStoreSave: public Tool{
   
   boost::posix_time::ptime *Epoch;
   std::string StartTime;
-  int MonitorFrequency;
+  //  int MonitorFrequency;
+  zmq::pollitem_t items[1];
+
 };
 
 #endif

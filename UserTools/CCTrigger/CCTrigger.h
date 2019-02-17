@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <sstream>
 
 #include "Tool.h"
 #include "Lecroy3377.h"
@@ -38,6 +39,9 @@ class CCTrigger: public Tool
 
 		std::map<std::string, std::vector<CamacCrate*> >::iterator iL;	//Iterates over Module.CC
 		std::vector<CamacCrate*>::iterator iC;				//Iterates over Module.CC<vector>
+		zmq::socket_t* TriggerSend;
+		zmq::pollitem_t items[1];
+
 
 };
 

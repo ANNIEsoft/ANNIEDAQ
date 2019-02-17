@@ -21,7 +21,7 @@ class MRDMonitoring: public Tool {
 
   bool cleanup;
   long num;
-
+  long period;
 
 };
 
