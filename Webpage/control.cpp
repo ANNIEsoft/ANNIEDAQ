@@ -60,16 +60,23 @@ std::vector<Store*> RemoteServices;
 
   zmq::message_t send(256);
   snprintf ((char *) send.data(), 256 , "%s" ,"All NULL") ;
-
+  //  std::cout<<"d1"<<std::endl;
   Ireceive.send(send);
+  // std::cout<<"d2"<<std::endl;
 
       
   zmq::message_t receive;
+  //std::cout<<"d3"<<std::endl;
+
   Ireceive.recv(&receive);
+  //std::cout<<"d4"<<std::endl;
+
   std::istringstream iss(static_cast<char*>(receive.data()));
       
   int size;
   iss>>size;
+
+  //std::cout<<"d5 "<<size<<std::endl;
 
   RemoteServices.clear();
 
@@ -79,10 +86,13 @@ std::vector<Store*> RemoteServices;
     Store *service = new Store;
 
     zmq::message_t servicem;
+    //std::cout<<"d6"<<std::endl;
+
     Ireceive.recv(&servicem);
+    //std::cout<<"d7"<<std::endl;
 
     std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonPaser(ss.str());
+    service->JsonParser(ss.str());
 
     RemoteServices.push_back(service);
 
@@ -90,7 +100,10 @@ std::vector<Store*> RemoteServices;
 
 
   zmq::message_t tmp;
-  Ireceive.recv(&tmp);
+  //std::cout<<"d8"<<std::endl;
+ 
+  // Ireceive.recv(&tmp);
+  // std::cout<<"d9"<<std::endl;
 
 
   

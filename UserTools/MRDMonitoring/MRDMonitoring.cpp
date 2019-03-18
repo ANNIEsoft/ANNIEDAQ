@@ -13,7 +13,7 @@ bool MRDMonitoring::Initialise(std::string configfile, DataModel &data){
   m_variables.Get("MonitoringPeriod",period);
 
   cleanup=false;
-  num=0;
+  //  num=0;
 
   m_data->MonitoringSocket=0;
 
@@ -42,12 +42,12 @@ bool MRDMonitoring::Initialise(std::string configfile, DataModel &data){
 
 bool MRDMonitoring::Execute(){
 
-  if (m_data->MRDdata.TRG){
+  //  if (m_data->MRDdata.TRG){
 
-    num++;
-  }
+  //    num++;
+  // }
 
-  if(num % period==0){
+  if( m_data->MRDdata.triggernum % period==0){
   zmq::message_t message(10);                  
   snprintf ((char *) message.data(), 10 , "%s" ,"MRDSingle") ;
   m_data->MonitoringSocket->send(message, ZMQ_SNDMORE);

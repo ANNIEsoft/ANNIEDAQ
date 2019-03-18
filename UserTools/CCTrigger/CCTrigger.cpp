@@ -90,6 +90,13 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 			m_data->MRDdata.List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i), Ncrate.at(i)));	//They use CC at 0
 			std::cout << "d5 "<<std::endl;
 		}
+		else if (Lcard.at(i) == "DISC"){
+		  //		  std::string cardname, std::string config, int cardslot, int crate
+		  std::cout<<"setting descriminator crate:"<<Ncrate.at(i)<<", Card:"<<Ncard.at(i)<<std::endl;
+		    LeCroy4413* tmp=new LeCroy4413(Ncard.at(i), Ccard.at(i), Ncrate.at(i));
+		  //		  tmp.
+	  
+		}
 		else std::cout << "\n\nUnkown card\n" << std::endl;
 		std::cout << "for over " << std::endl;
 	}
@@ -145,7 +152,12 @@ bool CCTrigger::Execute()
 		default:
 			std::cout << "WARNING: Trigger mode unknown\n" << std::endl;
 	}
-	if(m_data->MRDdata.TRG)  m_data->MRDdata.triggernum++;
+	if(m_data->MRDdata.TRG){
+	  m_data->MRDdata.triggernum++;
+	  std::stringstream tmp;
+	  tmp<<"Trigger No.="<<m_data->MRDdata.triggernum;
+	  m_data->vars.Set("Status",tmp.str());
+	}
 	//	if(m_data->MRDdata.TRG) std::cout<<"yo"<<std::endl;
 	
 	zmq::poll(&items[0], 1, 0);
@@ -156,9 +168,10 @@ bool CCTrigger::Execute()
 
 	  std::stringstream tmp;
 	  tmp<<"MRD "<<m_data->MRDdata.triggernum;
-	  zmq::message_t message(tmp.str().size());
-	  snprintf ((char *) message.data(), tmp.str().length() , "%s" ,tmp.str().c_str()) ;
+	  zmq::message_t message(tmp.str().length()+1);
+	  snprintf ((char *) message.data(), tmp.str().length()+1 , "%s" ,tmp.str().c_str()) ;
 	  TriggerSend->send(message);
+	  //std::cout<<"MRD sending "<<tmp.str()<<std::endl;
 	}
 
 	  return true;

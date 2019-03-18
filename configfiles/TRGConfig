@@ -1,4 +1,4 @@
 configcc configfiles/ModuleConfig
 verbose 3
-percent 20
-trg_mode 0	#0 for real trg, 1 for soft trg, 2 for test function
+percent 50
+trg_mode 2	#0 for real trg, 1 for soft trg, 2 for test function

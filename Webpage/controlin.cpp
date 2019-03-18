@@ -76,7 +76,7 @@ int main (){
     Ireceive.recv(&servicem);
 
     std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonPaser(ss.str());
+    service->JsonParser(ss.str());
 
     RemoteServices.push_back(service);
 
@@ -385,7 +385,7 @@ int main (){
 	std::string answer;
 	answer=iss.str();
 	Store rr;
-	rr.JsonPaser(answer);
+	rr.JsonParser(answer);
 	if(*rr["msg_type"]=="Command Reply") std::cout<<"Service ["<<ServiceNum<<"] Reply: "<<*rr["msg_value"];
 	 
       }

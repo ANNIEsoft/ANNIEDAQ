@@ -18,9 +18,9 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	FileCount = 0;	
 	std::stringstream Tmp;
 	OutName = OutPath + OutName;
-	std::cout<<"here1"<<std::endl;
+	//std::cout<<"here1"<<std::endl;
 	OutNameB= OutName + "B";
-	std::cout<<"here2"<<std::endl;
+	//std::cout<<"here2"<<std::endl;
 
 	//Tmp << OutName << "p" << FileCount << ".Store";
 //	TFile file(Tmp.str().c_str(), "RECREATE", "", 1);
@@ -28,24 +28,24 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 //	file.Close();
 	
 	//std::cout<<"MRD: attempting connect"<<std::endl;
-	std::cout<<"here3"<<std::endl;
+	//std::cout<<"here3"<<std::endl;
 
 	sPort = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
 	sPort->bind("tcp://*:9999");		//final use
 
-	std::cout<<"here4"<<std::endl;
+	//std::cout<<"here4"<<std::endl;
 
 	items[0].socket=*sPort;
 	items[0].fd=0;
 	items[0].events=ZMQ_POLLIN;
 	items[0].revents=0;
 
-	std::cout<<"here5"<<std::endl;
+	//std::cout<<"here5"<<std::endl;
 
 	zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
 	Ireceive.connect("inproc://ServicePublish");
 	
-	std::cout<<"here6"<<std::endl;
+	//std::cout<<"here6"<<std::endl;
 
 	boost::uuids::uuid m_UUID;
 	m_UUID = boost::uuids::random_generator()();
@@ -55,7 +55,7 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	snprintf ((char *) send.data(), test.str().length() , "%s" ,test.str().c_str()) ;
 	Ireceive.send(send);  
 
-	std::cout<<"here7"<<std::endl;
+	//std::cout<<"here7"<<std::endl;
 
 	//	sPort->connect("ipc:///tmp/0");			//test only
 	//std::cout<<"MRD: connected"<<std::endl;
@@ -66,7 +66,7 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	//int iEmp;
 
 	CCData=new BoostStore(false, 2);
-	std::cout<<"here8"<<std::endl;
+	//std::cout<<"here8"<<std::endl;
 
 	//	tree = new TTree("CCData", "CCData");
 
@@ -81,11 +81,11 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	tree->Branch("TimeStamp", &TimeStamp, "TimeStamp/l" );
 //... and ends here
 */
-	Trigger = 0;
-	std::cout<<"here9"<<std::endl;
+
+	//std::cout<<"here9"<<std::endl;
 
 	Epoch = new boost::posix_time::ptime(boost::gregorian::from_string(StartTime));
-	std::cout<<"here10"<<std::endl;
+	//std::cout<<"here10"<<std::endl;
 
 	return true;
 }
@@ -111,7 +111,7 @@ bool MRDStoreSave::Execute()
       m_data->MRDout.Channel.clear();
       m_data->MRDout.OutN = 0;
       //std::cout<<"E4"<<std::endl;
-      m_data->MRDout.Trigger=Trigger;
+      m_data->MRDout.Trigger= m_data->MRDdata.triggernum;
       // std::cout<<"E5 size="<<m_data->MRDdata.List.Data.size()<<std::endl;
             
       if (m_data->MRDdata.List.Data.size() > 0)	//There is something to be saved
@@ -185,7 +185,7 @@ bool MRDStoreSave::Execute()
 
 
     
-      Trigger++;
+      //Trigger++;
       //std::cout<<"E8"<<std::endl;
       m_data->MRDdata.List.Data.clear();		
 
@@ -209,8 +209,8 @@ bool MRDStoreSave::Execute()
     std::stringstream tmp;
     tmp<<CCData;
 
-    std::cout<<" SENDING "<<CCData<<std::endl;
-    std::cout<<" SENDING "<<tmp.str()<<std::endl;
+    //std::cout<<" SENDING "<<CCData<<std::endl;
+    //std::cout<<" SENDING "<<tmp.str()<<std::endl;
 
     zmq::message_t message2(tmp.str().length()+1);
     snprintf ((char *) message2.data(), tmp.str().length()+1 , "%s" ,tmp.str().c_str()) ;
@@ -303,11 +303,11 @@ bool MRDStoreSave::Finalise()
   std::cout<<"f11"<<std::endl;
   */
   CCData->Close();
-  std::cout<<"f12"<<std::endl;
+  //std::cout<<"f12"<<std::endl;
   delete CCData;
-  std::cout<<"f13"<<std::endl;
+  //std::cout<<"f13"<<std::endl;
   CCData =0;
-  std::cout<<"f14"<<std::endl;
+  //std::cout<<"f14"<<std::endl;
   
   return true;
 }

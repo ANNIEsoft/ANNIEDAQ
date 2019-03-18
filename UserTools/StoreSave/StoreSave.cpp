@@ -49,7 +49,7 @@ bool StoreSave::Initialise(std::string configfile, DataModel &data){
   //  m_data->InfoTitle="TriggerVariables";
   // m_variables>>m_data->InfoMessage;
   //m_data->GetTTree("RunInformation")->Fill();
-
+  m_data->Stores["RunInformation"]->Set("StoreSave",m_variables);
 
   return true;
 }
@@ -80,13 +80,14 @@ bool StoreSave::Execute(){
       iss2 >>  std::hex >> arg2;
       BoostStore* tmp;
       tmp=reinterpret_cast<BoostStore*>(arg2);
-      std::cout<<"h1 "<<tmp<<std::endl;
+      //std::cout<<"h1 "<<tmp<<std::endl;
       outstore->Set(name,tmp);
-      std::cout<<"h2"<<std::endl;
+      //std::cout<<"h2"<<std::endl;
 
 
     }
 
+    outstore->Set("RunInformation",m_data->Stores["RunInformation"]);
     outstore->Save(Out);
 
     zmq::message_t message(9);                  
@@ -141,6 +142,7 @@ bool StoreSave::Finalise(){
       it->second=0;
     }
 
+    m_data->Stores["RunInformation"]->Set("InputVariables",m_variables);
     outstore->Save(Out);
     delete outstore;
     outstore=0;
@@ -171,59 +173,72 @@ void StoreSave::FindDataSources(){
   zmq::socket_t Ireceive (*(m_data->context), ZMQ_DEALER);
   Ireceive.connect("inproc://ServiceDiscovery");
   
-  for(int i=0;i<11;i++){
+  //  for(int i=0;i<11;i++){
+  zmq::pollitem_t items[1]={{Ireceive,0,ZMQ_POLLOUT,0},}; 
   
   zmq::message_t send(8);
   snprintf ((char *) send.data(), 8 , "%s" ,"All NULL") ;
-  
-  Ireceive.send(send);
-  
-  zmq::message_t receive;
-  Ireceive.recv(&receive);
-  std::istringstream iss(static_cast<char*>(receive.data()));
-  
-  int size;
-  iss>>size;
-  
-    
-  for(int i=0;i<size;i++){
-    
-    Store *service = new Store;
-    
-    zmq::message_t servicem;
-    Ireceive.recv(&servicem);
-    
-    std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonParser(ss.str());
-    
-    std::string servicetype;
-    std::string uuid;
-    std::string ip;
-    int port=0;
-  
-    service->Get("msg_value",servicetype);
-    service->Get("uuid",uuid);
-    service->Get("ip",ip);
-    service->Get("remote_port",port); 
-   //printf("%s \n",servicetype.c_str());
-    if(servicetype=="DataSend" && DataSources.count(uuid)==0){
-      zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
-      int a=12000;
-      RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
-      RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
-      
-      std::stringstream tmp;
-      tmp<<"tcp://"<<ip<<":"<<port;
-      
-      // printf("%s \n",tmp.str().c_str());
-      RemoteSend->connect(tmp.str().c_str());
-      DataSources[uuid]=RemoteSend;
-    }
 
-    else delete service;
+  zmq::poll(&items[0], 1, 0); 
+
+  if ((items [0].revents & ZMQ_POLLOUT)) {
+  
+    Ireceive.send(send);
+  
+    zmq::message_t receive;
+    Ireceive.recv(&receive);
+    //std::cout<<"storesave message size="<<sizeof(receive.data())<<std::endl;
+
+
+    std::istringstream iss(static_cast<char*>(receive.data()));
+    //std::cout<<"storesave iss="<<iss.str()<<std::endl;
     
-  }
-  
-  
+    int size;
+    iss>>size;
+    //std::cout<<"storesave size="<<size<<std::endl;
+    
+    for(int i=0;i<size;i++){
+      
+      //std::cout<<"storesave loop="<<i<<std::endl;
+      
+      Store *service = new Store;
+      
+      zmq::message_t servicem;
+      Ireceive.recv(&servicem);
+      
+      std::istringstream ss(static_cast<char*>(servicem.data()));
+      //std::cout<<"storesave message="<<i<<" : "<<ss.str()<<std::endl;
+      
+      service->JsonParser(ss.str());
+      
+      std::string servicetype;
+      std::string uuid;
+      std::string ip;
+      int port=0;
+      
+      service->Get("msg_value",servicetype);
+      service->Get("uuid",uuid);
+      service->Get("ip",ip);
+      service->Get("remote_port",port); 
+      //printf("%s \n",servicetype.c_str());
+      if(servicetype=="DataSend" && DataSources.count(uuid)==0){
+	zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
+	int a=12000;
+	RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
+	RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
+	
+	std::stringstream tmp;
+	tmp<<"tcp://"<<ip<<":"<<port;
+	
+	// printf("%s \n",tmp.str().c_str());
+	RemoteSend->connect(tmp.str().c_str());
+	DataSources[uuid]=RemoteSend;
+      }
+      
+      else delete service;
+      
+    }
+    
+    
   }
 }

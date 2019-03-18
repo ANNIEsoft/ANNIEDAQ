@@ -40,6 +40,6 @@ StartTO		85	#4, 0-9		Common start time out, in 50 ns, up to 32 us. Must be a val
 
 #Register 5
 #Common start (test function only)
-TestPulse	1	#5, 0-4		Number of pulses generated in test mode. 0-31 pulses, each 1/2 clock period long.
+TestPulse	0	#5, 0-4		Number of pulses generated in test mode. 0-31 pulses, each 1/2 clock period long.
 TestClock	0	#5, 5-6		Test mode clock: 0 = 100 ns, 1 = 200 ns, 2 = 400 ns, 3 = 800 ns
-TestFlag	1	#5, 8		Test enable. This must be 1 for test mode.
+TestFlag	0	#5, 8		Test enable. This must be 1 for test mode.

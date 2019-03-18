@@ -10,6 +10,8 @@
 #include "Tool.h"
 #include "Lecroy3377.h"
 #include "Lecroy4300b.h"
+#include "Lecroy4413.h"
+
 
 class CCTrigger: public Tool
 {

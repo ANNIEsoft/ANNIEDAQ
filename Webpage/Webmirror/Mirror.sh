@@ -1,6 +1,11 @@
 #!/bin/bash
 
 echo test1
+cd /home/annie/ANNIEDAQ
+source Setup.sh
+cd -
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
 ########################## Lock function garentees only one instance #########################
 exec 200>/home/annie/ANNIEDAQ/Webpage/Webmirror/lock
 flock -n 200 || exit 1

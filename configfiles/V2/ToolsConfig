@@ -1,4 +1,4 @@
-#InputVariables InputVariables configfiles/Hefty_InputVariablesConfig
+InputVariables InputVariables configfiles/V2/InputVariablesConfig
 #Postgress Postgress configfiles/PostgressConfig
 #SlackBot SlackBot NULL
 #HVComs HVComs configfiles/HVComsConfig

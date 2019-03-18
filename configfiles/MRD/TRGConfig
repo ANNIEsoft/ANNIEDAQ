@@ -1,4 +1,4 @@
 configcc configfiles/MRD/ModuleConfig
-verbose 3
+verbose 1
 percent 100
-trg_mode 2	#0 for real trg, 1 for soft trg, 2 for test function
+trg_mode 0	#0 for real trg, 1 for soft trg, 2 for test function

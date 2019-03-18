@@ -2,4 +2,4 @@ FileCap 1
 OutPath /data/
 OutName test
 StartTime 1970/1/1	#Use the format yyyy/mm/dd
-MonitorFrequency 10
+MonitorFrequency 1000

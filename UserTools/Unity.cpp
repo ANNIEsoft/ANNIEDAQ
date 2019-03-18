@@ -1,6 +1,6 @@
 #include "DummyTool/DummyTool.cpp"
-  /*#include "InputVariables/InputVariables.cpp"
-#include "Postgress/Postgress.cpp"
+#include "InputVariables/InputVariables.cpp"
+/*#include "Postgress/Postgress.cpp"
 #include "BoardReader/BoardReader.cpp"
 #include "Monitoring/Monitoring3.cpp"
 #include "CardDataRecorder/CardDataRecorder.cpp"
