@@ -3,8 +3,8 @@ ToolDAQFrameworkPath=ToolDAQ/ToolDAQFramework
 ZMQLib= -L ToolDAQ/zeromq-4.0.7/lib -lzmq 
 ZMQInclude= -I ToolDAQ/zeromq-4.0.7/include/ 
 
-BoostLib= -L /usr/local/lib -lboost_date_time -lboost_serialization
-BoostInclude= -I /usr/local/include/
+BoostLib= -L ToolDAQ/boost_1_66_0/install/lib -lboost_date_time -lboost_serialization  -lboost_iostreams 
+BoostInclude= -I ToolDAQ/boost_1_66_0/install/include/ 
 
 DataModelInclude = 
 DataModelLib = -lvme -lrt 
@@ -45,18 +45,18 @@ lib/libDataModel.so: lib/libStore.so lib/libLogging.so
 
 	cp DataModel/DataModel.h include/
 	cp DataModel/CardData.h include/
-	cp uc500adc/include/HardwareInterface.h include/
+	cp ToolDAQ/uc500adc/include/HardwareInterface.h include/
 	g++ -g -fPIC -shared DataModel/DataModel.cpp DataModel/CardData.cpp -I include -L lib -lStore  -lLogging  -o lib/libDataModel.so $(DataModelInclude) $(DataModelLib) $(ZMQLib) $(ZMQInclude)  $(BoostLib) $(BoostInclude)
 
 lib/libMyTools.so: lib/libStore.so include/Tool.h lib/libDataModel.so lib/libLogging.so
 
 	cp UserTools/*.h include/
 	cp UserTools/Factory/*.h include/
-	cp uc500adc/include/CardSync.h include/
-	cp uc500adc/include/trigger.h include/
-	cp uc500adc/include/UC500ADCInterface.h include/
-	cp uc500adc/include/ucadc.h include/
-	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp uc500adc/src/UC500ADCInterface.cc uc500adc/src/ucadc.cc uc500adc/src/trigger.cc uc500adc/src/CardSync.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
+	cp ToolDAQ/uc500adc/include/CardSync.h include/
+	cp ToolDAQ/uc500adc/include/trigger.h include/
+	cp ToolDAQ/uc500adc/include/UC500ADCInterface.h include/
+	cp ToolDAQ/uc500adc/include/ucadc.h include/
+	g++ -g -fPIC -shared  UserTools/Factory/Factory.cpp ToolDAQ/uc500adc/src/UC500ADCInterface.cc ToolDAQ/uc500adc/src/ucadc.cc ToolDAQ/uc500adc/src/trigger.cc ToolDAQ/uc500adc/src/CardSync.cc -I include -L lib -lStore -lDataModel -lLogging -o lib/libMyTools.so $(MyToolsInclude) $(MyToolsLib) $(DataModelInclude) $(ZMQLib) $(ZMQInclude) $(BoostLib) $(BoostInclude)
 
 RemoteControl:
 	cp $(ToolDAQFrameworkPath)/RemoteControl ./
