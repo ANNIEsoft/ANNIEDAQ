@@ -1,42 +1,42 @@
 #ifndef CARDDATA_H
 #define CARDDATA_H
 
-#include <stdint.h>
+//#include <stdint.h>
 #include <iostream>
+#include <vector>
+//#include <array>
 #include <stdlib.h>
-
 #include "zmq.hpp"
+#include <SerialisableObject.h>
 
-struct CardData{
+class CardData : public SerialisableObject{
 
-  uint64_t LastSync;
-  int SequenceID;
-  int StartTimeSec;
-  int StartTimeNSec;
-  uint64_t StartCount;
-  int triggerNumber; 
-  uint64_t* triggerCounts;
-  //std::vector<uint64_t> triggerCounts;
-  uint32_t* Rates;
-  //std::vector<uint32_t> Rates;
+  friend class boost::serialization::access;
+
+ public:
+
   int CardID;
-  int channels; // eg number of connected PMTs
-  int buffersize;
-  int eventsize;
-  int fullbuffsize; // buffersize * num channels
-  uint16_t* Data;
-  //std::vector<uint16_t> Data; //1D array of card readout size fullbuffsize
-
-
-  //the form and structure of this data is probably something you want to change this was just my guess baised on what we talked about.
-  //so feel free to make this what ever you making the card output to be
+  int SequenceID;
+  int FirmwareVersion;
+  std::vector<uint32_t> Data;
   
-  ~CardData();  
+  ~CardData();
 
-  void  Send(zmq::socket_t *socket);
+  bool Print(){};
+
+  void  Send(zmq::socket_t *socket, int flag=0);
   bool Receive(zmq::socket_t *socket);
-  
+
+ private:
+
+  template <class Archive> void serialize(Archive& ar, const unsigned int version){
+
+    ar & CardID;
+    ar & SequenceID;
+    ar & FirmwareVersion;
+    ar & Data;
  
+  }
   
 };
 

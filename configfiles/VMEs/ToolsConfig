@@ -1,0 +1,4 @@
+VMETrigger VMETrigger Null
+Trigger Trigger configfiles/Hefty_TriggerConfig
+NetworkReceiveData NetworkReceiveData configfiles/VMEs/NetworkReceiveDataConfig
+VMEStoreSave VMEStoreSave NUll

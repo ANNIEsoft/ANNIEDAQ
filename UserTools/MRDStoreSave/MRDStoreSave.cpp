@@ -204,7 +204,7 @@ bool MRDStoreSave::Execute()
 
     zmq::message_t name(7);
     snprintf ((char *) name.data(), 7 , "%s" ,"CCData") ;
-    sPort->send(name);
+    sPort->send(name,ZMQ_SNDMORE);
 
     std::stringstream tmp;
     tmp<<CCData;

@@ -235,23 +235,34 @@ int Lecroy3377::TestFIFO()	//Test FIFO tag bit, Q = 1 if tag bit set for word to
 
 int Lecroy3377::CommonStop()	//F(30): Begin the reprogramming sequence for Common Stop
 {
+  std::cout<<"in common stop"<<std::endl;
 	int ret = 0;
 	int Data = 0;
 	int Q = 0, X = 0;
 
+	ret = READ(0, 9, Data, Q, X);
 	ret = READ(0, 30, Data, Q, X);
-	ret = ClearAll();
+	Data = 1;
+	std::cout << "b4 " << std::endl;
+        //ret = WRITE(0, 21, Data, Q, X);
+	//ret = ClearAll();
 	ret = READ(0, 25, Data, Q, X);
 
 	usleep(500000);
+	std::cout<<"g1"<<std::endl;
 	do
 		ret = READ(0, 13, Data, Q, X);
 	while (Q != 1);
+	std::cout<<"g2"<<std::endl;
+
 	ret = ClearAll();
 
 	std::cout << "Common Stop programming complete" << std::endl;
 
 	SetRegister();
+
+	ret = EnLAM();
+        ret = EnAcq();
 
 	if (ret < 0) return ret;
 	else return Q;

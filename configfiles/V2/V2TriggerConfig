@@ -2,4 +2,5 @@
 
 verbose 1
 numTriggers 1
-MRD 10000
+#MRD 10000
+VME 10000

@@ -54,7 +54,7 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
     Ireceive.recv(&servicem);
     
     std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonPaser(ss.str());
+    service->JsonParser(ss.str());
     
     std::string servicetype;
     service->Get("msg_value",servicetype);
@@ -85,9 +85,9 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
     
     
     zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
-    int a=12000;
-    RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
-    RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
+    //    int a=12000;
+    //RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
+    //RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
  
     std::stringstream tmp;
     tmp<<"tcp://"<<ip<<":"<<VME_port;
@@ -149,7 +149,7 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
 	zmq::message_t re;
 	if(VMESockets.at(i)->recv(&re)){
 	  std::istringstream iss2(static_cast<char*>(re.data()));
-	  //	std::cout<<"debug 6 "<<iss2.str()<<std::endl;
+	  	//std::cout<<"debug 6 "<<iss2.str()<<std::endl;
 	}
 	else{
 	  Log("Error receiving trigger query from VME",0,m_verbose);
@@ -175,9 +175,9 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   // std::cout<<"debug 9"<<std::endl;
   
   
-  m_data->InfoTitle="TriggerVariables";
-  m_variables>>m_data->InfoMessage;
-  m_data->GetTTree("RunInformation")->Fill();
+  //  m_data->InfoTitle="TriggerVariables";
+  // m_variables>>m_data->InfoMessage;
+  // m_data->GetTTree("RunInformation")->Fill();
   
   
   
@@ -195,7 +195,9 @@ bool Trigger::Execute(){
   //boost::progress_timer t;
 
   bool trigger=true;  
+  if(VMESockets.size()==0)trigger=false;
   //std::cout<<"d2"<<std::endl;
+
   for (int i=0;i<VMESockets.size();i++){
     // std::cout<<"d3"<<std::endl;
     std::string query="Status";
@@ -203,16 +205,16 @@ bool Trigger::Execute(){
     snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
     //std::cout<<"d4"<<std::endl;
     if( VMESockets.at(i)->send(message)){
-      // std::cout<<"d5"<<std::endl;
+       //std::cout<<"d5"<<std::endl;
       zmq::message_t receive;
       if(VMESockets.at(i)->recv(&receive)){
-	//	std::cout<<"d6"<<std::endl;
+	//std::cout<<"d6"<<std::endl;
 	std::istringstream iss(static_cast<char*>(receive.data()));
 	//std::cout<<" got trigger message "<<iss.str()<<std::endl;	
 	bool tmptrigger;
 	iss>>tmptrigger;
 	trigger*=tmptrigger;
-	//std::cout<<"d7"<<std::endl;
+	//std::cout<<"d7 "<<tmptrigger<<std::endl;
       }
       else{
 	//std::cout<<"d8"<<std::endl;
@@ -232,6 +234,7 @@ bool Trigger::Execute(){
   }
   // std::cout<<"d10"<<std::endl;
   m_data->triggered=trigger;
+  if( m_data->triggered) m_data->triggernum++;
   //  std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
   //std::cout<<"d11"<<std::endl;  
   }

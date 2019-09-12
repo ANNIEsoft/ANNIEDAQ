@@ -4,60 +4,55 @@
 #include <stdint.h>
 #include <iostream>
 #include <vector>
-
-#include "zmq.hpp"
+#include <zmq.hpp>
+#include <SerialisableObject.h>
 
 //#include <boost/iostreams/stream.hpp>
 //#include <boost/iostreams/device/back_inserter.hpp>
 //#include <boost/archive/text_oarchive.hpp>
 //#include <boost/archive/text_iarchive.hpp>
 //#include <boost/serialization/vector.hpp>
-#include "timestamp.h"
-#include "eventlog.h"
-#include "TTree.h"
 
-struct TriggerData{
-//  friend class boost::serialization::access;
-  TriggerData();
-  void Init();
-  TTree *tree;
-  void Fill(){
-    //    std::cout<<"eventsize "<<EventSize<<std::endl;
-    //std::cout<<"triggersize "<<TriggerSize<<std::endl;
-tree->Fill();}
-  void Write(){tree->Write();}
+
+class TriggerData : public SerialisableObject{
+
+  friend class boost::serialization::access;
+
+ public:
+  
+  //  friend class boost::serialization::access;
   int FirmwareVersion;
   int SequenceID;
   int EventSize;
-  //  std::vector<uint16_t> EventIDs;
-  //std::vector<uint64_t> EventTimes;  // units of nanoseconds.
-  unsigned short EventIDs[500];
-    unsigned long EventTimes[500];
-  int TriggerSize;
-  // std::vector<uint32_t> TriggerMasks;
-
-  //std::vector<uint32_t> TriggerCounters;
-   unsigned  int TriggerMasks[50000];
-   uint32_t TriggerCounters[50000];  
+  std::vector<uint16_t> EventIDs;
+  std::vector<uint64_t> EventTimes;  // units of nanoseconds.
+  int TriggerSize; 
+  std::vector<uint32_t> TriggerMasks;
+  std::vector<uint32_t> TriggerCounters;
   int FIFOOverflow;
   int DriverOverflow;
+  ~TriggerData();
+  bool Print(){};
   
+  void  Send(zmq::socket_t *socket, int flag=0);
+  bool Receive(zmq::socket_t *socket);        
+  
+ private:
 
-  void  Send(zmq::socket_t *socket);
-  bool Receive(zmq::socket_t *socket);
+  template <class Archive> void serialize(Archive& ar, const unsigned int version){
 
-//  template<class Archive>
-//  void serialize(Archive & ar, const unsigned int version) {
-//    ar & FirmwareVersion;
-//    ar & SequenceID;
-//    ar & eventsize;
-//    ar & Events;
-//    ar & datasize;
-//    ar & Data;
-//    ar & FIFOOverflow;
-//    ar & DriverOverflow;
-//  }
-//  
+      ar & FirmwareVersion;
+      ar & SequenceID;
+      ar & EventSize;
+      ar & TriggerSize;
+      ar & FIFOOverflow;
+      ar & DriverOverflow;
+      ar & EventIDs;
+      ar & EventTimes;
+      ar & TriggerMasks;
+      ar & TriggerCounters;
+    }
+    
 };
 
 //template <class T>

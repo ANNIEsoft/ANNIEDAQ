@@ -5,6 +5,8 @@ CCTrigger::CCTrigger():Tool() {}
 
 bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 {
+  threshold=0;
+  reftriggernum=99999;
 
 	if(configfile!="")	m_variables.Initialise(configfile);
 	//m_variables.Print();
@@ -78,32 +80,33 @@ bool CCTrigger::Initialise(std::string configfile, DataModel &data)
 	  std::cout << "for begin " <<Lcard.at(i)<< std::endl;
 		if (Lcard.at(i) == "TDC" || Lcard.at(i) == "ADC")
 		{
-		  std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<" "<< Ncrate.at(i)<<std::endl; 
+		  //std::cout << "d1 " << Ccard.at(i) << " " << Ncard.at(i) <<" "<< Ncrate.at(i)<<std::endl; 
 		  m_data->MRDdata.List.CC[Lcard.at(i)].push_back(Create(Lcard.at(i), Ccard.at(i), Ncard.at(i), Ncrate.at(i)));	//They use CC at 0
-			std::cout << "d2 "<<std::endl;
+			//std::cout << "d2 "<<std::endl;
 		}
 		else if (Lcard.at(i) == "TRG")
 		{
-		  std::cout << "d3 "<<std::endl;
+		  //std::cout << "d3 "<<std::endl;
 			trg_pos = m_data->MRDdata.List.CC["TDC"].size();
-			std::cout << "d4 "<<std::endl;			
+			//std::cout << "d4 "<<std::endl;			
 			m_data->MRDdata.List.CC["TDC"].push_back(Create("TDC", Ccard.at(i), Ncard.at(i), Ncrate.at(i)));	//They use CC at 0
-			std::cout << "d5 "<<std::endl;
+			//std::cout << "d5 "<<std::endl;
 		}
 		else if (Lcard.at(i) == "DISC"){
 		  //		  std::string cardname, std::string config, int cardslot, int crate
-		  std::cout<<"setting descriminator crate:"<<Ncrate.at(i)<<", Card:"<<Ncard.at(i)<<std::endl;
+		  //std::cout<<"setting descriminator crate:"<<Ncrate.at(i)<<", Card:"<<Ncard.at(i)<<std::endl;
 		    LeCroy4413* tmp=new LeCroy4413(Ncard.at(i), Ccard.at(i), Ncrate.at(i));
-		  //		  tmp.
+		    disc.push_back(tmp);
+		    //		  tmp.
 	  
 		}
 		else std::cout << "\n\nUnkown card\n" << std::endl;
-		std::cout << "for over " << std::endl;
+		//std::cout << "for over " << std::endl;
 	}
 
-	std::cout << "Trigger is in slot ";
-	std::cout << m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetSlot();
-	std::cout << " and crate "<<m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetCrate() << std::endl;
+	//std::cout << "Trigger is in slot ";
+	//std::cout << m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetSlot();
+	//std::cout << " and crate "<<m_data->MRDdata.List.CC["TDC"].at(trg_pos)->GetCrate() << std::endl;
 
 	srand(time(0));
 
@@ -174,6 +177,18 @@ bool CCTrigger::Execute()
 	  //std::cout<<"MRD sending "<<tmp.str()<<std::endl;
 	}
 
+	/*	if((m_data->MRDdata.triggernum % 10000) ==0  && m_data->MRDdata.triggernum != reftriggernum){
+	  threshold++;
+	  reftriggernum=m_data->MRDdata.triggernum;
+	  std::cout<<"triggernum="<<m_data->MRDdata.triggernum<<" , threshold set to "<<threshold<<std::endl;
+	  if (threshold>=1024) exit(1);
+	  for(int i=0;i<disc.size();i++){
+
+	    disc.at(i)->WriteThresholdValue(threshold);
+	  }
+
+	}
+	*/
 	  return true;
 }
 

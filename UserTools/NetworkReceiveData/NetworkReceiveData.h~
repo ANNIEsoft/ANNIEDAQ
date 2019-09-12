@@ -30,8 +30,13 @@ class NetworkReceiveData: public Tool {
  private:
 
   zmq::socket_t *Receive;
+  zmq::socket_t *TrigReceive;
   int m_port;
+  int m_trigport;
   std::string m_address;
+  std::string m_trigaddress; 
+
+  zmq::pollitem_t in[2];
 
   int cards;
   int channels;

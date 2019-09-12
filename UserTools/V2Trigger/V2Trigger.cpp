@@ -72,7 +72,7 @@ bool V2Trigger::Execute(){
 	//printf("d6");
 	//std::cout<<"d6"<<std::endl;
 	std::istringstream iss(static_cast<char*>(receive.data()));
-	//std::cout<<" got trigger message "<<iss.str()<<std::endl;	
+	std::cout<<" got trigger message "<<iss.str()<<std::endl;	
 	std::string type="";
 	long trigger=0;
 	//std::cout<<"V2Trigger received "<<iss.str()<<std::endl;
@@ -93,7 +93,7 @@ bool V2Trigger::Execute(){
     }
     
     else{
-      printf("d9");
+      //printf("d9");
       //std::cout<<"d9"<<std::endl;
       Log("Error sending trigger query to Socket",0,m_verbose);
       
@@ -111,7 +111,7 @@ bool V2Trigger::Execute(){
     if(m_variables.Has(it->first)){
       long tmp=0;
       m_variables.Get(it->first,tmp);
-
+      std::cout<<tmp<<" : "<<TriggerResiduals[it->first]<<std::endl;
       if((it->second % tmp)< TriggerResiduals[it->first]){
 	trigger=true;
       }

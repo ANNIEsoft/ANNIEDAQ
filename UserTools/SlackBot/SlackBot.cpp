@@ -28,7 +28,7 @@ bool SlackBot::Initialise(std::string configfile, DataModel &data){
       /* First set the URL that is about to receive our POST. This URL can
 	 just as well be a https:// URL if that is what should receive the
 	 data. */ 
-      curl_easy_setopt(curl, CURLOPT_URL, "https://hooks.slack.com/services/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");
+      curl_easy_setopt(curl, CURLOPT_URL, "https://hooks.slack.com/services/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");
       /* Now specify the POST data */ 
       std::string field;
       field=tmp.str();
@@ -64,9 +64,10 @@ bool SlackBot::Initialise(std::string configfile, DataModel &data){
   //exit(0);
   //}
 
-  m_data->InfoTitle="SlackBotVariables";
-  m_variables>>m_data->InfoMessage;
-  m_data->GetTTree("RunInformation")->Fill();
+  //Ben need to replace
+  //  m_data->InfoTitle="SlackBotVariables";
+  // m_variables>>m_data->InfoMessage;
+  // m_data->GetTTree("RunInformation")->Fill();
 
   return true;
 }
@@ -103,7 +104,7 @@ bool SlackBot::Finalise(){
       /* First set the URL that is about to receive our POST. This URL can
 	 just as well be a https:// URL if that is what should receive the
 	 data. */
-      curl_easy_setopt(curl, CURLOPT_URL, "https://hooks.slack.com/services/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");
+      curl_easy_setopt(curl, CURLOPT_URL, "https://hooks.slack.com/services/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");
       
       std::string field;
       field=tmp.str();

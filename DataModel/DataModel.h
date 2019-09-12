@@ -53,8 +53,8 @@ class DataModel{
   std::vector<int> fullbuffsize;
   std::vector<double*> Data;
 
-  std::vector<CardData*> carddata; 
-  TriggerData *trigdata;
+ BoostStore *carddata; 
+ BoostStore *trigdata;
   
   std::string InfoTitle;
   std::string InfoMessage;
@@ -63,6 +63,7 @@ class DataModel{
   MRDOut MRDout;
 
   zmq::socket_t *MonitoringSocket;
+  bool TRG;
 
  private:
   

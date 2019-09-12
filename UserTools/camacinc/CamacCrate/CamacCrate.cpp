@@ -38,9 +38,11 @@ void CamacCrate::Init(int i)		//Initialize device
 	cratenum=i;
 	std::cout<<"w3"<<std::endl;
 	int usbdevid=0;
+	std::cout<<"i="<<i<<std::endl;
 	if(i==7)usbdevid=devicemap["CC0318"];
 	if(i==8)usbdevid=devicemap["CC0135"];
-	
+	std::cout<<"usbdevid="<<usbdevid<<std::endl;
+
 	USBOpen(usbdevid);
 	std::cout<<"w4"<<std::endl;
 

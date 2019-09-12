@@ -43,8 +43,9 @@ class CCTrigger: public Tool
 		std::vector<CamacCrate*>::iterator iC;				//Iterates over Module.CC<vector>
 		zmq::socket_t* TriggerSend;
 		zmq::pollitem_t items[1];
-
-
+		std::vector<LeCroy4413*> disc;
+		int threshold;
+		unsigned long reftriggernum;
 };
 
 

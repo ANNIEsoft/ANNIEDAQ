@@ -22,7 +22,7 @@ TrgClock	0	#1, 8-9		0 (def) = 25 ns, 1 = 50 ns, 2 = 100 ns, 3 = selects external
 
 #Register 2
 #Both
-MaxHITS		0	#2, 0-3		Maximum number of hits allowed per TDC channel. From 0 = 1 to 15 (def)= 16
+MaxHITS		15	#2, 0-3		Maximum number of hits allowed per TDC channel. From 0 = 1 to 15 (def)= 16
 #Common stop
 FullScale	4095 	#2, 4-15	Maximum full scale time allowed for the TDC data, in units of 8 ns, from 0 to 32767.5 ns
 

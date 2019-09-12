@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <pthread.h>
+#include <sstream>
 
 #include "Tool.h"
 
@@ -36,6 +37,7 @@ class ThreadedSubToolChain: public Tool {
   pthread_t thread;
   //  zmq::socket_t* Isend;
   ToolChain_thread_args *args;
+  std::string name;
 
   static void *SubThread(void* arg);
 

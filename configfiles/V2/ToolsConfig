@@ -1,6 +1,6 @@
 InputVariables InputVariables configfiles/V2/InputVariablesConfig
 #Postgress Postgress configfiles/PostgressConfig
-#SlackBot SlackBot NULL
+SlackBot SlackBot NULL
 #HVComs HVComs configfiles/HVComsConfig
 #Trigger Trigger configfiles/Hefty_TriggerConfig
 #NetworkReceiveData NetworkReceiveData configfiles/NetworkReceiveDataConfig
@@ -10,4 +10,6 @@ InputVariables InputVariables configfiles/V2/InputVariablesConfig
 #MRD MRD configfiles/MRDConfig
 V2Trigger V2Trigger configfiles/V2/V2TriggerConfig
 StoreSave StoreSave configfiles/V2/StoreSaveConfig
-ThreadedSubToolChain ThreadedSubToolChain configfiles/MRD/ToolChainConfig
+#MRDSubToolChain ThreadedSubToolChain configfiles/MRD/ToolChainConfig
+VMESubToolChain ThreadedSubToolChain configfiles/VMEs/ToolChainConfig
+#LAPPDSubToolChain ThreadedSubToolChain configfiles/LAPPD/ToolChainConfig

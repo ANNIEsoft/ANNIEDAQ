@@ -72,6 +72,7 @@ bool StoreSave::Execute(){
       it->second->recv(&mesname);
       std::istringstream iss(static_cast<char*>(mesname.data()));
       std::string name=iss.str();
+      //std::cout<<"h0 "<<name<<std::endl;
 
       zmq::message_t in;
       it->second->recv(&in);
@@ -80,10 +81,19 @@ bool StoreSave::Execute(){
       iss2 >>  std::hex >> arg2;
       BoostStore* tmp;
       tmp=reinterpret_cast<BoostStore*>(arg2);
-      //std::cout<<"h1 "<<tmp<<std::endl;
+      //std::cout<<"h1 "<<name<<":"<<tmp<<std::endl;
+      //tmp->Print(false);
+      //if(name=="TrigData"){
+	//TriggerData tt;
+	//tmp->Get("TrigData",tt);
+	//std::cout<<"SS Eventsize="<<tt.EventSize<<std::endl;
+	//std::cout<<"SS SequenceID="<<tt.SequenceID<<std::endl;
+	//std::cout<<"SS EventIDs size="<<tt.EventIDs.size()<<std::endl;
+	//std::cout<<"SS EventIDs 3="<<tt.EventIDs.at(3)<<std::endl;
+	//}
       outstore->Set(name,tmp);
-      //std::cout<<"h2"<<std::endl;
-
+      std::cout<<"h2"<<std::endl;
+      delete tmp;
 
     }
 
