@@ -24,6 +24,8 @@ class VMETriggerSend: public Tool {
 
 
   zmq::socket_t *TriggerCom;
+  zmq_pollitem_t in[1];
+  zmq_pollitem_t out[1];
 
   int m_verbose;
   int Trigger_port;

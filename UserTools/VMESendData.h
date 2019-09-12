@@ -179,7 +179,9 @@ class VMESendData: public Tool {
  private:
 
   zmq::socket_t *Send;
+  zmq::socket_t *TrigSend;
   int m_port;
+  int m_trigport;
 
 
 };

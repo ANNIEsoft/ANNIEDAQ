@@ -11,17 +11,21 @@ bool VMESendData::Initialise(std::string configfile, DataModel &data){
   m_data= &data;
 
   m_variables.Get("port",m_port);
+  m_variables.Get("trigport",m_trigport);
   
   Send=new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
+  TrigSend=new zmq::socket_t(*(m_data->context), ZMQ_PUSH);
   //  int a=12000;
   //Send->setsockopt(ZMQ_SNDTIMEO, a);
   //Send->setsockopt(ZMQ_RCVTIMEO, a);
 
   std::stringstream tmp;
   tmp<<"tcp://*:"<<m_port;
-  
   Send->bind(tmp.str().c_str());
 
+  std::stringstream tmp2;
+  tmp2<<"tcp://*:"<<m_trigport;
+  TrigSend->bind(tmp2.str().c_str());
    
   return true;
 }
@@ -33,6 +37,10 @@ bool VMESendData::Execute(){
 
     zmq::pollitem_t out[] = {
       { *Send, 0, ZMQ_POLLOUT, 0 }
+    };
+
+    zmq::pollitem_t out2[] = {
+      { *TrigSend, 0, ZMQ_POLLOUT, 0 }
     };
 
     //std::cout<<"d 1 "<<std::endl; 
@@ -52,16 +60,18 @@ bool VMESendData::Execute(){
     //    std::cout<<"d 3 "<<m_data->carddata.size()<<std::endl;  
     // write class instance to archive
 
+    std::cout<<"before poll 1"<<std::endl;
     zmq::poll (&out[0], 1, 5000);
-
-    if (out[0].revents & ZMQ_POLLOUT) {
+    std::cout<<"after poll 1"<<std::endl;
+    if (out[0].revents & ZMQ_POLLOUT ) {
       //   NEWNEW
-      zmq::message_t cards(sizeof m_data->carddata.size());
-      snprintf ((char *) cards.data(),  sizeof m_data->carddata.size() , "%d" ,m_data->carddata.size()) ;
-      //std::cout<<"Sending card size = "<<m_data->carddata.size()<<std::endl;
-      Send->send(cards);
-      
-      //std::cout<<"Sent"<<std::endl;    
+      int size= m_data->carddata.size();
+      zmq::message_t cards(sizeof size);
+      snprintf ((char *) cards.data(),  sizeof size , "%d" ,size) ;
+      std::cout<<"Sending card size = "<<m_data->carddata.size()<<std::endl;
+      if(size>0)      Send->send(cards,ZMQ_SNDMORE);
+      else Send->send(cards);
+      std::cout<<"Sent"<<std::endl;    
       
       for (int i=0;i<m_data->carddata.size();i++){
 	
@@ -70,10 +80,15 @@ bool VMESendData::Execute(){
     //Send->send(m_data->carddata.begin(),m_data->carddata.end());
        //m_data->carddata.at(i)
       // std::cout<<"Sending"<<std::endl;
+	std::cout<<"before poll 2"<<std::endl;
 	zmq::poll (&out[0], 1, 2000);
-	
+	std::cout<<"after poll 2"<<std::endl;
+
 	if (out[0].revents & ZMQ_POLLOUT) {    
-	  m_data->carddata.at(i)->Send(Send);
+	  std::cout<<"sending card data"<<std::endl;
+	  if( i <(m_data->carddata.size()-1))  m_data->carddata.at(i).Send(Send, ZMQ_SNDMORE);
+	  else m_data->carddata.at(i).Send(Send);
+	  std::cout<<"set card data"<<std::endl;
 	  //std::cout<<" test "<<(m_data->carddata.at(0)->LastSync)<<std::hex<<&(m_data->carddata.at(0)->LastSync)<< std::endl;
 	  //zmq::message_t ms1(&(m_data->carddata.at(0)->LastSync),sizeof m_data->carddata.at(0)->LastSync, my_free);
 	  //std::cout<<"Sent"<<std::endl;
@@ -190,11 +205,19 @@ bool VMESendData::Execute(){
 	   Send->send(message);
 	   //std::cout<<"d 9 "<<std::endl;*/
 	}
+
       }
     }
-  
-    
-    
+    //    std::cout<<"before trig send poll success"<<std::endl;
+    std::cout<<"before poll 3"<<std::endl;
+    zmq::poll (&out2[0], 1, 5000);
+    std::cout<<"after poll 3"<<std::endl;  
+    if (out2[0].revents & ZMQ_POLLOUT && m_data->triggerdata!=0) {  
+      std::cout<<"in trig send poll success"<<std::endl;
+      m_data->triggerdata->Send(TrigSend); 
+       std::cout<<"in trig sent"<<std::endl;
+
+    }
   }
   
   return true;
@@ -205,6 +228,9 @@ bool VMESendData::Finalise(){
   
   delete  Send;
   Send=0;
+
+  delete TrigSend;
+  TrigSend=0;
 
   return true;
 }

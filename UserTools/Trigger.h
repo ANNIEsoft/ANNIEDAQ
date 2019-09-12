@@ -3,10 +3,9 @@
 
 #include <string>
 #include <iostream>
-#include <unistd.h>
-#include <vector>
 
 #include "Tool.h"
+#include <zmq.hpp>
 
 class Trigger: public Tool {
 
@@ -21,14 +20,14 @@ class Trigger: public Tool {
 
  private:
 
+
+  zmq::socket_t* sock;
+  zmq_pollitem_t in[1];
+  zmq_pollitem_t out[1]; 
+
   int m_verbose;
-  std::string VME_service_name;
-  int numVME;
-  int VME_port;
-
-  std::vector<zmq::socket_t*> VMESockets;
-
-
+  int Trigger_port;
+  
 };
 
 

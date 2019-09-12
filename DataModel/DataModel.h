@@ -10,9 +10,14 @@
 #include "Store.h"
 #include "Logging.h"
 #include "CardData.h"
-#include "HardwareInterface.h"
+#include "TriggerData.h"
+//#include "HardwareInterface.h"
+#include "UC500ADCInterface.h" 
+#include "ANNIETriggerInterface.h"
 
 #include <zmq.hpp>
+
+#define VERSION 5;
 
 class DataModel{
 
@@ -37,11 +42,13 @@ class DataModel{
   bool triggered;
 
   //Board Data
-  HardwareInterface* Crate;
-
-  std::vector<CardData*> carddata;
-
-
+  //  HardwareInterface* Crate;
+  UC500ADCInterface* Crate;
+  ANNIETriggerInterface* TriggerCard;
+  
+  std::vector<CardData> carddata;
+  TriggerData* triggerdata;
+  /*
   std::vector<int> LastSync;
   std::vector<int> SequenceID;
   std::vector<int> StartTime;
@@ -51,8 +58,10 @@ class DataModel{
   std::vector<int> buffersize;
   std::vector<int> fullbuffsize;
   std::vector<double*> Data;
+  */
+  int CrateNum;
 
-
+  //  bool enabled;
 
  private:
   

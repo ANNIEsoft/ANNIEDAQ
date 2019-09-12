@@ -7,165 +7,65 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
 
   if(configfile!="")  m_variables.Initialise(configfile);
   //m_variables.Print();
-  
+
+  m_variables.Get("Trigger_port",Trigger_port);
+  m_variables.Get("verbose",m_verbose);
+
   m_data= &data;
 
-  m_variables.Get("verbose",m_verbose);  
-  m_variables.Get("VME_service_name",VME_service_name);
-  m_variables.Get("numVME",numVME);
-  m_variables.Get("VME_port",VME_port);  
-  
-  m_data->triggered=false;
-  
-  
-  std::vector<Store*> RemoteServices;
-  
-  zmq::socket_t Ireceive (*(m_data->context), ZMQ_DEALER);
-  Ireceive.connect("inproc://ServiceDiscovery");
+  sock=new zmq::socket_t(*(m_data->context), ZMQ_REP);
 
-  for(int i=0;i<11;i++){
-  
-  zmq::message_t send(256);
-  snprintf ((char *) send.data(), 256 , "%s" ,"All NULL") ;
-  
-  Ireceive.send(send);
-  
-  zmq::message_t receive;
-  Ireceive.recv(&receive);
-  std::istringstream iss(static_cast<char*>(receive.data()));
-  
-  int size;
-  iss>>size;
-  
-  
-  for(int i=0;i<RemoteServices.size();i++){
+  std::stringstream tmp;
+  tmp<<"tcp://*:"<<Trigger_port;
+  sock->bind(tmp.str().c_str());
 
-    delete RemoteServices.at(i);
-    RemoteServices.at(i)=0;
-  }
-  
-  RemoteServices.clear();
-  
-  for(int i=0;i<size;i++){
-    
-    Store *service = new Store;
-    
-    zmq::message_t servicem;
-    Ireceive.recv(&servicem);
-    
-    std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonPaser(ss.str());
-    
-    std::string servicetype;
-    service->Get("msg_value",servicetype);
-    //printf("%s \n",servicetype.c_str());
-    if(servicetype==VME_service_name)  RemoteServices.push_back(service);
-    else delete service  ;
-    
-  }
+  in[0].socket=sock;
+  in[0].events=ZMQ_POLLIN;
+  out[0].socket=sock;
+  out[0].events=ZMQ_POLLOUT; 
 
-  if (RemoteServices.size()==numVME)break;
-  else  usleep(1500000);
- 
-  }
+  m_data->enabled=false;
 
-  if (RemoteServices.size()!=numVME){
-    Log("ERROR!! Cant find all of the VME boards",0,m_verbose);
-    return false;
-  }
-
-  
-  for(int i=0;i<RemoteServices.size();i++){
-    
-    std::string ip;
-    //int logport=24010;
-    
-    //*(it->second)>> output;
-    ip=*((*(RemoteServices.at(i)))["ip"]);
-    
-    
-    zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
-    int a=12000;
-    RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
-    RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
- 
-    std::stringstream tmp;
-    tmp<<"tcp://"<<ip<<":"<<VME_port;
-    // printf("%s \n",tmp.str().c_str());
-    RemoteSend->connect(tmp.str().c_str());
-    
-    VMESockets.push_back(RemoteSend);
-
-  }
-
-
-  for(int i=0;i<RemoteServices.size();i++){
-
-    delete RemoteServices.at(i);
-    RemoteServices.at(i)=0;
-  }
-
-  RemoteServices.clear();
-    
   return true;
 }
 
 
 bool Trigger::Execute(){
 
-  bool trigger=true;  
-  
-  for (int i=0;i<VMESockets.size();i++){
-    
-    std::string query="Status";
-    zmq::message_t message(query.length()+1);
-    snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
 
-    if( VMESockets.at(i)->send(message)){
+  if(m_data->enabled) zmq_poll(&in[0], 1, 0);
+  else zmq_poll(&in[0], 1, 100);
+
+  if (in[0].revents & ZMQ_POLLIN) {
+    zmq::message_t msg;
+    sock->recv(&msg);
+    std::istringstream iss(static_cast<char*>(msg.data()));
+    
+    if(iss.str()=="Enable") m_data->enabled=true;
+    else if(iss.str()=="Disable") m_data->enabled=false; 
+    
+    zmq_poll(&out[0], 1, 100);
+
+    if (out[0].revents & ZMQ_POLLOUT) {
       
-      zmq::message_t receive;
-      if(VMESockets.at(i)->recv(&receive)){
-	std::istringstream iss(static_cast<char*>(receive.data()));
-	
-	bool tmptrigger;
-	iss>>tmptrigger;
-	trigger*=tmptrigger;
-	
-      }
-      else{
-	
-	Log("Error sending trigger query to VME",0,m_verbose);
-	return false;
-	
-      }
+      zmq::message_t rep(4);
+      printf ((char *) rep.data(), 4 , "%s" ,"AKN" );
+      sock->send(rep);
     }
     
-    else{
-      
-      Log("Error receiving trigger query to VME",0,m_verbose);
-      return false;
-   
-    }   
   }
   
-  m_data->triggered=trigger;
-  
+
+
   return true;
-  
 }
 
 
 bool Trigger::Finalise(){
 
-  for (int i=0;i<VMESockets.size();i++){
-
-    delete VMESockets.at(i);
-
-
-  }
-
-  VMESockets.clear();
-
+  m_data->enabled=false;
+  delete sock;
+  sock=0;
 
   return true;
 }
