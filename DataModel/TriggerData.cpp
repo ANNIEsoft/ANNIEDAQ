@@ -9,24 +9,31 @@ TriggerData::~TriggerData(){
 
 void  TriggerData::Send(zmq::socket_t *socket, int flag){
   
-   //std::cout<<"d0"<<std::endl;
+  //std::cout<<"d0"<<std::endl;
   zmq::message_t ms1(&FirmwareVersion,sizeof FirmwareVersion, bencleanup2);
-   //std::cout<<"d0.1"<<std::endl;  
-zmq::message_t ms2(&SequenceID,sizeof SequenceID, bencleanup2);
-//std::cout<<"d0.2"<<std::endl;
-
- zmq::message_t ms3(&EventSize,sizeof EventSize, bencleanup2);
-  //std::cout<<"d0.3"<<std::endl;
-
+  //std::cout<<"d0.1 FV="<< FirmwareVersion<<std::endl;  
+  zmq::message_t ms2(&SequenceID,sizeof SequenceID, bencleanup2);
+  //std::cout<<"d0.2 SID="<<SequenceID<<std::endl;
+  
+  zmq::message_t ms3(&EventSize,sizeof EventSize, bencleanup2);
+  //std::cout<<"d0.3 ES="<<EventSize<<std::endl;
+  
   zmq::message_t ms4(&TriggerSize,sizeof TriggerSize, bencleanup2);
-  //std::cout<<"d0.4"<<std::endl;
-
+  //std::cout<<"d0.4 TS="<<TriggerSize<<std::endl;
+  
   zmq::message_t ms5(&FIFOOverflow,sizeof FIFOOverflow, bencleanup2);
-  //std::cout<<"d0.5"<<std::endl;
-
+  //std::cout<<"d0.5 FO="<<FIFOOverflow<<std::endl;
+  
   zmq::message_t ms6(&DriverOverflow,sizeof DriverOverflow, bencleanup2);
-  //std::cout<<"d0.6"<<std::endl;
+  //std::cout<<"d0.6 D0="<<DriverOverflow<<std::endl;
 
+  socket->send(ms1,ZMQ_SNDMORE);
+  socket->send(ms2,ZMQ_SNDMORE);
+  socket->send(ms3,ZMQ_SNDMORE);
+  socket->send(ms4,ZMQ_SNDMORE);
+  socket->send(ms5,ZMQ_SNDMORE);
+  socket->send(ms6,ZMQ_SNDMORE);                              
+  
   //
   //std::cout<<"triggercounts snd size check = "<<triggerCounts.size()<<" card = "<< CardID<<std::endl;
   //std::cout<<"data.size = "<<Data.size()<<std::endl;
@@ -53,22 +60,63 @@ zmq::message_t ms2(&SequenceID,sizeof SequenceID, bencleanup2);
   //zmq::message_t ms11(&eventsize,sizeof eventsize, bencleanup2);
   //std::cout<<"d0.11"<<std::endl;
 
-  //zmq::message_t ms3(&FirmwareVersion,sizeof FirmwareVersion, bencleanup2); 
- 
-  zmq::message_t ms7(&(EventIDs.at(0)), sizeof(uint16_t)*EventIDs.size(), bencleanup2);
+  //zmq::message_t ms3(&FirmwareVersion,sizeof FirmwareVersion, bencleanup2);
+  size7=EventIDs.size(); 
+  //std::cout<<"size7="<<size7<<std::endl; 
+  zmq::message_t ms7a(&size7,sizeof size7, bencleanup2);
+  if(size7>0){
+    //std::cout<<"size7>0 = "<<size7<< std::endl;
+    socket->send(ms7a,ZMQ_SNDMORE);
+    zmq::message_t ms7b(&(EventIDs.at(0)), sizeof(uint16_t)*EventIDs.size(), bencleanup2);
+    socket->send(ms7b,ZMQ_SNDMORE);  
+  }
+  else socket->send(ms7a,ZMQ_SNDMORE);
+  
+  
   //std::cout<<"d0.7"<<std::endl;
-
-  zmq::message_t ms8(&(EventTimes.at(0)), sizeof(uint64_t)*EventTimes.size(), bencleanup2);
+  size8=EventTimes.size(); 
+  //std::cout<<"size8="<<size8<<std::endl;
+  zmq::message_t ms8a(&size8,sizeof size8, bencleanup2);
+  if(size8>0){
+    //std::cout<<"size8>0 = "<<size8<< std::endl;
+    socket->send(ms8a,ZMQ_SNDMORE);
+    zmq::message_t ms8b(&(EventTimes.at(0)), sizeof(uint64_t)*EventTimes.size(), bencleanup2);
+    socket->send(ms8b,ZMQ_SNDMORE);
+  }
+  else socket->send(ms8a,ZMQ_SNDMORE);
+  
+  
+  
   //std::cout<<"d0.8"<<std::endl;
-
-  zmq::message_t ms9(&(TriggerMasks.at(0)), sizeof(uint32_t)*TriggerMasks.size(), bencleanup2);
+  size9=TriggerMasks.size();
+  //std::cout<<"size9="<<size9<<std::endl; 
+  zmq::message_t ms9a(&size9,sizeof size9, bencleanup2);  
+  if(size9>0){
+    //std::cout<<"size9>0 = "<<size9<< std::endl;
+    socket->send(ms9a,ZMQ_SNDMORE);
+    zmq::message_t ms9b(&(TriggerMasks.at(0)), sizeof(uint32_t)*TriggerMasks.size(), bencleanup2);
+    socket->send(ms9b,ZMQ_SNDMORE);
+  }
+  else socket->send(ms9a,ZMQ_SNDMORE);
+  
+  
   //std::cout<<"d0.9"<<std::endl;
-
-  zmq::message_t ms10(&(TriggerCounters.at(0)), sizeof(uint32_t)*TriggerCounters.size(), bencleanup2);
+  size10=TriggerCounters.size();
+  //std::cout<<"size10="<<size10<<std::endl; 
+  zmq::message_t ms10a(&size10,sizeof size10, bencleanup2);
+  if(size10>0){
+    //std::cout<<"size10>0 = "<<size10<< std::endl;
+    socket->send(ms10a,ZMQ_SNDMORE);
+    zmq::message_t ms10b(&(TriggerCounters.at(0)), sizeof(uint32_t)*TriggerCounters.size(), bencleanup2);
+    socket->send(ms10b,flag);
+  }
+  else socket->send(ms10a,flag);
+  
+  
   //std::cout<<"d0.10"<<std::endl;
-
+  
   //  std::cout<<"d0.12"<<std::endl;
-
+  
   //  std::cout<<"data.size = "<<Data.size()<<std::endl;
   // std::cout<<"data.size2 = "<<Data.size()*sizeof(uint16_t)<<std::endl;
   //std::cout<<"d1"<<std::endl;  
@@ -80,16 +128,6 @@ if(Data.at(i)==0)    std::cout<<" data.at("<<i<<")="<<Data.at(i);
   */
   //zmq::message_t ms8(&fullbuffsize,sizeof fullbuffsize, bencleanup2);
   //std::cout<<"sending"<<std::endl;
-  socket->send(ms1,ZMQ_SNDMORE);
-  socket->send(ms2,ZMQ_SNDMORE);
-  socket->send(ms3,ZMQ_SNDMORE);
-  socket->send(ms4,ZMQ_SNDMORE);
-  socket->send(ms5,ZMQ_SNDMORE);
-  socket->send(ms6,ZMQ_SNDMORE);                              
-  socket->send(ms7,ZMQ_SNDMORE);
-  socket->send(ms8,ZMQ_SNDMORE);
-  socket->send(ms9,ZMQ_SNDMORE);
-  socket->send(ms10,flag);
   //std::cout<<"sent"<<std::endl;
 
   // socket->send(ms11,ZMQ_SNDMORE);

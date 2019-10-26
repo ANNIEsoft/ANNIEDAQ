@@ -39,8 +39,11 @@ bool VMETriggerSend::Initialise(std::string configfile, DataModel &data){
   if(m_crate_num==1){
     m_data->TriggerCard= new ANNIETriggerInterface(m_crate_num);
     m_data->TriggerCard->Initialise(m_variables);
+    //std::cout<<"grr 1"<<std::endl;
     m_data->TriggerCard->EnableTrigger();
+    //std::cout<<"grr 2"<<std::endl;
   }
+  //std::cout<<"grr 3"<<std::endl;     
 
   return true;
 }
@@ -60,7 +63,13 @@ bool VMETriggerSend::Execute(){
   */
 
   zmq::message_t receive;
-  if(TriggerCom->recv(&receive,ZMQ_NOBLOCK)){
+  //  if(TriggerCom->recv(&receive,ZMQ_NOBLOCK)){
+
+  zmq::poll (&in[0], 1, 100);
+  
+  if (in[0].revents & ZMQ_POLLIN) {
+    
+    TriggerCom->recv(&receive);    
     std::istringstream iss(static_cast<char*>(receive.data()));
     
     std::string ret="";
@@ -69,19 +78,19 @@ bool VMETriggerSend::Execute(){
       //std::cout<<"got status"<<std::endl;      
       
       if(m_data->Crate->Triggered()){
-	//	std::cout<<"v1"<<std::endl;
+	//std::cout<<"v1"<<std::endl;
 	m_data->triggered=true;
 	ret="1";
       }
       else {
-	//	std::cout<<"v2 "<<m_soft<<std::endl;
+	//std::cout<<"v2 "<<m_soft<<std::endl;
 	m_data->triggered=false;
 	if(m_soft && m_crate_num==1 ){
 	  //std::cout<<"v3"<<std::endl;
 	  while(!m_data->Crate->Triggered()){
-	    // std::cout<<"v4"<<std::endl;  
-	     m_data->TriggerCard->ForceTriggerNow();
-	    usleep(1000);
+	    //std::cout<<"v4"<<std::endl;  
+	    m_data->TriggerCard->ForceTriggerNow();
+	    usleep(100);
 	  }
 	  ret="1";
 	  m_data->triggered=true;	
@@ -91,11 +100,11 @@ bool VMETriggerSend::Execute(){
 	//usleep(10000);
       }
 
-      //////////////////// BEN faking trigger remove///////
+/*      //////////////////// BEN faking trigger remove///////
       ret="1";            
       m_data->triggered=true;
       usleep(1000);  
-      //////////////////////////////////////////////////
+*/     //////////////////////////////////////////////////
 
       //ret=1;
       //  std::cout << "Waiting for triggers " << std::endl;
@@ -105,13 +114,13 @@ bool VMETriggerSend::Execute(){
     }
 
     else if(iss.str()=="Initialise"){
-
+      
       //std::cout<<"got initialise"<<std::endl;
       zmq::poll (&in[0], 1, 5000);
       
       if (in[0].revents & ZMQ_POLLIN) {
 	TriggerCom->recv(&receive);
-	//std::cout<<"d1"<<std::endl;
+	////std::cout<<"d1"<<std::endl;
 	std::istringstream iss2(static_cast<char*>(receive.data()));
 	//std::cout<<"d2"<<std::endl;
 	m_variables.JsonParser(iss2.str());
@@ -139,7 +148,7 @@ bool VMETriggerSend::Execute(){
 	  while(!m_data->Crate->Triggered()){
 	    //std::cout<<"p1 "<<m_data->Crate->Triggered()<<std::endl;
 	    m_data->TriggerCard->ForceTriggerNow();
-	    usleep(1000);
+	    usleep(100);
           }
 	  //std::cout<<"p2"<<std::endl;
 	}

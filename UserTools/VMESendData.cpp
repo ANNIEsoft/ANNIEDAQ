@@ -60,18 +60,18 @@ bool VMESendData::Execute(){
     //    std::cout<<"d 3 "<<m_data->carddata.size()<<std::endl;  
     // write class instance to archive
 
-    std::cout<<"before poll 1"<<std::endl;
+    //std::cout<<"before poll 1"<<std::endl;
     zmq::poll (&out[0], 1, 5000);
-    std::cout<<"after poll 1"<<std::endl;
+    //std::cout<<"after poll 1"<<std::endl;
     if (out[0].revents & ZMQ_POLLOUT ) {
       //   NEWNEW
       int size= m_data->carddata.size();
       zmq::message_t cards(sizeof size);
       snprintf ((char *) cards.data(),  sizeof size , "%d" ,size) ;
-      std::cout<<"Sending card size = "<<m_data->carddata.size()<<std::endl;
+      //std::cout<<"Sending card size = "<<m_data->carddata.size()<<std::endl;
       if(size>0)      Send->send(cards,ZMQ_SNDMORE);
       else Send->send(cards);
-      std::cout<<"Sent"<<std::endl;    
+      //std::cout<<"Sent"<<std::endl;    
       
       for (int i=0;i<m_data->carddata.size();i++){
 	
@@ -80,15 +80,21 @@ bool VMESendData::Execute(){
     //Send->send(m_data->carddata.begin(),m_data->carddata.end());
        //m_data->carddata.at(i)
       // std::cout<<"Sending"<<std::endl;
-	std::cout<<"before poll 2"<<std::endl;
-	zmq::poll (&out[0], 1, 2000);
-	std::cout<<"after poll 2"<<std::endl;
+	//std::cout<<"before poll 2 i="<<i<<std::endl;
+	zmq::poll (&out[0], 1, -1);
+	//std::cout<<"after poll 2"<<std::endl;
 
 	if (out[0].revents & ZMQ_POLLOUT) {    
-	  std::cout<<"sending card data"<<std::endl;
-	  if( i <(m_data->carddata.size()-1))  m_data->carddata.at(i).Send(Send, ZMQ_SNDMORE);
-	  else m_data->carddata.at(i).Send(Send);
-	  std::cout<<"set card data"<<std::endl;
+	  //std::cout<<"sending card data"<<std::endl;
+	  if( i <(m_data->carddata.size()-1)){
+	    //std::cout<<"sendmore"<<std::endl;
+	    m_data->carddata.at(i).Send(Send, ZMQ_SNDMORE);
+	  }
+	  else{
+	    m_data->carddata.at(i).Send(Send);
+	    //std::cout<<"send"<<std::endl;
+	  }
+	  //std::cout<<"set card data"<<std::endl;
 	  //std::cout<<" test "<<(m_data->carddata.at(0)->LastSync)<<std::hex<<&(m_data->carddata.at(0)->LastSync)<< std::endl;
 	  //zmq::message_t ms1(&(m_data->carddata.at(0)->LastSync),sizeof m_data->carddata.at(0)->LastSync, my_free);
 	  //std::cout<<"Sent"<<std::endl;
@@ -209,17 +215,17 @@ bool VMESendData::Execute(){
       }
     }
     //    std::cout<<"before trig send poll success"<<std::endl;
-    std::cout<<"before poll 3"<<std::endl;
-    zmq::poll (&out2[0], 1, 5000);
-    std::cout<<"after poll 3"<<std::endl;  
-    if (out2[0].revents & ZMQ_POLLOUT && m_data->triggerdata!=0) {  
-      std::cout<<"in trig send poll success"<<std::endl;
-      m_data->triggerdata->Send(TrigSend); 
-       std::cout<<"in trig sent"<<std::endl;
-
+    if(m_data->CrateNum==1 &&  m_data->triggerdata!=0){   
+      //std::cout<<"before poll 3"<<std::endl;
+      zmq::poll (&out2[0], 1, 5000);
+      //std::cout<<"after poll 3"<<std::endl;  
+      if (out2[0].revents & ZMQ_POLLOUT) {  
+	//std::cout<<"in trig send poll success"<<std::endl;
+	m_data->triggerdata->Send(TrigSend); 
+	//std::cout<<"in trig sent"<<std::endl;
+      }
     }
   }
-  
   return true;
 }
 

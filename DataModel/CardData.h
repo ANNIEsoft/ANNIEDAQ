@@ -13,12 +13,12 @@ struct CardData{
   int SequenceID;
   int FirmwareVersion;
   std::vector<uint32_t> Data;
-  
+  int FIFOstate;  
   ~CardData();
 
   void  Send(zmq::socket_t *socket, int flag=0);
   void Receive(zmq::socket_t *socket);
-
+  int size;
   
 };
 

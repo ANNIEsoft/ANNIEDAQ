@@ -30,7 +30,7 @@ bool CrateReader::Initialise(std::string configfile, DataModel &data){
 
 bool CrateReader::Execute(){
   
-  //  std::cout<<" debug 0 "<<m_data->Crate->NumberOfCards()<<std::endl;
+  //std::cout<<" debug 0 "<<m_data->Crate->NumberOfCards()<<std::endl;
   // m_data->triggered=m_data->Crate->Triggered();
 
   //  std::cout<<" debug 1 "<<std::endl;
@@ -59,8 +59,17 @@ bool CrateReader::Execute(){
     //}
     // m_data->Crate->EnableTrigger();
     m_data->carddata=  m_data->Crate->GetCardData();
+    //std::cout<<" debug 7 "<<std::endl;
 
-    ///////////////////// BEN faking card data remove ////////
+    /*for( int i=0;i<m_data->carddata.size();i++){
+      std::cout<<i<<": data.size = "<<m_data->carddata.at(i).Data.size()<<std::endl;
+      if(m_data->carddata.at(i).Data.size()>0) std::cout<<i<<": data.at(size-1) = "<<m_data->carddata.at(i).Data.at(m_data->carddata.at(i).Data.size()-1)<<std::endl;
+      std::cout<<i<<": CardID = "<<m_data->carddata.at(i).CardID<<std::endl;
+      std::cout<<i<<": SequenceID = "<<m_data->carddata.at(i).SequenceID<<std::endl;
+      std::cout<<i<<": FirwareVersion = "<<m_data->carddata.at(i).FirmwareVersion<<std::endl;
+      std::cout<<i<<": FIFOstate = "<<m_data->carddata.at(i).FIFOstate<<std::endl;
+      }*/
+    /*  ///////////////////// BEN faking card data remove ////////
     for( int i=0;i<10;i++){
       CardData tmp;
       tmp.CardID=i;
@@ -74,17 +83,34 @@ bool CrateReader::Execute(){
     
 }
     
-    ///////////////////////////////////////////
-    
+    */ ///////////////////////////////////////////
+    //std::cout<<"b1"<<std::endl;
     if(m_data->CrateNum==1){
-      //  std::cout<<"getting trig data"<<std::endl;
+        //std::cout<<"getting trig data"<<std::endl;
 
 
 	if(m_data->TriggerCard->HasData()){
-	  //  std::cout<<"in has trig data"<<std::endl;
+	   //std::cout<<"in has trig data"<<std::endl;
 	  m_data->triggerdata=m_data->TriggerCard->GetTriggerData();
-	}
-      ////////// BEN faking trigger data remove ///////
+	  /*
+	  std::cout<<"trig.FirmwareVersion = "<<  m_data->triggerdata->FirmwareVersion<<std::endl;
+	  std::cout<<"trig.SequenceID = "<<  m_data->triggerdata->SequenceID<<std::endl;
+	  std::cout<<"trig.EventSize = " <<  m_data->triggerdata->EventSize<<std::endl;
+	  std::cout<<"trig.EventIDs.size() = "<<  m_data->triggerdata->EventIDs.size()<<std::endl;
+	  if(m_data->triggerdata->EventIDs.size()>0)std::cout<<"trig.EventIDs.at(0) = " <<  m_data->triggerdata->EventIDs.at(0)<<std::endl;
+	  std::cout<<"trig.EventTimes.size() = "<<  m_data->triggerdata->EventTimes.size()<<std::endl;
+	  if(m_data->triggerdata->EventTimes.size()>0)std::cout<<"trig.EventTimes.at(0) = "<<  m_data->triggerdata->EventTimes.at(0)<<std::endl;
+	  std::cout<<"trig.TriggerSize = "<<  m_data->triggerdata->TriggerSize<<std::endl;
+	  std::cout<<"trig.TriggerMasks.size() = " <<  m_data->triggerdata->TriggerMasks.size()<<std::endl;
+	  if(m_data->triggerdata->TriggerMasks.size()>0)std::cout<<"trig.TriggerMasks.at(0) = "<<  m_data->triggerdata->TriggerMasks.at(0)<<std::endl;
+	  std::cout<<"trig.TriggerCounters.size() = "<<  m_data->triggerdata->TriggerCounters.size()<<std::endl;
+	  if(m_data->triggerdata->TriggerCounters.size()>0)std::cout<<"trig.TriggerCounters.at(0) = "<<  m_data->triggerdata->TriggerCounters.at(0)<<std::endl;
+	  std::cout<<"trig.FIFOOverflow = "<<  m_data->triggerdata->FIFOOverflow<<std::endl;
+	  std::cout<<"trig.DriverOverflow = "<<  m_data->triggerdata->DriverOverflow<<std::endl;
+	  */	}
+	//std::cout<<"b2"<<std::endl;
+	  
+	/*////////// BEN faking trigger data remove ///////
 	m_data->triggerdata = new TriggerData();
 	//std::cout<<"w1"<<std::endl;
 
@@ -107,16 +133,17 @@ bool CrateReader::Execute(){
 	std::cout<<"w4 "<< m_data->triggerdata->EventIDs.size()<<std::endl;
 	std::cout<<"wr "<< m_data->triggerdata->EventIDs.at(3)<<std::endl;
 
-	///////////////////////////////
+	*/	///////////////////////////////
 	
 	
     }
+    //std::cout<<"b3"<<std::endl;
     
   }
   
   
   
-  //std::cout<<" debug 7 "<<std::endl;
+  //std::cout<<" debug 8 "<<std::endl;
   return true;
 }
 

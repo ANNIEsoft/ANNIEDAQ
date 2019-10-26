@@ -30,6 +30,7 @@ struct TriggerData{
   void  Send(zmq::socket_t *socket, int flag=0);
   void Receive(zmq::socket_t *socket);        
 
+  int size7,size8,size9,size10;
 //  template<class Archive>
 //  void serialize(Archive & ar, const unsigned int version) {
 //    ar & FirmwareVersion;
