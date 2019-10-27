@@ -19,8 +19,8 @@ all: lib/libMyTools.so lib/libToolChain.so lib/libStore.so include/Tool.h  lib/l
 
 lib/libStore.so:
 
-	cp $(ToolDAQFrameworkPath)/src/Store/Store.h include/
-	g++ -std=c++1y -g -fPIC -shared  -I inlcude $(ToolDAQFrameworkPath)/src/Store/Store.cpp -o lib/libStore.so
+	cp $(ToolDAQFrameworkPath)/src/Store/*.h include/
+	g++ -std=c++1y -g -fPIC -shared $(ToolDAQFrameworkPath)/src/Store/*.cpp -o lib/libStore.so -I include $(BoostLib) $(BoostInclude)
 
 
 include/Tool.h:
