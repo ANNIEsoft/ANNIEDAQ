@@ -1,6 +1,9 @@
 #DummyVMETriggerSend DummyVMETriggerSend configfiles/VMETriggerSendConfig
-VMETriggerSend VMETriggerSend configfiles/VMETriggerSendConfig
+#VMETriggerSend VMETriggerSend configfiles/VMETriggerSendConfig
+#VMETriggerSendStream VMETriggerSendStream configfiles/VMETriggerSendConfig
 #BoardReader BoardReader configfiles/BoardReaderConfig
 #NetworkSendData NetworkSendData configfiles/NetworkSendDataConfig
-CrateReader CrateReader configfiles/CrateReaderConfig
-VMESendData VMESendData configfiles/VMESendDataConfig
+#CrateReader CrateReader configfiles/CrateReaderConfig
+CrateReaderStream2 CrateReaderStream2 configfiles/CrateReaderConfig
+#VMESendData VMESendData configfiles/VMESendDataConfig
+VMESendDataStream VMESendDataStream configfiles/VMESendDataConfig

@@ -60,7 +60,7 @@ class DataModel{
   std::vector<double*> Data;
   */
   int CrateNum;
-
+  bool*  SoftTrigger;
   //  bool enabled;
 
  private:

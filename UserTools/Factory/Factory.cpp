@@ -18,7 +18,13 @@ if (tool=="VMESendData") ret=new VMESendData;
 
 
 //if (tool=="CrateReaderDummy") ret=new CrateReaderDummy;
-//  if (tool=="Trigger") ret=new Trigger;
+// if (tool=="Trigger") ret=new Trigger;
+if (tool=="VMETriggerSendStream") ret=new VMETriggerSendStream;
+if (tool=="CrateReaderStream") ret=new CrateReaderStream;
+//if (tool=="VMESendData") ret=new VMESendData;
+if (tool=="VMESendDataStream") ret=new VMESendDataStream;
+
+  if (tool=="CrateReaderStream2") ret=new CrateReaderStream2;
 return ret;
 }
 

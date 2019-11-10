@@ -7,3 +7,8 @@
 //#include "DummyVMETriggerSend.cpp"
 //#include "CrateReaderDummy.cpp"
 //#include "Trigger.cpp"
+#include "VMETriggerSendStream.cpp"
+#include "CrateReaderStream.cpp"
+//#include "VMESendData.cpp"
+#include "VMESendDataStream.cpp"
+#include "CrateReaderStream2.cpp"
