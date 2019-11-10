@@ -56,6 +56,8 @@ bool VMESendDataStream::Initialise(std::string configfile, DataModel &data){
 
   datacount=0;
   trigcount=0;
+  statusmsg.Set("Data",datacount);
+  statusmsg.Set("Trig",trigcount);
 
   carddatavec.clear();
   triggerdatavec.clear();
@@ -107,7 +109,7 @@ bool VMESendDataStream::Execute(){
       trigcount++;
       statusmsg.Set("Trig",trigcount);
  
-      std::stringstream status;
+       std::stringstream status;
       long datan;
       statusmsg.Get("Data",datan);
       status<<"Data="<<datan<<", Trig="<<trigcount;
@@ -185,6 +187,15 @@ bool VMESendDataStream::Execute(){
     carddatavec.clear();
     triggerdatavec.clear();
     statusmsg.Delete();
+    datacount=0;
+    trigcount=0;
+    statusmsg.Set("Data",datacount);
+    statusmsg.Set("Trig",trigcount);
+    std::stringstream status;
+    status<<"Data="<<datacount<<", Trig="<<trigcount;
+    //std::cout<<"status = "<<status.str()<<std::endl;
+    m_data->vars.Set("Status",status.str());
+    
     // std::cout<<"a11"<<std::endl;
   }  
   //std::cout<<"a12"<<std::endl;
@@ -210,7 +221,12 @@ bool VMESendDataStream::Finalise(){
   carddatavec.clear();
   triggerdatavec.clear();
   
+  datacount=0;
+  trigcount=0;
   statusmsg.Delete();
+
+  std::string tmp="";
+  m_data->vars.Set("Status",tmp);
 
   return true;
 }
