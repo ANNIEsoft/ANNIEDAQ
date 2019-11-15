@@ -120,7 +120,7 @@ bool VMESendDataStream::Execute(){
     }
     //std::cout<<"a4"<<std::endl;
     if(carddatavec.size()>0){
-      //std::cout<<"a5"<<std::endl;
+      //std::cout<<"a5 "<<carddatavec.size()<<std::endl;
       
       zmq::poll (&out[0], 1, 0);
       //std::cout<<"a6"<<std::endl;
@@ -159,6 +159,8 @@ bool VMESendDataStream::Execute(){
 
 
 	}
+	delete carddatavec.at(0);
+	carddatavec.at(0)=0;
 	carddatavec.pop_front();
       }
     }
@@ -166,7 +168,7 @@ bool VMESendDataStream::Execute(){
     
     //std::cout<<"a7"<<std::endl;
     if(triggerdatavec.size()>0){
-      //std::cout<<"a8"<<std::endl;
+      // std::cout<<"a8 "<<triggerdatavec.size()<<std::endl;
       //std::cout<<"before poll 3"<<std::endl;
       zmq::poll (&out2[0], 1, 0);
       //std::cout<<"a9"<<std::endl;  
@@ -175,6 +177,8 @@ bool VMESendDataStream::Execute(){
 	//std::cout<<"sending trigger "<<triggerdatavec.size()<<std::endl;
 	//std::cout<<"in trig send poll success"<<std::endl;
 	triggerdatavec.at(0)->Send(TrigSend);
+	delete triggerdatavec.at(0);
+	triggerdatavec.at(0)=0;
 	triggerdatavec.pop_front(); 
 	//std::cout<<"in trig sent"<<std::endl;
       }
@@ -183,9 +187,20 @@ bool VMESendDataStream::Execute(){
   }
   
   else{
-    //std::cout<<"a10"<<std::endl;
+      //std::cout<<"a10"<<std::endl;
+    for(int i=0;i<carddatavec.size();i++){
+      delete carddatavec.at(i);
+      carddatavec.at(i)=0;
+    }   
     carddatavec.clear();
+    
+    for (int i=0;i< triggerdatavec.size();i++){
+      delete triggerdatavec.at(i);
+      triggerdatavec.at(i)=0;
+    }
+    
     triggerdatavec.clear();
+  
     statusmsg.Delete();
     datacount=0;
     trigcount=0;
@@ -218,8 +233,20 @@ bool VMESendDataStream::Finalise(){
   delete TrigDataRecv;
   TrigDataRecv=0;
 
-  carddatavec.clear();
-  triggerdatavec.clear();
+  //std::cout<<"a10"<<std::endl;
+    for(int i=0;i<carddatavec.size();i++){
+      delete carddatavec.at(i);
+      carddatavec.at(i)=0;
+    }   
+    carddatavec.clear();
+    
+    for (int i=0;i< triggerdatavec.size();i++){
+      delete triggerdatavec.at(i);
+      triggerdatavec.at(i)=0;
+    }
+    
+    triggerdatavec.clear();
+  
   
   datacount=0;
   trigcount=0;
