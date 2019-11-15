@@ -133,6 +133,7 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	  variables.JsonParser(iss2.str());
 	  
 	  //std::cout<<"d6"<<std::endl;
+	  Crate.PresetCounters();
 	  Crate.Initialise(variables);
 	  //std::cout<<"d6.5"<<std::endl;
 	  if(args->crate_num==1) {
