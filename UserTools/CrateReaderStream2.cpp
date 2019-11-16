@@ -159,7 +159,7 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	snprintf ((char *) message.data(), ret.length()+1 , "%s" ,ret.c_str() ) ;
 	TriggerCom.send(message);
 
-	if(ret=="Initialise"){
+	if(ret=="Initialised"){
 	  Crate.PresetCounters();
 	  Crate.Initialise(variables);
 	  //std::cout<<"d6.5"<<std::endl;
