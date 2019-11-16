@@ -133,21 +133,9 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	  variables.JsonParser(iss2.str());
 	  
 	  //std::cout<<"d6"<<std::endl;
-	  Crate.PresetCounters();
-	  Crate.Initialise(variables);
-	  //std::cout<<"d6.5"<<std::endl;
-	  if(args->crate_num==1) {
-	    //std::cout<<"d6.6"<<std::endl;
-	    TriggerCard.Initialise(variables);	
-	    //std::cout<<"d7"<<std::endl;
-	    TriggerCard.EnableTrigger();
-	  }
 	  //std::cout<<"d8"<<std::endl;
 	  ret="Initialised";
 	  //std::cout<<"d9"<<std::endl;
-	  variables.Get("Soft_Trigger",soft);
-	  triggered=true;
-	  *(args->triggered)=triggered;
 	  
 	  
 	  //variables.Print();
@@ -170,6 +158,23 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	zmq::message_t message(ret.length()+1);
 	snprintf ((char *) message.data(), ret.length()+1 , "%s" ,ret.c_str() ) ;
 	TriggerCom.send(message);
+
+	if(ret=="Initialise"){
+	  Crate.PresetCounters();
+	  Crate.Initialise(variables);
+	  //std::cout<<"d6.5"<<std::endl;
+	  if(args->crate_num==1) {
+	    //std::cout<<"d6.6"<<std::endl;
+	    TriggerCard.Initialise(variables);	
+	    //std::cout<<"d7"<<std::endl;
+	    TriggerCard.EnableTrigger();
+	  }
+	  variables.Get("Soft_Trigger",soft);
+	  triggered=true;
+	  *(args->triggered)=triggered;
+	  
+
+	}
 	//std::cout<<"sent "<<ret<<std::endl;
       }
     }
