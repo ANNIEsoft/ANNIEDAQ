@@ -2,12 +2,21 @@
 
 void bencleanup2 (void *data, void *hint) { 
 }
+void bencleanup2b (void *data, void *hint) { 
+
+  if(hint!=0){
+    TriggerData* tmp=reinterpret_cast<TriggerData*>(hint);
+    delete tmp;
+  }
+  
+  
+}
 
 TriggerData::~TriggerData(){
 
 }
 
-void  TriggerData::Send(zmq::socket_t *socket, int flag){
+void  TriggerData::Send(zmq::socket_t *socket, int flag, TriggerData* hint){
   
   //std::cout<<"d0"<<std::endl;
   zmq::message_t ms1(&FirmwareVersion,sizeof FirmwareVersion, bencleanup2);
@@ -103,15 +112,17 @@ void  TriggerData::Send(zmq::socket_t *socket, int flag){
   //std::cout<<"d0.9"<<std::endl;
   size10=TriggerCounters.size();
   //std::cout<<"size10="<<size10<<std::endl; 
-  zmq::message_t ms10a(&size10,sizeof size10, bencleanup2);
   if(size10>0){
+    zmq::message_t ms10a(&size10,sizeof size10, bencleanup2);    
     //std::cout<<"size10>0 = "<<size10<< std::endl;
     socket->send(ms10a,ZMQ_SNDMORE);
-    zmq::message_t ms10b(&(TriggerCounters.at(0)), sizeof(uint32_t)*TriggerCounters.size(), bencleanup2);
+    zmq::message_t ms10b(&(TriggerCounters.at(0)), sizeof(uint32_t)*TriggerCounters.size(), bencleanup2b,hint);
     socket->send(ms10b,flag);
   }
-  else socket->send(ms10a,flag);
-  
+  else{
+    zmq::message_t ms10a(&size10,sizeof size10, bencleanup2b,hint);
+    socket->send(ms10a,flag);
+  }
   
   //std::cout<<"d0.10"<<std::endl;
   

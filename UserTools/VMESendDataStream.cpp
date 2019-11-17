@@ -82,6 +82,12 @@ bool VMESendDataStream::Execute(){
       iss2 >> std::hex >> arg2;
       std::vector<CardData>* tmp;
       tmp=reinterpret_cast<std::vector<CardData>* >(arg2);
+      
+      //	for(int k=0;k<tmp->size();k++){
+
+      //  if(tmp->at(k).CardID>4000) std::cout<<"wegot one "<< tmp->at(k).CardID<<std::endl;
+      //	}
+
       carddatavec.push_back(tmp);
       
       datacount++;      
@@ -128,7 +134,8 @@ bool VMESendDataStream::Execute(){
 	//std::cout<<"Sending data "<<carddatavec.size()<<std::endl;
 	int size= carddatavec.at(0)->size();
 	zmq::message_t cards(sizeof size);
-	snprintf ((char *) cards.data(),  sizeof size , "%d" ,size) ;
+	memcpy ( cards.data(), &size, sizeof size );
+	//snprintf ((char *) cards.data(),  sizeof size , "%d" ,size) ;
 	//std::cout<<"Sending card size = "<<m_data->carddata.size()<<std::endl;
 	if(size>0)   Send->send(cards,ZMQ_SNDMORE);
 	else Send->send(cards);
@@ -146,20 +153,26 @@ bool VMESendDataStream::Execute(){
 	//std::cout<<"after poll 2"<<std::endl;
 
 	//if (out[0].revents & ZMQ_POLLOUT) {    
-	  //std::cout<<"sending card data"<<std::endl;
+	  //sd::cout<<"sending card data"<<std::endl;
+	  //for(int k=0;k<carddatavec.at(0)->size();k++){
+
+	  //if(carddatavec.at(0)->at(k).CardID>4000) std::cout<<"wegot one "<< carddatavec.at(0)->at(k).CardID<<std::endl;
+	  //}
+
 	  if( i <(carddatavec.at(0)->size()-1)){
-	    //std::cout<<"sendmore"<<std::endl;
+	    //sd::cout<<"sendmore "<<i<<std::endl;
+	    
 	    carddatavec.at(0)->at(i).Send(Send, ZMQ_SNDMORE);
 	  }
 	  else{
-	    carddatavec.at(0)->at(i).Send(Send);
-	    //std::cout<<"send"<<std::endl;
+	    carddatavec.at(0)->at(i).Send(Send,0,carddatavec.at(0));
+	    //sd::cout<<"send "<<i<<std::endl;
 	  }
 
 
 
 	}
-	delete carddatavec.at(0);
+	//delete carddatavec.at(0);
 	carddatavec.at(0)=0;
 	carddatavec.pop_front();
       }
@@ -176,8 +189,8 @@ bool VMESendDataStream::Execute(){
       if (out2[0].revents & ZMQ_POLLOUT) {  
 	//std::cout<<"sending trigger "<<triggerdatavec.size()<<std::endl;
 	//std::cout<<"in trig send poll success"<<std::endl;
-	triggerdatavec.at(0)->Send(TrigSend);
-	delete triggerdatavec.at(0);
+	triggerdatavec.at(0)->Send(TrigSend,0, triggerdatavec.at(0));
+	//delete triggerdatavec.at(0);
 	triggerdatavec.at(0)=0;
 	triggerdatavec.pop_front(); 
 	//std::cout<<"in trig sent"<<std::endl;

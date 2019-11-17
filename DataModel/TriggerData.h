@@ -27,7 +27,7 @@ struct TriggerData{
   int DriverOverflow;
   ~TriggerData();
 
-  void  Send(zmq::socket_t *socket, int flag=0);
+  void  Send(zmq::socket_t *socket, int flag=0, TriggerData* hint=0);
   void Receive(zmq::socket_t *socket);        
 
   int size7,size8,size9,size10;
