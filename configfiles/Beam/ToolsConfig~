@@ -1,0 +1,9 @@
+Invariables InputVariables configfiles/Beam/InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+SlackBot SlackBot NULL
+HVComs HVComs configfiles/HVComsConfig
+V2Trigger V2Trigger configfiles/Beam/V2TriggerConfig
+StoreSave StoreSave configfiles/Beam/StoreSaveConfig
+#MRDSubToolChain ThreadedSubToolChain configfiles/MRD/ToolChainConfig
+VMESubToolChain ThreadedSubToolChain configfiles/BeamVMEs/ToolChainConfig
+#LAPPDSubToolChain ThreadedSubToolChain configfiles/LAPPD/ToolChainConfig

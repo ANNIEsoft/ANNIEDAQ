@@ -1,0 +1,6 @@
+VMETrigger VMETrigger Null
+#Trigger Trigger configfiles/Hefty_TriggerConfig
+TriggerStream TriggerStream configfiles/LEDVMEs/TriggerConfig
+#NetworkReceiveData NetworkReceiveData configfiles/VMEs/NetworkReceiveDataConfig
+NetworkReceiveDataStream NetworkReceiveDataStream configfiles/LEDVMEs/NetworkReceiveDataConfig
+VMEStoreSave VMEStoreSave NUll

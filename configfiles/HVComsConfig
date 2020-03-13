@@ -3,3 +3,7 @@
 verbose 1
 HVIP 192.168.163.61
 HVPort 5555
+Voltage_Change 0
+Voltage_Start 100
+Voltage_Stop 500
+Coltage_Step 100

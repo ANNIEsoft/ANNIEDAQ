@@ -15,6 +15,7 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   m_variables.Get("numVME",numVME);
   m_variables.Get("VME_port",VME_port);  
   
+  m_data->numVME=numVME;
   m_data->triggered=false;
   
     
@@ -24,56 +25,56 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
   Ireceive.connect("inproc://ServiceDiscovery");
   
   for(int i=0;i<11;i++){
-  
-  zmq::message_t send(8);
-  snprintf ((char *) send.data(), 8 , "%s" ,"All NULL") ;
-  
-  Ireceive.send(send);
-  
-  zmq::message_t receive;
-  Ireceive.recv(&receive);
-  std::istringstream iss(static_cast<char*>(receive.data()));
-  
-  int size;
-  iss>>size;
-  
-  
-  for(int i=0;i<RemoteServices.size();i++){
-
-    delete RemoteServices.at(i);
-    RemoteServices.at(i)=0;
+    
+    zmq::message_t send(8);
+    snprintf ((char *) send.data(), 8 , "%s" ,"All NULL") ;
+    
+    Ireceive.send(send);
+    
+    zmq::message_t receive;
+    Ireceive.recv(&receive);
+    std::istringstream iss(static_cast<char*>(receive.data()));
+    
+    int size;
+    iss>>size;
+    
+    
+    for(int i=0;i<RemoteServices.size();i++){
+      
+      delete RemoteServices.at(i);
+      RemoteServices.at(i)=0;
+    }
+    
+    RemoteServices.clear();
+    
+    for(int i=0;i<size;i++){
+      
+      Store *service = new Store;
+      
+      zmq::message_t servicem;
+      Ireceive.recv(&servicem);
+      
+      std::istringstream ss(static_cast<char*>(servicem.data()));
+      service->JsonParser(ss.str());
+      
+      std::string servicetype;
+      service->Get("msg_value",servicetype);
+      //printf("%s \n",servicetype.c_str());
+      if(servicetype==VME_service_name)  RemoteServices.push_back(service);
+      else delete service  ;
+      
+    }
+    
+    if (RemoteServices.size()==numVME)break;
+    else  usleep(1500000);
+    
   }
   
-  RemoteServices.clear();
-  
-  for(int i=0;i<size;i++){
-    
-    Store *service = new Store;
-    
-    zmq::message_t servicem;
-    Ireceive.recv(&servicem);
-    
-    std::istringstream ss(static_cast<char*>(servicem.data()));
-    service->JsonParser(ss.str());
-    
-    std::string servicetype;
-    service->Get("msg_value",servicetype);
-    //printf("%s \n",servicetype.c_str());
-    if(servicetype==VME_service_name)  RemoteServices.push_back(service);
-    else delete service  ;
-    
-  }
-
-  if (RemoteServices.size()==numVME)break;
-  else  usleep(1500000);
- 
-  }
-
   if (RemoteServices.size()!=numVME){
     Log("ERROR!! Cant find all of the VME boards",0,m_verbose);
     return false;
   }
-
+  
   
   for(int i=0;i<RemoteServices.size();i++){
     
@@ -188,58 +189,60 @@ bool Trigger::Initialise(std::string configfile, DataModel &data){
 
 
 bool Trigger::Execute(){
+  std::cout<<"in Trigger"<<std::endl;
   if(m_data->Restart==1)Finalise();
   else if(m_data->Restart==2)Initialise("",*m_data);
   else {
-  //  std::cout<<"d1"<<std::endl;
-  //boost::progress_timer t;
+    std::cout<<"d1"<<std::endl;
+    //boost::progress_timer t;
+    m_data->triggered=false;
 
-  bool trigger=true;  
-  if(VMESockets.size()==0)trigger=false;
-  //std::cout<<"d2"<<std::endl;
-
-  for (int i=0;i<VMESockets.size();i++){
-    // std::cout<<"d3"<<std::endl;
-    std::string query="Status";
-    zmq::message_t message(query.length()+1);
-    snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
-    //std::cout<<"d4"<<std::endl;
-    if( VMESockets.at(i)->send(message)){
-       //std::cout<<"d5"<<std::endl;
-      zmq::message_t receive;
-      if(VMESockets.at(i)->recv(&receive)){
-	//std::cout<<"d6"<<std::endl;
-	std::istringstream iss(static_cast<char*>(receive.data()));
-	//std::cout<<" got trigger message "<<iss.str()<<std::endl;	
-	bool tmptrigger;
-	iss>>tmptrigger;
-	trigger*=tmptrigger;
-	//std::cout<<"d7 "<<tmptrigger<<std::endl;
+    bool trigger=true;  
+    if(VMESockets.size()==0)trigger=false;
+    std::cout<<"d2 "<<  VMESockets.size()<<std::endl;
+    
+    for (int i=0;i<VMESockets.size();i++){
+      std::cout<<"d3"<<std::endl;
+      std::string query="Status";
+      zmq::message_t message(query.length()+1);
+      snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
+      std::cout<<"d4"<<std::endl;
+      if( VMESockets.at(i)->send(message)){
+	std::cout<<"d5"<<std::endl;
+	zmq::message_t receive;
+	if(VMESockets.at(i)->recv(&receive)){
+	  std::cout<<"d6"<<std::endl;
+	  std::istringstream iss(static_cast<char*>(receive.data()));
+	  std::cout<<" got trigger message :"<<i<<" = "<<iss.str()<<std::endl;	
+	  bool tmptrigger;
+	  iss>>tmptrigger;
+	  trigger*=tmptrigger;
+	  std::cout<<"d7 "<<tmptrigger<<std::endl;
+	}
+	else{
+	  std::cout<<"d8"<<std::endl;
+	  Log("Error receiving trigger query from VME",0,m_verbose);	
+	  return false;
+	  
+	}
       }
+      
       else{
-	//std::cout<<"d8"<<std::endl;
-	Log("Error receiving trigger query from VME",0,m_verbose);	
+	std::cout<<"d9"<<std::endl;
+	Log("Error sending trigger query to VME",0,m_verbose);
+	
 	return false;
 	
-      }
+      }   
     }
-    
-    else{
-      //std::cout<<"d9"<<std::endl;
-      Log("Error sending trigger query to VME",0,m_verbose);
-      
-      return false;
-   
-    }   
+    std::cout<<"d10"<<std::endl;
+    m_data->triggered=trigger;
+    if( m_data->triggered) m_data->triggernum++;
+    std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
+    std::cout<<"d11"<<std::endl;  
   }
-  // std::cout<<"d10"<<std::endl;
-  m_data->triggered=trigger;
-  if( m_data->triggered) m_data->triggernum++;
-  //  std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
-  //std::cout<<"d11"<<std::endl;  
-  }
-
-return true;
+  std::cout<<"end Trigger"<<std::endl;
+  return true;
   
 }
 

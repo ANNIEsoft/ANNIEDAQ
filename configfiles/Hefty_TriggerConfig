@@ -17,7 +17,7 @@ BeamDelay 12780
 BeamTriggerEnable 1
 ExternalTriggerEnable 0
 DISABLE_TRIGGER_CARD 0
-Soft_Trigger 0
+Soft_Trigger 1
 DownsampleMode 0
 DownsampleOffset 0
 AdvancedTriggerMode 0

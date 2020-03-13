@@ -1,0 +1,6 @@
+#V2TriggerConfig
+
+verbose 1
+numTriggers 1
+#MRD 100
+VME 1500

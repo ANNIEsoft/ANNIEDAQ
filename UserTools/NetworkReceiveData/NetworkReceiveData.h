@@ -33,7 +33,9 @@ class NetworkReceiveData: public Tool {
   zmq::socket_t *TrigReceive;
   int m_port;
   int m_trigport;
-  std::string m_address;
+  std::string m_address1;
+  std::string m_address2;
+  std::string m_address3;
   std::string m_trigaddress; 
 
   zmq::pollitem_t in[1];

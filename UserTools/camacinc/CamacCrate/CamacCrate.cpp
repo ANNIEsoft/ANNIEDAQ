@@ -14,7 +14,7 @@ CamacCrate::CamacCrate(int i)	//Class constructor
   std::cout<<"c1" << " open " << CamacCrate::IsOpen <<", crate laoded "<< CamacCrate::Mudev.count(i)<<std::endl;
 	cratenum=i;
 	if (!CamacCrate::IsOpen ||  CamacCrate::Mudev.count(i)==0) {
-	  	    std::cout<<"c2"<<std::endl;
+	  	    //std::cout<<"c2"<<std::endl;
 	    Init(i);
 	    //std::cout<<"c3"<<std::endl;
 	}
@@ -29,28 +29,28 @@ CamacCrate::~CamacCrate()		//Class destructor
 
 void CamacCrate::Init(int i)		//Initialize device
 {
-  std::cout<<"w1"<<std::endl;
+  //std::cout<<"w1"<<std::endl;
 	Slot.push_back(25);		// Find XX_USB devices and open the first one found.
 	Crate.push_back(25);
-	std::cout<<"w2"<<std::endl;
+	//std::cout<<"w2"<<std::endl;
 
 	USBFind();
 	cratenum=i;
-	std::cout<<"w3"<<std::endl;
+	//std::cout<<"w3"<<std::endl;
 	int usbdevid=0;
-	std::cout<<"i="<<i<<std::endl;
+	//std::cout<<"i="<<i<<std::endl;
 	if(i==7)usbdevid=devicemap["CC0318"];
 	if(i==8)usbdevid=devicemap["CC0135"];
-	std::cout<<"usbdevid="<<usbdevid<<std::endl;
+	//std::cout<<"usbdevid="<<usbdevid<<std::endl;
 
 	USBOpen(usbdevid);
-	std::cout<<"w4"<<std::endl;
+	//std::cout<<"w4"<<std::endl;
 
 	Z();
-	std::cout<<"w5"<<std::endl;
+	//std::cout<<"w5"<<std::endl;
 
 	C();
-	std::cout<<"c init run"<<std::endl;
+	//std::cout<<"c init run"<<std::endl;
 }
 
 void CamacCrate::USBFind()		//Find usb devices
@@ -84,11 +84,11 @@ void CamacCrate::USBClose()		//Close USB devices
 int CamacCrate::SetLAMmask(std::string &Mask)
 {
 	int Q = 0, X = 0;
-	std::cout << "L0\n";
+	//std::cout << "L0\n";
 	std::bitset<24> lam(Mask);
-	std::cout << "L1\n";
+	//std::cout << "L1\n";
 	long llam = lam.to_ulong();
-	std::cout << "L2\n";
+	//std::cout << "L2\n";
 	return WRITE(0, 9, 16, llam, Q, X); //LAM
 }
 

@@ -1,0 +1,11 @@
+#Network receive data config file
+
+port 24011
+address 192.168.163.36 #10.25.190.95 #10.25.190.15
+
+trigport 24013
+trigaddress 192.168.163.31
+
+cards 1
+channels 4
+buffersize 40000

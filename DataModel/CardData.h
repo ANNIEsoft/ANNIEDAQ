@@ -19,7 +19,7 @@ class CardData : public SerialisableObject{
   int SequenceID;
   int FirmwareVersion;
   std::vector<uint32_t> Data;
-  
+  int FIFOstate;  
   ~CardData();
 
   bool Print(){};
@@ -35,7 +35,7 @@ class CardData : public SerialisableObject{
     ar & SequenceID;
     ar & FirmwareVersion;
     ar & Data;
- 
+    ar & FIFOstate;
   }
   
 };

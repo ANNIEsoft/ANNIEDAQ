@@ -126,26 +126,54 @@ bool CardData::Receive(zmq::socket_t *socket){
     IF(Receive->recv(&message)){   
   */  
    
+  //std::cout<<"z1"<<std::endl;
   zmq::message_t message;
 
   socket->recv(&message);
+  //std::cout<<"z2"<<std::endl; 
   CardID=*(reinterpret_cast<int*>(message.data()));
+  //std::cout<<"CardID="<<CardID<<std::endl;
   socket->recv(&message);
+  //std::cout<<"z3"<<std::endl; 
   SequenceID=*(reinterpret_cast<int*>(message.data()));
+  //std::cout<<"SequenceID="<<SequenceID<<std::endl;
   socket->recv(&message);
+  //std::cout<<"z4"<<std::endl; 
   FirmwareVersion=*(reinterpret_cast<int*>(message.data()));
-  socket->recv(&message);
-  Data.resize(message.size()/sizeof(uint32_t));
-  std::memcpy(&Data[0], message.data(), message.size());
+  //std::cout<<"FirmwareVersion="<<FirmwareVersion<<std::endl;
+  zmq::message_t message2;
+  socket->recv(&message2);
+  //std::cout<<"z5"<<std::endl; 
+
+  int tmp=0;
+  tmp=*(reinterpret_cast<int*>(message2.data()));  
+  //std::cout<<"z5b size="<<tmp<<std::endl;
+
+  if(tmp>0){
+    socket->recv(&message);
+    //std::cout<<"z6 message.size()/sizeof(uint32_t)="<<message.size()/sizeof(uint32_t)<<std::endl; 
+    Data.resize(message.size()/sizeof(uint32_t));
+    std::memcpy(&Data[0], message.data(), message.size());
+    //std::cout<<"Data.at(0) : Data.at(size-1)="<<Data.at(0)<<" : "<<Data.at(tmp-1)<<std::endl;
+    //    for(int k=0;k<tmp;k++){
+    // std::cout<<"Data["<<k<<"]="<<Data.at(k)<<std::endl;
+    // }
+
+
+  }
+  
+  socket->recv(&message); 
+  //std::cout<<"z7"<<std::endl; 
+  FIFOstate=*(reinterpret_cast<int*>(message.data()));
+  //std::cout<<"FiFIO="<<FIFOstate<<std::endl;
+ /*
+    Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);                    
     
-      /*
-      Receive->getsockopt(ZMQ_RCVMORE, &more, &more_size);                    
-          
-}
-                                                        
+    }
+    
     if(more==0) break;
-      */
-
+  */
+  //std::cout<<"z8"<<std::endl; 
   return true;
-
+  
 }

@@ -1,0 +1,2 @@
+all:
+	 g++ readreaw.cpp -o readreaw -I include/ -L lib/ -lStore -lDataModel -L ToolDAQ/boost_1_66_0/install/lib -lboost_date_time -lboost_serialization -lboost_iostreams -I ToolDAQ/boost_1_66_0/install/include/           

@@ -11,6 +11,7 @@ bool InputVariables::Initialise(std::string configfile, DataModel &data){
   m_data= &data;
 
   m_variables.Get("RunType",m_data->RunType);
+  m_variables.Get("SubRunEventNum",SubRunEventNum);
 
   //  TTree *tree=new TTree("RunInformation","RunInformation");
   // TBranch *br;
@@ -41,20 +42,30 @@ bool InputVariables::Initialise(std::string configfile, DataModel &data){
 
 bool InputVariables::Execute(){
 
-  /*  if(m_data->NumEvents==10000){
-    m_data->NumEvents=10001;
+  std::cout<<"start restart = "<<m_data->Restart<<std::endl;
+  std::cout<<"m_data->NumEvents = "<<m_data->NumEvents<<std::endl;
+  std::cout<<"SubRunEventNum = "<<SubRunEventNum<<std::endl;
+  std::cout<<"m_data->NumEvents>=SubRunEventNum = "<<std::endl;
+
+  if(m_data->Restart==2){
+    //sleep(80);
+    m_data->Restart=0;
+  }
+
+  else if(m_data->Restart==1){
+    sleep(90);
+    Initialise("",*m_data);
+    m_data->Restart=2;
+  }
+    
+  else if(m_data->NumEvents>=SubRunEventNum && SubRunEventNum!=-1){
+    // m_data->NumEvents=10001;
+    // sleep(80);
     m_data->Restart=1;
     Finalise();
   }
-  */
-
-  if(m_data->Restart==1){
-    m_data->Restart=2;
-    Initialise("",*m_data);
-  }
-
-  else if(m_data->Restart==2)m_data->Restart=0;
   
+  std::cout<<"end restart = "<<m_data->Restart<<std::endl;
 
   return true;
 }

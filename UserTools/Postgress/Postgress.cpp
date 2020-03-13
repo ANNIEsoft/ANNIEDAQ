@@ -139,6 +139,8 @@ bool Postgress::Initialise(std::string configfile, DataModel &data){
     m_variables.Set("StarTime",ms); 
     m_variables>>m_data->InfoMessage;
     // m_data->GetTTree("RunInformation")->Fill();
+
+    m_data->Stores["RunInformation"]->Set("Postgress",m_variables);
     
   return true;
 }

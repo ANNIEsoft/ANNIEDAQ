@@ -1,0 +1,4 @@
+# InputVariavles config file
+
+RunType 3 #0=testing , 1=LED, 2=Ped, 3=Beam
+SubRunEventNum -1

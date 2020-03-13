@@ -87,6 +87,10 @@ bool MRDStoreSave::Initialise(std::string configfile, DataModel &data){
 	Epoch = new boost::posix_time::ptime(boost::gregorian::from_string(StartTime));
 	//std::cout<<"here10"<<std::endl;
 
+	m_data->ma="/data/ma";
+	m_data->mb="/data/mb";
+	m_data->mn=0;
+
 	return true;
 }
 
@@ -178,7 +182,7 @@ bool MRDStoreSave::Execute()
       */
 
       CCData->Set("Data",m_data->MRDout);
-      CCData->Save(OutName);
+      CCData->Save(m_data->ma);
       CCData->Delete();
 	// tree->Fill();		//Fill
       //std::cout<<"ben after fi;;"<<std::endl;
@@ -209,8 +213,8 @@ bool MRDStoreSave::Execute()
     std::stringstream tmp;
     tmp<<CCData;
 
-    //std::cout<<" SENDING "<<CCData<<std::endl;
-    //std::cout<<" SENDING "<<tmp.str()<<std::endl;
+    std::cout<<" SENDING "<<CCData<<std::endl;
+    std::cout<<" SENDING "<<tmp.str()<<std::endl;
 
     zmq::message_t message2(tmp.str().length()+1);
     snprintf ((char *) message2.data(), tmp.str().length()+1 , "%s" ,tmp.str().c_str()) ;
@@ -219,9 +223,14 @@ bool MRDStoreSave::Execute()
     //delete CCData;
     CCData=0;
     std::string tt;
-    tt=OutName;
-    OutName=OutNameB;
-    OutNameB=tt;
+    tt=m_data->ma;
+    m_data->ma=m_data->mb;
+    m_data->mb=tt;
+    //m_data->mn++;
+    // std::stringstream mm;
+    //mm<<m_data->ma<<m_data->mn;
+    //m_data->ma=mm.str();
+
     CCData=new BoostStore(false, 2);
   }
   

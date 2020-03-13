@@ -14,6 +14,7 @@
 #include "MRDData.h"
 #include "TriggerData.h"
 #include "MRDOut.h"
+#include "HelperFunctions.h"
 
 #include <zmq.hpp>
 
@@ -33,6 +34,7 @@ class DataModel{
   BoostStore CStore;
   std::map<std::string,BoostStore*> Stores;
   Logging *Log;
+  
 
   //Run info
   long RunNumber;
@@ -64,6 +66,11 @@ class DataModel{
 
   zmq::socket_t *MonitoringSocket;
   bool TRG;
+  int numVME;
+  int hhh;
+
+  std::string da, db, ta, tb, ma, mb;
+  int dn,tn,mn;
 
  private:
   

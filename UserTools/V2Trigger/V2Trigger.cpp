@@ -27,6 +27,7 @@ bool V2Trigger::Initialise(std::string configfile, DataModel &data){
 
   m_data->Stores["RunInformation"]->Set("V2Trigger",m_variables);
 
+  m_data->NumEvents=0;
   return true;
 }
 
@@ -39,7 +40,7 @@ bool V2Trigger::Execute(){
   else if(m_data->Restart==2)Initialise("",*m_data);
   else {
     //printf("d0.1");
-    // std::cout<<"d0.1"<<std::endl;
+     //std::cout<<"d0.1"<<std::endl;
     FindTriggerSources();
     //printf("d0.2");
     //std::cout<<"d0.2"<<std::endl;
@@ -52,27 +53,45 @@ bool V2Trigger::Execute(){
 
   bool trigger=false;
   //printf("d2");  
-  // std::cout<<"d2"<<std::endl;
+   //std::cout<<"d2"<<std::endl;
   std::stringstream statusmsg;
   for (std::map<std::string,zmq::socket_t*>::iterator it=Sockets.begin(); it!=Sockets.end(); ++it){
-    
-    //printf("d3");
-    //std::cout<<"d3"<<std::endl;
-    std::string query="Status";
-    zmq::message_t message(query.length()+1);
-    snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
 
-    //printf("d4");
-    //std::cout<<"d4"<<std::endl;
-    if( it->second->send(message)){
-      //printf("d5");
-      //std::cout<<"d5"<<std::endl;
-      zmq::message_t receive;
-      if(it->second->recv(&receive)){
+    //std::cout<<"socket = "<<it->first<<std::endl;
+    zmq_pollitem_t in[1];
+    zmq_pollitem_t out[1];
+    
+    in[0].socket= *(it->second);
+    in[0].events=ZMQ_POLLIN;
+    out[0].socket= *(it->second);
+    out[0].events=ZMQ_POLLOUT;
+    
+    zmq::poll (&out[0], 1, 5000);
+
+    if (out[0].revents & ZMQ_POLLOUT) {
+      
+      
+      //printf("d3");
+      //std::cout<<"d3"<<std::endl;
+      std::string query="Status";
+      zmq::message_t message(query.length()+1);
+      snprintf ((char *) message.data(), query.length()+1 , "%s" ,query.c_str() ) ;
+      
+      //printf("d4");
+      //std::cout<<"d4"<<std::endl;
+      it->second->send(message);
+      //std::cout<<"d4b"<<std::endl;
+
+      zmq::poll (&in[0], 1, 5000);
+      if (in[0].revents & ZMQ_POLLIN) {
+	//printf("d5");
+	//std::cout<<"d5"<<std::endl;
+	zmq::message_t receive;
+	it->second->recv(&receive);
 	//printf("d6");
 	//std::cout<<"d6"<<std::endl;
 	std::istringstream iss(static_cast<char*>(receive.data()));
-	std::cout<<" got trigger message "<<iss.str()<<std::endl;	
+	//std::cout<<" got trigger message "<<iss.str()<<std::endl;	
 	std::string type="";
 	long trigger=0;
 	//std::cout<<"V2Trigger received "<<iss.str()<<std::endl;
@@ -103,7 +122,7 @@ bool V2Trigger::Execute(){
   }
   m_data->vars.Set("Status",statusmsg.str());
   //printf("d10"); 
-  ///std::cout<<"d10"<<std::endl;
+  //std::cout<<"d10"<<std::endl;
 
 
   for (std::map<std::string,long>::iterator it=triggers.begin(); it!=triggers.end(); ++it){
@@ -111,7 +130,8 @@ bool V2Trigger::Execute(){
     if(m_variables.Has(it->first)){
       long tmp=0;
       m_variables.Get(it->first,tmp);
-      std::cout<<tmp<<" : "<<TriggerResiduals[it->first]<<std::endl;
+      m_data->NumEvents=it->second;
+      //std::cout<<tmp<<" : "<<TriggerResiduals[it->first]<<std::endl;
       if((it->second % tmp)< TriggerResiduals[it->first]){
 	trigger=true;
       }
@@ -123,7 +143,7 @@ bool V2Trigger::Execute(){
 
   m_data->triggered=trigger;
 
-  // std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
+   //std::cout<< "trigger status= "<<m_data->triggered<<std::endl;
   //printf("d11");
   //std::cout<<"d11"<<std::endl;  
   }
@@ -222,8 +242,8 @@ void V2Trigger::FindTriggerSources(){
       //std::cout<<"w7"<<std::endl;
       zmq::socket_t *RemoteSend = new zmq::socket_t(*(m_data->context), ZMQ_DEALER);
       int a=12000;
-      RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
-      RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
+      //BEN//RemoteSend->setsockopt(ZMQ_SNDTIMEO, a);
+      //BEN//RemoteSend->setsockopt(ZMQ_RCVTIMEO, a);   
       //std::cout<<"w8"<<std::endl;
 
       std::stringstream tmp;

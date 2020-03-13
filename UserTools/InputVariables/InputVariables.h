@@ -19,7 +19,7 @@ class InputVariables: public Tool {
 
  private:
 
-
+  int SubRunEventNum;
 
 
 

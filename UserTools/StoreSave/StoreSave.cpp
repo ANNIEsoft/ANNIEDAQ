@@ -21,7 +21,7 @@ bool StoreSave::Initialise(std::string configfile, DataModel &data){
   //numTriggers=1;  
   part=0;
   std::stringstream tmp;
-  tmp<<OutPath<<OutFile<<"p"<<part;
+  tmp<<OutPath<<OutFile<<"R"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber<<"p"<<part;
   Out=tmp.str();
 
   m_data->triggered=false;
@@ -51,39 +51,57 @@ bool StoreSave::Initialise(std::string configfile, DataModel &data){
   //m_data->GetTTree("RunInformation")->Fill();
   m_data->Stores["RunInformation"]->Set("StoreSave",m_variables);
 
+
   return true;
 }
 
 
 bool StoreSave::Execute(){
+  std::cout<<"q0"<<std::endl;
 
-  FindDataSources();
-
-  if(m_data->triggered){
-
-    for (std::map<std::string,zmq::socket_t*>::iterator it=DataSources.begin(); it!=DataSources.end(); ++it){
-     
-      
-      
-      zmq::message_t out(2);
-      it->second->send(out);
-
-      zmq::message_t mesname;
-      it->second->recv(&mesname);
-      std::istringstream iss(static_cast<char*>(mesname.data()));
-      std::string name=iss.str();
-      //std::cout<<"h0 "<<name<<std::endl;
-
-      zmq::message_t in;
-      it->second->recv(&in);
-      std::istringstream iss2(static_cast<char*>(in.data()));
-      unsigned long arg2;
-      iss2 >>  std::hex >> arg2;
-      BoostStore* tmp;
-      tmp=reinterpret_cast<BoostStore*>(arg2);
-      //std::cout<<"h1 "<<name<<":"<<tmp<<std::endl;
-      //tmp->Print(false);
-      //if(name=="TrigData"){
+  if(m_data->Restart==1){
+    std::cout<<"q1"<<std::endl;
+    Finalise();
+    std::cout<<"q2"<<std::endl;
+  }
+  else if(m_data->Restart==2){
+    std::cout<<"q3"<<std::endl;
+    Initialise("",*m_data);
+    std::cout<<"q4"<<std::endl;
+  }
+  else {
+    std::cout<<"q5"<<std::endl; 
+    
+    FindDataSources();
+    std::cout<<"q6"<<std::endl;
+    if(m_data->triggered){
+      std::cout<<"q7"<<std::endl;
+      for (std::map<std::string,zmq::socket_t*>::iterator it=DataSources.begin(); it!=DataSources.end(); ++it){
+	
+	
+	
+	zmq::message_t out(2);
+	it->second->send(out);
+	
+	zmq::message_t mesname;
+	it->second->recv(&mesname);
+	std::istringstream iss(static_cast<char*>(mesname.data()));
+	std::string name=iss.str();
+	std::cout<<"h0 "<<name<<std::endl;
+	
+	zmq::message_t in;
+	it->second->recv(&in);
+	std::istringstream iss2(static_cast<char*>(in.data()));
+	unsigned long arg2;
+	iss2 >>  std::hex >> arg2;
+	BoostStore* tmp;
+	tmp=reinterpret_cast<BoostStore*>(arg2);
+	//  std::string r="r";
+	//  tmp->Set("test",r);
+	//tmp->Save("ggg");
+	std::cout<<"h1 "<<name<<":"<<tmp<<std::endl;
+	//tmp->Print(false);
+	//if(name=="TrigData"){
 	//TriggerData tt;
 	//tmp->Get("TrigData",tt);
 	//std::cout<<"SS Eventsize="<<tt.EventSize<<std::endl;
@@ -91,35 +109,45 @@ bool StoreSave::Execute(){
 	//std::cout<<"SS EventIDs size="<<tt.EventIDs.size()<<std::endl;
 	//std::cout<<"SS EventIDs 3="<<tt.EventIDs.at(3)<<std::endl;
 	//}
-      outstore->Set(name,tmp);
-      std::cout<<"h2"<<std::endl;
-      delete tmp;
-
+	outstore->Set(name,tmp);
+	std::cout<<"h2"<<std::endl;
+	//delete tmp;
+	std::cout<<"h3"<<std::endl;
+      }
+      
+      std::cout<<"h4"<<std::endl;
+      BoostStore* RI=new BoostStore(false,0);
+      std::string RItmp="";
+      (*(m_data->Stores["RunInformation"]))>>RItmp;
+      RI->JsonParser(RItmp);
+      outstore->Set("RunInformation",RI);
+      outstore->Save(Out);
+      //BoostStore * RItmp=0;
+      // outstore->Set("RunInformation",RItmp,false);
+      outstore->Close();
+      std::cout<<"h5"<<std::endl;
+      
+      zmq::message_t message(9);                  
+      snprintf ((char *) message.data(), 9 , "%s" ,"DataFile") ;
+      m_data->MonitoringSocket->send(message, ZMQ_SNDMORE);
+      std::cout<<"h6"<<std::endl;
+      
+      zmq::message_t message2(Out.length()+1);
+      snprintf ((char *) message2.data(), Out.length()+1 , "%s" ,Out.c_str()) ; 
+      m_data->MonitoringSocket->send(message2);
+      std::cout<<"h7"<<std::endl;
+      
+      std::stringstream tmp;
+      part++;
+      tmp<<OutPath<<OutFile<<"R"<<m_data->RunNumber<<"S"<<m_data->SubRunNumber<<"p"<<part;
+      Out= tmp.str();
+      delete outstore;
+      outstore=0;
+      outstore= new BoostStore(false,0); 
+      std::cout<<"h8"<<std::endl;
     }
-
-    outstore->Set("RunInformation",m_data->Stores["RunInformation"]);
-    outstore->Save(Out);
-
-    zmq::message_t message(9);                  
-    snprintf ((char *) message.data(), 9 , "%s" ,"DataFile") ;
-    m_data->MonitoringSocket->send(message, ZMQ_SNDMORE);
-    
-    zmq::message_t message2(Out.length()+1);
-    snprintf ((char *) message2.data(), Out.length()+1 , "%s" ,Out.c_str()) ; 
-    m_data->MonitoringSocket->send(message2);
-
-
-    std::stringstream tmp;
-    part++;
-    tmp<<OutPath<<OutFile<<"p"<<part;
-    Out= tmp.str();
-    //    delete outstore;
-    //outstore=0;
-    outstore= new BoostStore(false,0); 
-
   }
-
-
+  
   return true;
 }
 
@@ -145,21 +173,30 @@ bool StoreSave::Finalise(){
       iss2 >>  std::hex >> arg2;
       BoostStore* tmp;
       tmp=reinterpret_cast<BoostStore *>(arg2);
-
+      std::cout<<"h1 "<<name<<":"<<tmp<<std::endl;
+      std::cout<<"r-1"<<std::endl; 
       outstore->Set(name,tmp);
-
+      std::cout<<"r-2"<<std::endl;
+      delete tmp;
+      std::cout<<"r-3"<<std::endl;
       delete it->second;
+      std::cout<<"r-4"<<std::endl;
       it->second=0;
     }
 
     m_data->Stores["RunInformation"]->Set("InputVariables",m_variables);
     outstore->Save(Out);
-    delete outstore;
+    std::cout<<"r1"<<std::endl;
+    outstore->Close();
+    std::cout<<"r1.5"<<std::endl;  
+    //delete outstore;
     outstore=0;
-    //    outstore= new BoostStore(false,0); 
-
+    std::cout<<"r2"<<std::endl;     
+//    outstore= new BoostStore(false,0); 
+    std::cout<<"r3"<<std::endl; 
     DataSources.clear();
-
+    std::cout<<"r4"<<std::endl;
+ 
     zmq::socket_t Ireceive (*m_data->context, ZMQ_PUSH);
     Ireceive.connect("inproc://ServicePublish");
     std::stringstream test;
@@ -167,12 +204,12 @@ bool StoreSave::Finalise(){
     zmq::message_t send(test.str().length()+1);
     snprintf ((char *) send.data(), test.str().length()+1 , "%s" ,test.str().c_str()) ;
     Ireceive.send(send);
-
+    std::cout<<"r5"<<std::endl; 
 
     delete m_data->MonitoringSocket;
     m_data->MonitoringSocket==0;
 
-
+    std::cout<<"r6"<<std::endl; 
   return true;
 }
 

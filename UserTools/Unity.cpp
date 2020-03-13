@@ -14,8 +14,8 @@
 #include "MRD/MRD.cpp"
 #include "RootDataRecorder/RootDataRecorder.cpp"
 #include "SlackBot/SlackBot.cpp"
-#include "HVComs/HVComs.cpp"
 */
+#include "HVComs/HVComs.cpp"
 #include "NetworkReceiveData/NetworkReceiveData.cpp"
 #include "Trigger/Trigger.cpp"      
 #include "SlackBot/SlackBot.cpp"
@@ -33,3 +33,5 @@
 #include "StoreSave/StoreSave.cpp"
 #include "LAPPDTrigger/LAPPDTrigger.cpp"
 #include "VMETrigger/VMETrigger.cpp"
+#include "TriggerStream/TriggerStream.cpp"
+#include "NetworkReceiveDataStream/NetworkReceiveDataStream.cpp"

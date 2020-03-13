@@ -68,6 +68,7 @@ bool SlackBot::Initialise(std::string configfile, DataModel &data){
   //  m_data->InfoTitle="SlackBotVariables";
   // m_variables>>m_data->InfoMessage;
   // m_data->GetTTree("RunInformation")->Fill();
+  m_data->Stores["RunInformation"]->Set("SlackBot",m_variables);
 
   return true;
 }

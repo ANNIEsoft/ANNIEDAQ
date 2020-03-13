@@ -86,17 +86,24 @@ bool VMEStoreSave::Initialise(std::string configfile, DataModel &data){
 	m_data->carddata= new BoostStore(false,2);
 	m_data->trigdata= new BoostStore(false,2);
 
+	m_data->da="/data/da";
+	m_data->db="/data/db";
+	m_data->ta="/data/ta";
+	m_data->tb="/data/tb";
+	m_data->dn=0;
+	m_data->tn=0;
+
 	return true;
 }
 
 bool VMEStoreSave::Execute()
 {
-  //  std::cout<<"E1"<<std::endl;
+  //std::cout<<"in vme store save"<<std::endl;
 
   zmq::poll(&items[0], 2, 0);
 
   if (items [0].revents & ZMQ_POLLIN) {
-
+    std::cout<<"recevied"<<std::endl;
     zmq::message_t message;
 
     sPort->recv(&message);
@@ -107,7 +114,9 @@ bool VMEStoreSave::Execute()
 
     std::stringstream tmp;
     tmp<<m_data->carddata;
-
+    //    std::cout<<"printing in vmes "<<std::endl;
+    // m_data->carddata->Print(false);
+    //std::cout<<"finished printing in vmes "<<std::endl;
     //std::cout<<" SENDING "<<CCData<<std::endl;
     //std::cout<<" SENDING "<<tmp.str()<<std::endl;
 
@@ -116,16 +125,24 @@ bool VMEStoreSave::Execute()
     sPort->send(message2);
     //CCData->Send(sPort);
     //delete CCData;
+    //delete m_data->carddata;
     m_data->carddata=0;
     std::string tt;
-    tt=OutName;
-    OutName=OutNameB;
-    OutNameB=tt;
+    tt=m_data->da;
+    m_data->da=m_data->db;
+    m_data->db=tt;
+    //m_data->dn++;
+    //std::stringstream dd;
+    //dd<<m_data->da<<m_data->dn;
+    //m_data->da=dd.str();
+    //tt=OutName;
+    // OutName=OutNameB;
+    //OutNameB=tt;
     m_data->carddata=new BoostStore(false, 2);
   }
 
   if (items [1].revents & ZMQ_POLLIN) {
-
+    std::cout<<"recevied2"<<std::endl;
     zmq::message_t message;
 
     strigPort->recv(&message);
@@ -147,18 +164,23 @@ bool VMEStoreSave::Execute()
     tmp<<m_data->trigdata;
 
     //std::cout<<" SENDING "<<CCData<<std::endl;
-    std::cout<<" SENDING trig"<<tmp.str()<<std::endl;
+    //std::cout<<" SENDING trig"<<tmp.str()<<std::endl;
 
     zmq::message_t message2(tmp.str().length()+1);
     snprintf ((char *) message2.data(), tmp.str().length()+1 , "%s" ,tmp.str().c_str()) ;
     strigPort->send(message2);
     //CCData->Send(sPort);
     //delete CCData;
+    //delete m_data->trigdata;
     m_data->trigdata=0;
     std::string tt;
-    tt=OutName;
-    OutName=OutNameB;
-    OutNameB=tt;
+    tt=m_data->ta;
+    m_data->ta=m_data->tb;
+    m_data->tb=tt;
+    //m_data->tn++;
+    //std::stringstream tt;
+    //tt<< m_data->ta<<m_data->tn;
+    //m_data->ta=tt.str();
     m_data->trigdata=new BoostStore(false, 2);
   }
   
@@ -197,6 +219,7 @@ bool VMEStoreSave::Execute()
   //std::cout<<"E11"<<std::endl;
   */
 
+  //std::cout<<"finished VME store save"<<std::endl;
   return true;
 }
 

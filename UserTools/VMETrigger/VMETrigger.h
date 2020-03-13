@@ -20,7 +20,8 @@ class VMETrigger: public Tool {
  private:
 
   zmq::socket_t* TriggerSend;
-  zmq::pollitem_t items[1];
+  zmq::pollitem_t in[1];
+  zmq::pollitem_t out[1];
   unsigned long reftriggernum;
 
 

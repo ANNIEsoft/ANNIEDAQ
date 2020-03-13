@@ -1,0 +1,9 @@
+Invariables InputVariables configfiles/LED/InputVariablesConfig
+Postgress Postgress configfiles/PostgressConfig
+SlackBot SlackBot NULL
+HVComs HVComs configfiles/HVComsConfig
+V2Trigger V2Trigger configfiles/LED/V2TriggerConfig
+StoreSave StoreSave configfiles/LED/StoreSaveConfig
+#MRDSubToolChain ThreadedSubToolChain configfiles/MRD/ToolChainConfig
+VMESubToolChain ThreadedSubToolChain configfiles/LEDVMEs/ToolChainConfig
+#LAPPDSubToolChain ThreadedSubToolChain configfiles/LAPPD/ToolChainConfig

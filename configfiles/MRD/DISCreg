@@ -1,0 +1,24 @@
+#LRS4413 discriminator settings
+RemoteMode	       1	#local=0, remote=1
+ThresholdMode	       0	#programmed threshold setting = 0, front panel potentiometer = 1
+Threshold	       0	#programmed threshold, 10-bit value, 0-1023 => -15mV-1V. Do values <15 & > 1000 get coerced?
+#
+#StartChannelMask
+#Chan	Ped
+0	0 #
+1	0 #
+2	0 #
+3	0 #
+4	0 #
+5	0 #
+6	0 #
+7	0 #
+8	0 #
+9	0 #
+10	0 #
+11	0 #
+12	0 #
+13	0 #
+14	0 #
+15	0 #
+#EndChannelMask

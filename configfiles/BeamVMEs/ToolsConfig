@@ -1,0 +1,6 @@
+VMETrigger VMETrigger Null
+#Trigger Trigger configfiles/Hefty_TriggerConfig
+TriggerStream TriggerStream configfiles/BeamVMEs/TriggerConfig
+#NetworkReceiveData NetworkReceiveData configfiles/VMEs/NetworkReceiveDataConfig
+NetworkReceiveDataStream NetworkReceiveDataStream configfiles/BeamVMEs/NetworkReceiveDataConfig
+VMEStoreSave VMEStoreSave NUll

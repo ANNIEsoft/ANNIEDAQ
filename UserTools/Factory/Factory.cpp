@@ -24,8 +24,8 @@ if (tool=="NetworkReceiveData") ret=new NetworkReceiveData;
 //if (tool=="RootDataRecorder") ret=new RootDataRecorder;
 
 //if (tool=="SlackBot") ret=new SlackBot;
-//if (tool=="HVComs") ret=new HVComs;
- if (tool=="SlackBot") ret=new SlackBot;
+if (tool=="HVComs") ret=new HVComs;
+if (tool=="SlackBot") ret=new SlackBot;
 if (tool=="CCTrigger") ret=new CCTrigger;
 if (tool=="Lecroy") ret=new Lecroy;
 //if (tool=="MRDTreeRecorder") ret=new MRDTreeRecorder;
@@ -35,13 +35,15 @@ if (tool=="Lecroy") ret=new Lecroy;
 
 //if (tool=="MRD") ret=new MRD;
 if (tool=="MRDStoreSave") ret=new MRDStoreSave;
- if (tool=="VMEStoreSave") ret=new VMEStoreSave;
+if (tool=="VMEStoreSave") ret=new VMEStoreSave;
 if (tool=="MRDMonitoring") ret=new MRDMonitoring;
 if (tool=="ThreadedSubToolChain") ret=new ThreadedSubToolChain;
 if (tool=="V2Trigger") ret=new V2Trigger;
 if (tool=="StoreSave") ret=new StoreSave;
 if (tool=="LAPPDTrigger") ret=new LAPPDTrigger;
-  if (tool=="VMETrigger") ret=new VMETrigger;
+if (tool=="VMETrigger") ret=new VMETrigger;
+if (tool=="TriggerStream") ret=new TriggerStream;
+  if (tool=="NetworkReceiveDataStream") ret=new NetworkReceiveDataStream;
 return ret;
 }
 

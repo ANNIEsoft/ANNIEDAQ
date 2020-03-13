@@ -38,9 +38,11 @@ class ThreadedSubToolChain: public Tool {
   //  zmq::socket_t* Isend;
   ToolChain_thread_args *args;
   std::string name;
-
+  std::string configpath;
   static void *SubThread(void* arg);
-
+  bool flag;
+  zmq::socket_t* config;
+  zmq::pollitem_t conf[1];
 
 };
 
