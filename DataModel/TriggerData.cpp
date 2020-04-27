@@ -27,8 +27,9 @@ void  TriggerData::Send(zmq::socket_t *socket, int flag, TriggerData* hint){
   zmq::message_t ms3(&EventSize,sizeof EventSize, bencleanup2);
   //std::cout<<"d0.3 ES="<<EventSize<<std::endl;
   
-  zmq::message_t ms4(&TriggerSize,sizeof TriggerSize, bencleanup2);
-  //std::cout<<"d0.4 TS="<<TriggerSize<<std::endl;
+  //  zmq::message_t ms4(&TriggerSize,sizeof TriggerSize, bencleanup2);  
+  zmq::message_t ms4(&TimeStampSize,sizeof TimeStampSize, bencleanup2);
+//std::cout<<"d0.4 TS="<<TriggerSize<<std::endl;
   
   zmq::message_t ms5(&FIFOOverflow,sizeof FIFOOverflow, bencleanup2);
   //std::cout<<"d0.5 FO="<<FIFOOverflow<<std::endl;
@@ -94,7 +95,7 @@ void  TriggerData::Send(zmq::socket_t *socket, int flag, TriggerData* hint){
   }
   else socket->send(ms8a,ZMQ_SNDMORE);
   
-  
+  /*
   
   //std::cout<<"d0.8"<<std::endl;
   size9=TriggerMasks.size();
@@ -123,6 +124,24 @@ void  TriggerData::Send(zmq::socket_t *socket, int flag, TriggerData* hint){
     zmq::message_t ms10a(&size10,sizeof size10, bencleanup2b,hint);
     socket->send(ms10a,flag);
   }
+  */
+
+
+  //std::cout<<"d0.9"<<std::endl;
+  size10=TimeStampData.size();
+  //std::cout<<"size10="<<size10<<std::endl; 
+  if(size10>0){
+    zmq::message_t ms10a(&size10,sizeof size10, bencleanup2);    
+    //std::cout<<"size10>0 = "<<size10<< std::endl;
+    socket->send(ms10a,ZMQ_SNDMORE);
+    zmq::message_t ms10b(&(TimeStampData.at(0)), sizeof(uint32_t)*TimeStampData.size(), bencleanup2b,hint);
+    socket->send(ms10b,flag);
+  }
+  else{
+    zmq::message_t ms10a(&size10,sizeof size10, bencleanup2b,hint);
+    socket->send(ms10a,flag);
+  }
+
   
   //std::cout<<"d0.10"<<std::endl;
   

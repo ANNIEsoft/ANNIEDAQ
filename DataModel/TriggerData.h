@@ -20,9 +20,11 @@ struct TriggerData{
   int EventSize;
   std::vector<uint16_t> EventIDs;
   std::vector<uint64_t> EventTimes;  // units of nanoseconds.
-  int TriggerSize; 
-  std::vector<uint32_t> TriggerMasks;
-  std::vector<uint32_t> TriggerCounters;
+  int TimeStampSize;
+  //int TriggerSize; 
+  //  std::vector<uint32_t> TriggerMasks;
+  //std::vector<uint32_t> TriggerCounters;
+  std::vector<uint32_t> TimeStampData;
   int FIFOOverflow;
   int DriverOverflow;
   ~TriggerData();

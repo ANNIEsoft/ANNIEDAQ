@@ -165,6 +165,7 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	  //std::cout<<"d6.5"<<std::endl;
 	  if(args->crate_num==1) {
 	    //std::cout<<"d6.6"<<std::endl;
+	    TriggerCard.PresetCounters(); 
 	    TriggerCard.Initialise(variables);	
 	    //std::cout<<"d7"<<std::endl;
 	    TriggerCard.EnableTrigger();
@@ -193,10 +194,10 @@ void* CrateReaderStream2::ADCThread(void* arg){
 	carddata=new std::vector<CardData>;
 	*(carddata)=Crate.GetCardData();
 
-	//	for(int k=0;k<carddata->size();k++){
-
-	//if(carddata->at(k).CardID>4000) std::cout<<"wegot one "<< carddata->at(k).CardID<<std::endl;
-	//	}
+	/*for(int k=0;k<carddata->size();k++){
+		  
+		  if(carddata->at(k).Data.size()==0) std::cout<<"wegot one "<< std::endl;
+		  }*/
 	//std::cout<<"m4"<<std::endl;
 	
 	zmq::poll(&Dout[0], 1, 100);
